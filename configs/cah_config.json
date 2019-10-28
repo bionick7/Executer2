@@ -1,0 +1,14 @@
+{
+  "full": [
+    "cah_lib",
+    "baselib",
+    "extendedlib",
+    "holidaylib",
+    "themedlib",
+    "paxlib"
+  ],
+  "image url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Cards_Against_Humanity_logo.png/1200px-Cards_Against_Humanity_logo.png",
+
+  "black": "xFFFFFF",
+  "white": "x000000"
+}
