@@ -1,5 +1,4 @@
-# This is the entrance point to the program.
-# This file is expected to be run to regularly start the bot
+# -*- coding: UTF-8 -*-
 
 import sys
 import datetime
