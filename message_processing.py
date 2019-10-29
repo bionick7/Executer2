@@ -69,9 +69,9 @@ async def on_message(message):
         server_data = get_globals("DEFAULT SERVER DATA")
         server_data["default_channel_id"] = message.id
     else:
-        server_data = get_globals("database client|executer_database|servers").find({"discord_id": message.guild.id})[0]
+        server_data = get_globals("database_client|executer_database|servers").find({"discord_id": message.guild.id})[0]
 
-    input_ = ResponseInput(message, {**get_globals("safe data"), "server data": server_data})
+    input_ = ResponseInput(message, {**get_globals("safe_data"), "server data": server_data})
     input_.check()
 
     func = special_reaction(input_)
