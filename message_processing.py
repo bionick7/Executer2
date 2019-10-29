@@ -66,7 +66,7 @@ async def on_message(message):
         return
 
     if isinstance(message.channel, (discord.DMChannel, discord.GroupChannel)):
-        server_data = get_globals("DEFAULT SERVER DATA")
+        server_data = get_globals("default server data")
         server_data["default_channel_id"] = message.id
     else:
         server_data = get_globals("database_client|executer_database|servers").find({"discord_id": message.guild.id})[0]
