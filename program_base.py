@@ -40,7 +40,8 @@ _global_dict = {
     "database_client": __database_client,
     "response_dict": __response_dict,
     "routine_list": __routine_list,
-    "default server data": DEFAULT_SERVER_DATA
+    "default server data": DEFAULT_SERVER_DATA,
+    "logger": data_backend.logger
 }
 
 
@@ -65,7 +66,7 @@ def __get_dict(d, path, current_path=""):
             if len(path) > 1:
                 return __get_dict(d[int(path[0])], path[1:], current_path + path[0])
             else:
-                return  d[path[0]]
+                return d[path[0]]
         except ValueError as e:
             raise KeyError(f"Cannot index a list with a non int key: '{path[0]}'@'{current_path}'")
     elif isinstance(d, (MongoClient, Database)):

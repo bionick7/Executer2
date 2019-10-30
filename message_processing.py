@@ -1,14 +1,14 @@
 import asyncio
 import datetime
+import discord
 
 from program_base import get_globals, set_globals, pop_message, push_message, get_response_function, special_reaction,\
     can_pop
 from traceback import format_exc
 
-from backend import *
-from data_backend import *
+from backend import ResponseInput, ResponseOutput
 
-client = get_globals("client")
+client, logger = get_globals("client", "logger")
 
 
 def update_database_server():
@@ -18,7 +18,7 @@ def update_database_server():
     db_create = server_set - database_set
     db_delete = database_set - server_set
     for create_database in db_create:
-        stdout.write(f"\"{create_database}\" server needs database\n")
+        logger.log_line(f"\"{create_database}\" server needs database")
         server_obj = client.get_guild(create_database)
         database_object = {
             "discord_id": server_obj.id,
@@ -31,33 +31,37 @@ def update_database_server():
         }
         server_collection.insert_one(database_object)
     for delete_database in db_delete:
-        stdout.write(f"[delete \"{delete_database}\" database]\n")
+        logger.log_line(f"[delete \"{delete_database}\" database]")
 
 
 @client.event
 async def on_ready():
     time_display_template = get_globals("general|time display template")
-    stdout.write(f"Ready\n{datetime.datetime.now().strftime(time_display_template)}\n")
+    logger.indicate_process_outcome(f"Ready\n{datetime.datetime.now().strftime(time_display_template)}")
     update_database_server()
-    stdout.write("Initiate routines ...\n")
+    logger.log_line("Initiate routines ...")
     initiate_routines(client.loop)
-    stdout.write("\nAll is nominal\n")
-    stdout.write("""
-    +---------------------------------------+
-    | E X E C U T E R    B O T    S T A R T |
-    +---------------------------------------+\n""")
-    stdout.write("="*100 + "\n")
+    logger.log_block(
+        "",
+        "All is nominal",
+        "",
+        "   +---------------------------------------+",
+        "   | E X E C U T E R    B O T    S T A R T |",
+        "   +---------------------------------------+",
+        "",
+        "==================================================================================================="
+    )
 
 
 @client.event
 async def on_connect():
-    stdout.write("Connected ... ")
+     logger.log("Connected ... ")
 
 
 @client.event
 async def on_disconnect():
     time_display_template = get_globals("general|time display template")
-    stdout.write(f"Client disconnected at {datetime.datetime.now().strftime(time_display_template)}\n###\n\n")
+    logger.log_line(f"Client disconnected at {datetime.datetime.now().strftime(time_display_template)}\n###\n")
 
 
 @client.event
@@ -124,7 +128,7 @@ def initiate_routines(loop):
             if item in routine_list:
                 func, time = routine_list[item]
                 loop.create_task(routine_def(func, x, time))
-                stdout.write(f"\t\"{func.__name__}\" routine initiated  ({time}s) for {x['name']}\n")
+                logger.log_line(f"\t\"{func.__name__}\" routine initiated  ({time}s) for {x['name']}")
     set_globals(routine_list=routine_list)
 
 
@@ -132,6 +136,5 @@ def run():
     """
     entrance point; gets bot to run
     """
-    stdout.write("Connecting ..." + " " * 85)
-    stdout.flush()
+    logger.indicate_process_start("Connecting ..." + " " * 85)
     client.run(get_globals("auth|token"))
