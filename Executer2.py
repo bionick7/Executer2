@@ -1,8 +1,8 @@
 # -*- coding: UTF-8 -*-
 
 import datetime
-import pymongo
-import traceback
+import pymongo, pymongo.errors
+import dns
 
 from program_base import get_globals, set_globals
 import message_processing
@@ -26,14 +26,15 @@ def main():
     logger.indicate_process_start("Connecting to Database ...")
     try:
         cl = pymongo.MongoClient(url)
-        set_globals(database_client=cl)
-    except pymongo.errors.ConfigurationError as e:
+    except (pymongo.errors.ConfigurationError, dns.exception.Timeout):
         logger.indicate_process_outcome("\nAn error occurred while trying to setup the database client."
                                         " See stderr for more information")
         logger.log_traceback()
-        return -1
+        set_globals(database_access=False)
     else:
+        set_globals(database_client=cl)
         logger.indicate_process_outcome("Success")
+        set_globals(database_access=True)
     start = datetime.datetime.now()
     try:
         run()
@@ -44,6 +45,7 @@ def main():
                         f" {datetime.datetime.now().strftime(time_display_format)}")
         logger.log_line(f"Bot run for {(datetime.datetime.now() - start).seconds}s. See stderr for more information")
         logger.log_traceback()
+        logger.log_line("=" * 100)
         return 1
 
 

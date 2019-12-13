@@ -2,7 +2,7 @@ import asyncio
 import datetime
 import discord
 
-from program_base import get_globals, set_globals, pop_message, push_message, get_response_function, special_reaction,\
+from program_base import get_globals, restore_client, set_globals, pop_message, push_message, get_response_function, special_reaction,\
     can_pop
 from traceback import format_exc
 
@@ -12,26 +12,29 @@ client, logger = get_globals("client", "logger")
 
 
 def update_database_server():
-    server_collection = get_globals("database_client|executer_database|servers")
-    server_set = set(map(lambda x: x.id, client.guilds))
-    database_set = set(map(lambda x: x["discord_id"], server_collection.find()))
-    db_create = server_set - database_set
-    db_delete = database_set - server_set
-    for create_database in db_create:
-        logger.log_line(f"\"{create_database}\" server needs database")
-        server_obj = client.get_guild(create_database)
-        database_object = {
-            "discord_id": server_obj.id,
-            "name": server_obj.name,
-            "functions": [],
-            "cah_librairies": get_globals("cah functions|full"),
-            "youtube_fllow_channels": [],
-            "response_functions": {},
-            "default_channel_id": server_obj.fetch_channels(limit=1)[0].id
-        }
-        server_collection.insert_one(database_object)
-    for delete_database in db_delete:
-        logger.log_line(f"[delete \"{delete_database}\" database]")
+    if get_globals("database_access"):
+        server_collection = get_globals("database_client|executer_database|servers")
+        server_set = set(map(lambda x: x.id, client.guilds))
+        database_set = set(map(lambda x: x["discord_id"], server_collection.find()))
+        db_create = server_set - database_set
+        db_delete = database_set - server_set
+        for create_database in db_create:
+            logger.log_line(f"\"{create_database}\" server needs database")
+            server_obj = client.get_guild(create_database)
+            database_object = {
+                "discord_id": server_obj.id,
+                "name": server_obj.name,
+                "functions": [],
+                "cah_librairies": get_globals("cah functions|full"),
+                "youtube_follow_channels": [],
+                "response_functions": {},
+                "default_channel_id": server_obj.fetch_channels(limit=1)[0].id
+            }
+            server_collection.insert_one(database_object)
+        for delete_database in db_delete:
+            logger.log_line(f"[delete \"{delete_database}\" database]")
+    else:
+        logger.log("Server Collection cannot be updated. Client has nio connection to database")
 
 
 @client.event
@@ -69,7 +72,7 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if isinstance(message.channel, (discord.DMChannel, discord.GroupChannel)):
+    if isinstance(message.channel, (discord.DMChannel, discord.GroupChannel)) or not get_globals("database_access"):
         server_data = get_globals("default server data")
         server_data["default_channel_id"] = message.id
     else:
@@ -121,15 +124,16 @@ async def routine_def(func, x, time):
 
 
 def initiate_routines(loop):
-    server_collection, routine_list = get_globals("database_client|executer_database|servers", "routine_list")
-    for x in server_collection.find():
-        function_list = x["functions"]
-        for item in function_list:
-            if item in routine_list:
-                func, time = routine_list[item]
-                loop.create_task(routine_def(func, x, time))
-                logger.log_line(f"\t\"{func.__name__}\" routine initiated  ({time}s) for {x['name']}")
-    set_globals(routine_list=routine_list)
+    if get_globals("database_access"):
+        server_collection, routine_list = get_globals("database_client|executer_database|servers", "routine_list")
+        for x in server_collection.find():
+            function_list = x["functions"]
+            for item in function_list:
+                if item in routine_list:
+                    func, time = routine_list[item]
+                    loop.create_task(routine_def(func, x, time))
+                    logger.log_line(f"\t\"{func.__name__}\" routine initiated  ({time}s) for {x['name']}")
+        set_globals(routine_list=routine_list)
 
 
 def run():
@@ -137,4 +141,7 @@ def run():
     entrance point; gets bot to run
     """
     logger.indicate_process_start("Connecting ..." + " " * 85)
+    global client
+    if client.loop.is_closed():
+        client = restore_client()
     client.run(get_globals("auth|token"))

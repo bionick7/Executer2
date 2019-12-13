@@ -41,7 +41,8 @@ _global_dict = {
     "response_dict": __response_dict,
     "routine_list": __routine_list,
     "default server data": DEFAULT_SERVER_DATA,
-    "logger": data_backend.logger
+    "logger": data_backend.logger,
+    "database_access": False
 }
 
 
@@ -156,3 +157,10 @@ def update_server_data(server_id, **kwargs):
             servers.update_one({"discord_id": server_id}, {"$set": {keyword: value}}, upsert=True)
         else:
             raise KeyError(f"Error occurred trying to update the database {keyword} not a valid keyword\n")
+
+def restore_client():
+    global __client, _global_dict
+    __client = discord.Client()
+    _global_dict["client"] = __client
+    return __client
+    
