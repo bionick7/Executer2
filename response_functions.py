@@ -91,6 +91,9 @@ def brain_fuck(inp):
     return Out(outp, inp.channel)
 
 
+last_dice_rolls = {}
+
+
 def dice(inp):
     number, dice_faces = inp.args[1].split("d")
     is_sum = "/s" in inp.args
@@ -134,18 +137,42 @@ def dice(inp):
         collective_bonus = 0
         individual_bonus = bonus
 
-    conclude_individual = individual_bonus > 0 or mult > 1
+    conclude_individual = not (individual_bonus == 0 and mult == 1)
 
-    return_string = ("\n + " if is_sum else "\n").join([
-        str(d) +
-        (" * 2 " if mult > 1 else "") +
-        (" + " + str(individual_bonus) if individual_bonus > 0 else "") +
-        (" = " + str(d * mult + individual_bonus) if conclude_individual else "")
-        for d in dice_list
-    ]) + ("\n+" + str(collective_bonus) if collective_bonus > 0 else "") +\
-        (" = " + str(sum([x * mult + individual_bonus for x in dice_list]) + collective_bonus) if is_sum else "")
+    results_list = [d * mult + individual_bonus for d in dice_list]
+    formated_string_list = []
+    for i in range(len(dice_list)):
+        formated_string = str(dice_list[i])
+        if mult != 1:
+            formated_string += " * 2 "
+        if individual_bonus != 0:
+            formated_string += (" + " if individual_bonus > 0 else " - ") + str(abs(individual_bonus))
+        if conclude_individual:
+            formated_string += " = " + str(results_list[i])
+        formated_string_list.append(formated_string)
+
+    return_string = ("\n + " if is_sum else "\n").join(formated_string_list) +\
+                    ("\n+" + str(collective_bonus) if collective_bonus > 0 else "")
+
+    if is_sum:
+        end_result = sum([x * mult + individual_bonus for x in dice_list]) + collective_bonus
+        end_result += f" = {end_result}"
+        last_dice_rolls[inp.author.id] = end_result
+    else:
+        last_dice_rolls[inp.author.id] = results_list[-1]
 
     return Out(return_string, inp.channel)
+
+
+def gather_initiative(inp):
+    users = [discord.utils.get(inp.guild.members, id=i) for i in last_dice_rolls]
+    users_sorted = sorted(users, key=lambda x: last_dice_rolls.get(x.id, -1000), reverse=True)
+    res_string = "\n".join([f"{last_dice_rolls.get(usr.id, math.nan)}\t{usr.display_name}" for usr in users_sorted])
+    em = discord.Embed(title="Initiative", colour=0xf0f000)
+    for user in users_sorted:
+        em.add_field(name=user.display_name, value=last_dice_rolls.get(user.id, math.nan), inline=False)
+    push_message(Out("Copyable text: \n```" + res_string + "```", inp.author))
+    return Out(em, inp.channel)
 
 
 def small_py(inp):
@@ -408,6 +435,7 @@ def run():
     register(set_default_channel, "set_default_channel", "Sets the default channel to the indicated one or to the "
                                                          "current one if no arguments provided")
     register(brain_fuck,     "bf",          "Executes brainfuck command")
+    register(gather_initiative, "initiative", "Reads the latest results")
 
     register(add_youtube_channel,   "add_yt_channel", "Adds a youtube channel, whose uploads get posted regularly")
     register(add_youtube_channel,   "rmv_yt_channel", "Removes a youtube channel, c.f. add_yt_channel")
