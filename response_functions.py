@@ -6,9 +6,11 @@ import random
 import requests
 import json
 
+import numpy as np
+
 from program_base import get_globals, set_globals, push_message, register_response_function as register,\
     register_routine, update_server_data
-from backend import ResponseOutput as Out, FunctionMaintenanceState
+from backend import ResponseOutput as Out, FunctionMaintenanceState, ResponseInput
 
 from random import randint
 from contextlib import redirect_stdout
@@ -152,7 +154,7 @@ def dice(inp):
         formated_string_list.append(formated_string)
 
     return_string = ("\n + " if is_sum else "\n").join(formated_string_list) +\
-                    ("\n+" + str(collective_bonus) if collective_bonus > 0 else "")
+                    ("\n+" + str(collective_bonus) if collective_bonus != 0 else "")
 
     if is_sum:
         end_result = sum([x * mult + individual_bonus for x in dice_list]) + collective_bonus
@@ -173,6 +175,64 @@ def gather_initiative(inp):
         em.add_field(name=user.display_name, value=last_dice_rolls.get(user.id, math.nan), inline=False)
     push_message(Out("Copyable text: \n```" + res_string + "```", inp.author))
     return Out(em, inp.channel)
+
+
+NUMBER_EMOJIS = {
+    0: ":zero:",
+    1: ":one:",
+    2: ":two:",
+    3: ":three:",
+    4: ":four:",
+    5: ":five:",
+    6: ":six:",
+    7: ":seven:",
+    8: ":eight:",
+}
+
+
+POSSIBLE_NEIGHBOURS = [
+    (-1, -1),
+    (-1,  0),
+    (-1,  1),
+    ( 0, -1),
+    ( 0,  1),
+    ( 1, -1),
+    ( 1,  0),
+    ( 1,  1)
+]
+
+
+def minesweeper(inp):
+    mines = 10 if len(inp.args) < 4 else int(inp.args[3])
+    height = 10 if len(inp.args) < 3 else int(inp.args[2])
+    width = 10 if len(inp.args) < 2 else int(inp.args[1])
+    field_string = f"There are {mines} mines\n"
+
+    mine_matrix = np.zeros((height, width), np.bool)
+    for i in range(mines):
+        location = (random.randint(0, height - 1), random.randint(0, width - 1))
+        while mine_matrix[location[0], location[1]]:
+            location = (random.randint(0, height - 1), random.randint(0, width - 1))
+        mine_matrix[location[0], location[1]] = True
+
+    for y, row in enumerate(mine_matrix):
+        for x, cell in enumerate(row):
+            character = ":bomb:"
+            if not cell:
+                neighbour_bombs = 0
+                for n in POSSIBLE_NEIGHBOURS:
+                    if 0 <= x + n[0] < width and 0 <= y + n[1] < height:
+                        if mine_matrix[y + n[1], x + n[0]]:
+                            neighbour_bombs += 1
+
+                character = NUMBER_EMOJIS[neighbour_bombs]
+            field_string += "||" + character + "|| "
+        field_string += "\n"
+
+    if len(field_string) > 2000:
+        field_string = "board contains to much Text. Try a smaller board"
+
+    return Out(field_string, inp.channel)
 
 
 def small_py(inp):
@@ -436,8 +496,10 @@ def run():
                                                          "current one if no arguments provided")
     register(brain_fuck,     "bf",          "Executes brainfuck command")
     register(gather_initiative, "initiative", "Reads the latest results")
+    register(minesweeper, "minesweeper", "Gives you a round of minesweeper. arguments are boardwidth = 10, boardheight = 10, mines = 10")
 
     register(add_youtube_channel,   "add_yt_channel", "Adds a youtube channel, whose uploads get posted regularly")
     register(add_youtube_channel,   "rmv_yt_channel", "Removes a youtube channel, c.f. add_yt_channel")
 
     register_routine(yt_check, 900)
+
