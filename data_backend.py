@@ -70,14 +70,14 @@ def correct_dict(dict_):
     return dict_
 
 
-def load(name):
+def load(name, encoding="utf-8"):
     """
     loads a json module and returns the result s a dictionary
     """
     path = f"configs/{name}.json"
     logger.indicate_process_start("Loading: " + path + "...")
     try:
-        with open(path) as f:
+        with open(path, encoding=encoding) as f:
             data = json.load(f)
     except (json.JSONDecodeError, UnicodeDecodeError) as e:
         return {
@@ -104,8 +104,9 @@ def can_load(name):
     """
     checks if a json module of this name is available
     """
-    directory = "/".join((__file__.split("/"))[:-1])
-    return os.path.isfile(directory + "/configs/" + name + ".json")
+    directory = os.path.dirname(__file__)
+    #print(os.path.join(directory, "configs", name + ".json"))
+    return os.path.isfile(os.path.join(directory, "configs", name + ".json"))
 
 
 def save(name, data):
@@ -125,3 +126,7 @@ def load_all():
         if f != "__meta__":
             gen[f] = load(v)
     return gen
+
+
+if __name__ == '__main__':
+    print(can_load("s"))

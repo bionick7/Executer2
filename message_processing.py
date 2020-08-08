@@ -34,7 +34,7 @@ def update_database_server():
         for delete_database in db_delete:
             logger.log_line(f"[delete \"{delete_database}\" database]")
     else:
-        logger.log("Server Collection cannot be updated. Client has nio connection to database")
+        logger.log_line("Server Collection cannot be updated. Client has no connection to database")
 
 
 @client.event
@@ -94,14 +94,15 @@ async def on_message(message):
             try:
                 await func(input_)
             except Exception:
-                return ResponseOutput(f"A python error occurred insight of the response function: \n"
-                                      f"```{format_exc(limit=10)}```", input_.channel)
+                push_message(ResponseOutput(f"A python error occurred insight of the response function: \n"
+                                      f"```{format_exc(limit=10)}```", input_.channel))
         else:
+            output = 0
             try:
                 output = func(input_)
             except Exception:
-                return ResponseOutput(f"A python error occurred insight of the response function: \n"
-                                      f"```{format_exc(limit=10)}```", input_.channel)
+                push_message(ResponseOutput(f"A python error occurred insight of the response function: \n"
+                                      f"```{format_exc(limit=10)}```", input_.channel))
             if isinstance(output, ResponseOutput):
                 push_message(output)
 

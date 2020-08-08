@@ -46,6 +46,34 @@ _global_dict = {
 }
 
 
+def reload():
+    global __data, __safe_data, __client, __output_queue, __database_client, __response_dict, __routine_list, __globals_list, _global_dict
+
+    __data = data_backend.load_all()
+    __safe_data = deepcopy(__data)
+    del (__safe_data["auth"])
+    __client = discord.Client()
+    __output_queue = backend.Queue()
+    __database_client = None
+
+    __response_dict = {}
+    __routine_list = {}
+
+    __globals_list = [__safe_data, __client, __database_client, __response_dict, __routine_list]
+
+    _global_dict = {
+        **__data,
+        "safe_data": __safe_data,
+        "client": __client,
+        "database_client": __database_client,
+        "response_dict": __response_dict,
+        "routine_list": __routine_list,
+        "default server data": DEFAULT_SERVER_DATA,
+        "logger": data_backend.logger,
+        "database_access": False
+    }
+
+
 def __set_dict(d, path, value):
     if len(path) > 1:
         __set_dict(d[path[0]], path[1:], value)
@@ -135,6 +163,7 @@ def get_response_function(name: str):
 def special_reaction(inp):
     for name, struct in __response_dict.items():
         if struct["condition"] is not None:
+            print(struct)
             if struct["condition"](inp):
                 return struct["function"]
 
@@ -158,9 +187,9 @@ def update_server_data(server_id, **kwargs):
         else:
             raise KeyError(f"Error occurred trying to update the database {keyword} not a valid keyword\n")
 
+
 def restore_client():
     global __client, _global_dict
     __client = discord.Client()
     _global_dict["client"] = __client
     return __client
-    

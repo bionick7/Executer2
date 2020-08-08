@@ -260,7 +260,7 @@ def cah_join(inp):
 
     em = discord.Embed(title="User Joined", colour=0x20ff1d)
     em.set_thumbnail(url=inp.author.avatar_url)
-    em.description = author_ment + " just joined ..."
+    em.description = inp.author.display_name + " just joined ..."
     em.set_author(name="CaH", icon_url=CAH_IMAGE_URL)
     # Join a game
     return Out(em, inp.channel)

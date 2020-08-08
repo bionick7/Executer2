@@ -9,13 +9,14 @@ import json
 import numpy as np
 
 from program_base import get_globals, set_globals, push_message, register_response_function as register,\
-    register_routine, update_server_data
+    register_routine, update_server_data, reload
 from backend import ResponseOutput as Out, FunctionMaintenanceState, ResponseInput
+from dice_core import interprete_roll, HELP_TEXT, legacy, last_dice_rolls
 
 from random import randint
 from contextlib import redirect_stdout
 from sys import stderr
-
+from datetime import datetime
 
 YOUTUBE_RED = 0xff0000
 YOUTUBE_IMAGE_URL = "https://www.stichtingnorma.nl/wp-content/uploads/2018/10/YouTube-icon-1.png"
@@ -93,77 +94,16 @@ def brain_fuck(inp):
     return Out(outp, inp.channel)
 
 
-last_dice_rolls = {}
+def dice_legacy(inp: ResponseInput):
+    return Out(legacy(inp.args, inp.author.id), inp.channel)
 
 
-def dice(inp):
-    number, dice_faces = inp.args[1].split("d")
-    is_sum = "/s" in inp.args
-    mult = 2 if "/crit" in inp.args else 1
+def dice_help(inp: ResponseInput):
+    return Out(HELP_TEXT, inp.channel)
 
-    dice_list = []
-    dice_int = int(dice_faces)
 
-    for i in range(int(number)):
-        dice_list.append(randint(1, dice_int))
-
-    bonus = 0
-    for arg in inp.args[2:]:
-        if arg.startswith("+"):
-            if "d" in arg:
-                number, dice_int = arg[1:].split("d")
-                dice_int = int(dice_int)                
-                for i in range(int(number)):
-                    dice_list.append(randint(1, dice_int))
-            else:
-                try:
-                    bonus += int(arg[1:])
-                except ValueError:
-                    pass
-        if arg.startswith("-"):
-            if "d" in arg:
-                number, dice_int = arg[1:].split("d")
-                dice_int = int(dice_int)                
-                for i in range(int(number)):
-                    dice_list.append(-randint(1, dice_int))
-            else:
-                try:
-                    bonus -= int(arg[1:])
-                except ValueError:
-                    pass
-
-    if is_sum:
-        collective_bonus = bonus
-        individual_bonus = 0
-    else:
-        collective_bonus = 0
-        individual_bonus = bonus
-
-    conclude_individual = not (individual_bonus == 0 and mult == 1)
-
-    results_list = [d * mult + individual_bonus for d in dice_list]
-    formated_string_list = []
-    for i in range(len(dice_list)):
-        formated_string = str(dice_list[i])
-        if mult != 1:
-            formated_string += " * 2 "
-        if individual_bonus != 0:
-            formated_string += (" + " if individual_bonus > 0 else " - ") + str(abs(individual_bonus))
-        if conclude_individual:
-            formated_string += " = " + str(results_list[i])
-        formated_string_list.append(formated_string)
-
-    return_string = ("\n + " if is_sum else "\n").join(formated_string_list) +\
-                    ("\n+" + str(collective_bonus) if collective_bonus != 0 else "")
-
-    if is_sum:
-        end_result = sum([x * mult + individual_bonus for x in dice_list]) + collective_bonus
-        end_result += f" = {end_result}"
-        last_dice_rolls[inp.author.id] = end_result
-    else:
-        last_dice_rolls[inp.author.id] = results_list[-1]
-
-    return Out(return_string, inp.channel)
+def dice(inp: ResponseInput):
+    return Out(interprete_roll(inp.content_text, inp.author.id), inp.channel)
 
 
 def gather_initiative(inp):
@@ -236,7 +176,7 @@ def minesweeper(inp):
 
 
 def small_py(inp):
-    cont = "print(" + inp.content_text + ")"
+    cont = "print(```" + inp.content_text + "```)"
     return Out(execute_safe(cont), inp.channel)
 
 
@@ -440,6 +380,20 @@ def remove_youtube_channel(inp):
         update_server_data(inp.channel.guild.id, youtube_follow_channels=current_list)
 
 
+def random_sentence(inp):
+    category = "lefty_problem"
+    if len(inp.args) > 1:
+        category = inp.args[1]
+    matrix = get_globals("function specific|random_sentence_matrix").get(category, [[""]])
+    sentence = " ".join([random.choice(i) for i in matrix])
+    return Out(sentence, inp.channel)
+
+
+def reload_data(inp):
+    reload()
+    return Out("Reload sucessfully", inp.channel)
+
+
 def yt_check(data):
     client = get_globals("client")
 
@@ -448,6 +402,7 @@ def yt_check(data):
         url = f"https://www.googleapis.com/youtube/v3/search?part=snippet&channelId={channel}&maxResults=1&" \
                 "order=date&key=AIzaSyAHpipWEHy1I3YIkdjyPdCsrSzE3hcKXhE"
         rep = requests.get(url)
+        print("request yt api", datetime.now().isoformat())
         content_object = json.loads(rep.text)
         if "error" in content_object:
             stderr.write(f"Error {content_object['error']['code']} occurred in 'yt_check' routine:\n"
@@ -477,7 +432,9 @@ def yt_check(data):
 def run():
     register(help_,          "help",        "You just called it")
     register(copycat,        "print",       "Just repeats everything after ´print´")
-    register(dice,           "roll",        "Rolls dice")
+    register(dice_legacy,    "roll_legacy", "Legacy rolling algorythm", FunctionMaintenanceState.LEGACY)
+    register(dice_help,      "dice_help",   "gets help about rolling dice")
+    register(dice,           "roll",        "rolls dice")
     register(dice,           "r",           "c.f. \"roll\"")
     register(my_permissions, "permissions", "Tells you what you are allowed to do")
     register(approves,       "approve",     "Considers the ongoing discussion and gives a commentary "
@@ -492,14 +449,15 @@ def run():
     register(get_latest,     "latest",      "Get the latest video of a particular yt channel")
     register(search_youtube, "yt",          "Search for a keyword on youtube")
     register(analyse,        "analysis",    "Analyses a file and gives you it's details")
-    register(set_default_channel, "set_default_channel", "Sets the default channel to the indicated one or to the "
-                                                         "current one if no arguments provided")
+    register(set_default_channel, "set_default_channel", "Sets the default channel to the indicated one or to the current one if no arguments provided")
+    register(random_sentence, "random_sentence", "Generates a random sentence")
     register(brain_fuck,     "bf",          "Executes brainfuck command")
     register(gather_initiative, "initiative", "Reads the latest results")
     register(minesweeper, "minesweeper", "Gives you a round of minesweeper. arguments are boardwidth = 10, boardheight = 10, mines = 10")
+    register(reload_data, "reload_data", "Reloads data after it is modified. A more technical function")
 
     register(add_youtube_channel,   "add_yt_channel", "Adds a youtube channel, whose uploads get posted regularly")
     register(add_youtube_channel,   "rmv_yt_channel", "Removes a youtube channel, c.f. add_yt_channel")
 
-    register_routine(yt_check, 900)
+    register_routine(yt_check, 14400)
 

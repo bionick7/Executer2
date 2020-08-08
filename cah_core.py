@@ -1,4 +1,5 @@
 from data_backend import load, can_load
+from program_base import get_globals
 
 import random
 import os
@@ -8,6 +9,7 @@ from discord import Member
 from math import log2
 from program_base import *
 
+
 class Player:
     def __init__(self, discord_implement: Member, pgame, id: int, prando: bool=False):
         self.name = "Rando Calrissian" if prando else discord_implement.display_name
@@ -15,7 +17,6 @@ class Player:
         self.id = id
         self._points = 0
         self.cards = []
-        self.take(10)
         self.discord_implement = discord_implement
         self.isrando = prando
 
@@ -36,9 +37,10 @@ class Player:
 
     @classmethod
     def rando(cls, game, id):
-        return Player(client.user, game, id, True)
+        bot_client = get_globals("client")
+        return Player(bot_client.user, game, id, True)
 
-    def __str__(self):
+    def __repr__(self):
         return "<Player {n}>".format(n=self.name)
 
 
@@ -67,8 +69,8 @@ class Game:
             act_path = "cah_libraries/" + path
             if can_load(act_path):
                 lib = load(act_path)
-                if lib["__meta__"]["outcome"] != "success":
-                    outp.append(lib["__meta__"])
+                #if lib["__meta__"]["outcome"] != "success":
+                outp.append(lib["__meta__"])
                 self._whites_tot += lib.get("white", [])
                 self._blacks_tot += lib.get("black", [])
                 self.packs.append(path)
@@ -88,8 +90,10 @@ class Game:
         Called, when a player joins
         :param p_player: The discord member
         """
-        if self.game_stat != 0: return
-        if any([player.name == p_player.display_name for player in self.player_list]): return
+        if self.game_stat != 0:
+            return
+        if any([player.name == p_player.display_name for player in self.player_list]):
+            return
         player = Player(p_player, self, len(self.player_list))
         if self.tsar is None:
             self.tsar = player
@@ -97,7 +101,8 @@ class Game:
         return player
 
     def leave(self, p_player: Member):
-        if not any([player.name == p_player.display_name for player in self.player_list]): return
+        if not any([player.name == p_player.display_name for player in self.player_list]):
+            return
         self.player_list = list(filter(lambda x: x.name != p_player.display_name, self.player_list))
 
     def lay_card(self, player_name: str, cards: list):
@@ -133,7 +138,7 @@ class Game:
         self.game_stat = 2
         return res
 
-    def get_laid_out():
+    def get_laid_out(self):
         res = []
         for i, pl in enumerate(self.player_list):
             if pl != self.tsar:
@@ -161,6 +166,8 @@ class Game:
         After this, the njoin-phase is over, and the game beginns
         :returns text-output
         """
+        for player in self.player_list:
+            player.take(10)
         self.game_stat = 1
         return self._new_round()
 
@@ -246,7 +253,3 @@ def fill_black(card, white_cards: list):
     elif "__(3)___" in res:
         res = res.replace("__(3)___", "**{}**".format(white_cards[2]))
     return res
-
-
-if __name__ == '__main__':
-    print("No Syntax errors")

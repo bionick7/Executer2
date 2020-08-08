@@ -2,7 +2,7 @@
 
 import datetime
 import pymongo, pymongo.errors
-import dns
+#import dns
 
 from program_base import get_globals, set_globals
 import message_processing
@@ -26,7 +26,9 @@ def main():
     logger.indicate_process_start("Connecting to Database ...")
     try:
         cl = pymongo.MongoClient(url)
-    except (pymongo.errors.ConfigurationError, dns.exception.Timeout):
+        # To test, if it can actually fetch data
+        _ = cl["executer_database"]["servers"].find()[0]
+    except (pymongo.errors.ConfigurationError, pymongo.errors.OperationFailure):
         logger.indicate_process_outcome("\nAn error occurred while trying to setup the database client."
                                         " See stderr for more information")
         logger.log_traceback()
