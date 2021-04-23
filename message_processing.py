@@ -25,10 +25,12 @@ def update_database_server():
                 "discord_id": server_obj.id,
                 "name": server_obj.name,
                 "functions": [],
-                "cah_librairies": get_globals("cah functions|full"),
+                #"cah_librairies": get_globals("cah functions|full"),
+                "cah_librairies": {},
                 "youtube_follow_channels": [],
                 "response_functions": {},
-                "default_channel_id": server_obj.fetch_channels(limit=1)[0].id
+                # "default_channel_id": server_obj.fetch_channels()[0].id
+                "default_channel_id": 0
             }
             server_collection.insert_one(database_object)
         for delete_database in db_delete:
@@ -145,4 +147,7 @@ def run():
     global client
     if client.loop.is_closed():
         client = restore_client()
-    client.run(get_globals("auth|token"))
+    try:
+        client.run(get_globals("auth|token"))
+    except Exception:
+        print("Nope")

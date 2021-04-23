@@ -6,7 +6,7 @@ import pymongo, pymongo.errors
 
 from program_base import get_globals, set_globals
 import message_processing
-import response_functions
+import function_library
 import cah_functions
 
 from time import sleep as wait
@@ -14,7 +14,7 @@ from time import sleep as wait
 
 def run():
     # define the functions
-    response_functions.run()
+    function_library.run()
     cah_functions.run()
     # run the bot
     message_processing.run()
@@ -49,6 +49,7 @@ def main():
         logger.log_traceback()
         logger.log_line("=" * 100)
         return 1
+    return -1
 
 
 if __name__ == "__main__":

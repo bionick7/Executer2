@@ -4,7 +4,7 @@ import re
 from enum import Enum
 from typing import List, Dict
 
-last_dice_rolls = []
+last_dice_rolls = {}
 
 HELP_TEXT = """
 New roll Syntax:
@@ -119,6 +119,7 @@ def interprete_roll(inp: str, author_id: int) -> str:
             roll_list.append(t.custom_copy())
     for roll in roll_list:
         if author_id >= 0:
+            # print(f"Author is {author_id}")
             last_dice_rolls[author_id] = evaluate(roll)
         res += string_evaluate(roll, 0) + "\n"
     return res
@@ -224,7 +225,7 @@ def tokenise(inp: str) -> Dict[Token, Token]:
         i += 1"""
     times, rolls, add_times = [], [], True
     res = {}
-    print(tokens)
+    # print(tokens)
     for i, t in enumerate(tokens + [Token(TokenType.AND_OPERATOR)]):
         if t.token_type == TokenType.AND_OPERATOR:
             if not rolls:

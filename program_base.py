@@ -42,8 +42,12 @@ _global_dict = {
     "routine_list": __routine_list,
     "default server data": DEFAULT_SERVER_DATA,
     "logger": data_backend.logger,
-    "database_access": False
+    "database_access": True
 }
+
+
+def tr(token: str) -> str:
+    return token
 
 
 def reload():
@@ -190,6 +194,7 @@ def update_server_data(server_id, **kwargs):
 
 def restore_client():
     global __client, _global_dict
-    __client = discord.Client()
+    intents = Intents.all()
+    __client = discord.Client(intents=intents)
     _global_dict["client"] = __client
     return __client

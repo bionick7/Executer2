@@ -2,6 +2,6 @@
   "prefix": "%",
   "delete prefix": "!",
 
-  "offline simulation": false,
+  "offline simulation": true,
   "time display template": "[%a, %d %b %Y at %H:%M:%S]"
 }

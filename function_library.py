@@ -32,7 +32,7 @@ def isint(input_: str):
 
 
 def copycat(inp):
-    return Out(" ".join(inp.args), inp.channel)
+    return Out(" ".join(inp.args[1:]), inp.channel)
 
 
 def execute_safe(command):
@@ -107,13 +107,24 @@ def dice(inp: ResponseInput):
 
 
 def gather_initiative(inp):
-    users = [discord.utils.get(inp.guild.members, id=i) for i in last_dice_rolls]
-    users_sorted = sorted(users, key=lambda x: last_dice_rolls.get(x.id, -1000), reverse=True)
-    res_string = "\n".join([f"{last_dice_rolls.get(usr.id, math.nan)}\t{usr.display_name}" for usr in users_sorted])
+    def get_user_name(i):
+        user = inp.guild.get_member(i)
+        if user is None:
+            return "NULL"
+        else:
+            return user.display_name
+
+    ids_sorted = sorted(last_dice_rolls.items(), key=lambda x: x[1], reverse=True)
+    users_sorted = [(get_user_name(t[0]), t[1]) for t in ids_sorted]
+
     em = discord.Embed(title="Initiative", colour=0xf0f000)
-    for user in users_sorted:
-        em.add_field(name=user.display_name, value=last_dice_rolls.get(user.id, math.nan), inline=False)
-    push_message(Out("Copyable text: \n```" + res_string + "```", inp.author))
+    if len(users_sorted) > 0:
+        res_string = "\n".join([f"{t[1]}\t{t[0]}" for t in users_sorted])
+        for t in users_sorted:
+            em.add_field(name=t[0], value=t[1], inline=False)
+        push_message(Out("Copyable text: \n```" + res_string + "```", inp.author))
+    else:
+        em.description = "Noone rolled yet"
     return Out(em, inp.channel)
 
 
@@ -432,7 +443,7 @@ def yt_check(data):
 def run():
     register(help_,          "help",        "You just called it")
     register(copycat,        "print",       "Just repeats everything after ´print´")
-    register(dice_legacy,    "roll_legacy", "Legacy rolling algorythm", FunctionMaintenanceState.LEGACY)
+    register(dice_legacy,    "roll_legacy", "Legacy rolling algorythm", maintenance_state=FunctionMaintenanceState.LEGACY)
     register(dice_help,      "dice_help",   "gets help about rolling dice")
     register(dice,           "roll",        "rolls dice")
     register(dice,           "r",           "c.f. \"roll\"")
