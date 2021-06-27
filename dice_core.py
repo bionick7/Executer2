@@ -182,7 +182,8 @@ def tokenise(inp: str) -> Dict[Token, Token]:
     for c in inp + "\x00":  # Null terminate to trigger token evaluator at the end (could be any whitespace)
         if c in SINGLE_CHAR_TOKENS:
             # dice atom
-            if (match := re.search(r"^(\d+)d(\d+)$", current_token)) is not None:
+            match = re.search(r"^(\d+)d(\d+)$", current_token)
+            if match is not None:
                 number, sides = map(int, match.group(1, 2))
                 tokens.append(Token(TokenType.DICE, number, sides))
             # integer atom
