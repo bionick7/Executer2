@@ -12,6 +12,7 @@ from program_base import get_globals, set_globals, push_message, register_respon
     register_routine, update_server_data, reload
 from backend import ResponseOutput as Out, FunctionMaintenanceState, ResponseInput
 from dice_core import interprete_roll, HELP_TEXT, legacy, last_dice_rolls
+from inarow import interprete_inarow, begin_inarow, end_inarow, win_condotion, purgable, can_play
 
 from random import randint
 from contextlib import redirect_stdout
@@ -103,8 +104,30 @@ def dice_help(inp: ResponseInput):
 
 
 def dice(inp: ResponseInput):
-    return Out(interprete_roll(inp.content_text, inp.author.id), inp.channel)
+    return Out("```" + interprete_roll(inp.content_text, inp.author.id) + "```", inp.channel)
 
+
+def iar_begin(inp: ResponseInput):
+    return Out("```" + begin_inarow(*inp.args, **inp.kwargs) + "```", inp.channel)
+
+
+def iar_play(inp: ResponseInput):
+    if not can_play():
+        return Out("No game currently active", inp.channel)
+    res = interprete_inarow(inp.content_text.strip())
+    if res == -1:
+        return Out(f"Invalid Input `{inp.content_text.strip()}`", inp.channel)
+    win = win_condotion()
+    if win == 0:
+        return Out("```" + res + "```", inp.channel)
+    elif win == 1:
+        push_message(Out("You have won", inp.channel))
+    elif win == 2:
+        push_message(Out("THE MACHINE has won", inp.channel))
+
+
+def iar_end(inp: ResponseInput):
+    return Out(end_inarow(), inp.channel)
 
 def gather_initiative(inp):
     def get_user_name(i):
@@ -366,7 +389,7 @@ def add_youtube_channel(inp):
                 .add_field(name="Current last video", value=video_content["snippet"]["title"], inline=False)\
                 .set_image(url=video_content["snippet"]["thumbnails"]["medium"]["url"])\
                 .set_thumbnail(url=channel_content["snippet"]["thumbnails"]["medium"]["url"])\
-                .set_footer(text=f"For removal type %yt_rmv_channel {ch_name}")\
+                .set_footer(text=f"For removal type %rmv_yt_channel {ch_name}")\
                 .set_author(name="Executer Youtube Division", icon_url=YOUTUBE_IMAGE_URL)
 
     # Update database
@@ -383,12 +406,16 @@ def remove_youtube_channel(inp):
           f"&order=relevance&q={inp.content_text}&key=AIzaSyAHpipWEHy1I3YIkdjyPdCsrSzE3hcKXhE"
     channel_content = json.loads(requests.get(url).text)["items"][0]
     channel_id = channel_content["id"]["channelId"]
+    channel_name = channel_content["snippet"]["title"]
 
     # Update the database
     current_list = inp.data["server data"]["youtube_follow_channels"]
     if channel_id in current_list:
         del(current_list[channel_id])
         update_server_data(inp.channel.guild.id, youtube_follow_channels=current_list)
+
+        return Out(f"removed '{channel_name}' ({channel_id})", inp.channel)
+    return Out(f"'{channel_name}' ({channel_id}) not found", inp.channel)
 
 
 def random_sentence(inp):
@@ -467,8 +494,13 @@ def run():
     register(minesweeper, "minesweeper", "Gives you a round of minesweeper. arguments are boardwidth = 10, boardheight = 10, mines = 10")
     register(reload_data, "reload_data", "Reloads data after it is modified. A more technical function")
 
+    register(iar_begin, "4start", "starts a 3d 4-in-a-row game")
+    register(iar_play, "4play", "signals a move in the 3d 4-in-a-row game")
+    register(iar_play, "4", "Short for 4 play")
+    register(iar_end, "4end", "starts a 3d 4-in-a-row game")
+
     register(add_youtube_channel,   "add_yt_channel", "Adds a youtube channel, whose uploads get posted regularly")
-    register(add_youtube_channel,   "rmv_yt_channel", "Removes a youtube channel, c.f. add_yt_channel")
+    register(remove_youtube_channel,   "rmv_yt_channel", "Removes a youtube channel, c.f. add_yt_channel")
 
     register_routine(yt_check, 14400)
 
