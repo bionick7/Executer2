@@ -46,6 +46,18 @@ SINGLE_CHAR_TOKENS = {
 }
 
 
+def get_dice_permutations(p, q, x: int) -> int:
+    """ possibilities that pdq = x"""
+    if not (p <= x <= p*q):
+        return 0
+    if p == 1:
+        return 1
+    res = 0
+    for i in range(1, min(q, x - p + 1)+1):
+        res += get_dice_permutations(p-1, q, x-i)
+    return res
+
+
 class Token:
     def __init__(self, p_type: TokenType, *args, **kwargs):
         self.token_type = p_type
@@ -68,15 +80,29 @@ class Token:
     def can_be_evaluated_indirect(self) -> bool:
         return self.token_type in (TokenType.INTEGER, TokenType.DICE, TokenType.TOKEN_SET)
 
-    def evaluate(self) -> int:
+    def evaluate(self, modus_op="num") -> int:
         if self.token_type == TokenType.INTEGER:
-            return self.value
-        elif self.token_type == TokenType.DICE:
-            if not self._results:  # Don't re-roll
-                self._results = [randint(1, self.sides) for _ in range(self.number)]
-            return sum(self._results)
-        else:
-            return 0
+            if modus_op == "var":
+                return 0
+            if modus_op == "exp2":
+                return self.value*self.value
+            else:
+                return self.value
+        if self.token_type == TokenType.DICE:
+            if modus_op == "num":
+                if not self._results:  # Don't re-roll
+                    self._results = [randint(1, self.sides) for _ in range(self.number)]
+                return sum(self._results)
+            elif modus_op == "min":
+                return self.number
+            elif modus_op == "max":
+                return self.sides * self.number
+            elif modus_op == "exp":
+                return self.number * (0.5 + self.sides / 2)
+            elif modus_op == "exp2":
+                return self.number * sum([x * x for x in range(1, self.sides + 1)]) / self.sides
+            elif modus_op == "var":
+                return self.evaluate("exp2") - self.evaluate("exp")**2 / self.number
 
     def string_evaluate(self) -> str:
         if self.token_type == TokenType.INTEGER:
@@ -115,13 +141,24 @@ def interprete_roll(inp: str, author_id: int) -> str:
     roll_list = []
     for enumerator_token, t in tokens.items():
         res += "rolling: " + string_evaluate(enumerator_token, 0) + " times \n"
-        for _ in range(evaluate(enumerator_token)):
+        for _ in range(evaluate(enumerator_token, "num")):
             roll_list.append(t.custom_copy())
     for roll in roll_list:
         if author_id >= 0:
             # print(f"Author is {author_id}")
             last_dice_rolls[author_id] = evaluate(roll)
         res += string_evaluate(roll, 0) + "\n"
+    return res
+
+
+def analyse_roll(inp: str) -> str:
+    tokens = tokenise(inp)
+    res = ""
+    for enumerator_token, t in tokens.items():
+        if enumerator_token.token_type != TokenType.INTEGER:
+            res += f"Enumerator : [{evaluate(enumerator_token, 'min')}, {evaluate(enumerator_token, 'max')}]" \
+                   f"E = {evaluate(enumerator_token, 'exp')} --- STD = {evaluate(enumerator_token, 'var') ** 0.5}"
+        res += f"Roll : [{evaluate(t, 'min')}, {evaluate(t, 'max')}] E = {evaluate(t, 'exp')} --- STD = {evaluate(t, 'var') ** 0.5}"
     return res
 
 
@@ -146,11 +183,12 @@ def string_evaluate(token: Token, recursion_level: int) -> str:
     return ""
 
 
-def evaluate(token: Token) -> int:
+def evaluate(token: Token, modus_op="num"):
     if token.can_be_evaluated():
-        return token.evaluate()
+        return token.evaluate(modus_op)
     if token.token_type == TokenType.TOKEN_SET:
-        res = evaluate(token.token_list[0])
+        res = evaluate(token.token_list[0], modus_op)
+        t2 = token.token_list[0]
         current_operation = ''
         for t in token.token_list[1:]:
             if t.token_type == TokenType.ADD_OPERATOR:
@@ -162,14 +200,21 @@ def evaluate(token: Token) -> int:
             elif t.token_type == TokenType.DIVIDE_FLOOR_OPERATOR:
                 current_operation = '/'
             elif t.can_be_evaluated() or t.token_type == TokenType.TOKEN_SET:
-                if current_operation == '+':
-                    res += evaluate(t)
-                elif current_operation == '-':
-                    res -= evaluate(t)
-                elif current_operation == '*':
-                    res *= evaluate(t)
-                elif current_operation == '/':
-                    res //= evaluate(t)
+                if modus_op == "var":
+                    if current_operation == '*' and t2 is not None:
+                        res = evaluate(t, "var") * evaluate(t2, "exp2") + evaluate(t2, "var") * evaluate(t, "exp2")
+                    if current_operation == '/' and t.token_type == TokenType.INTEGER:
+                        res /= evaluate(t, "exp2")
+                else:
+                    if current_operation == '+':
+                        res += evaluate(t, modus_op)
+                    elif current_operation == '-':
+                        res -= evaluate(t, modus_op)
+                    elif current_operation == '*':
+                        res *= evaluate(t, modus_op)
+                    elif current_operation == '/':
+                        res //= evaluate(t, modus_op)
+                t2 = t
             else:
                 current_operation = ''
         return res
@@ -179,6 +224,7 @@ def evaluate(token: Token) -> int:
 def tokenise(inp: str) -> Dict[Token, Token]:
     current_token = ""
     tokens = []
+    # Initial tokenisation
     for c in inp + "\x00":  # Null terminate to trigger token evaluator at the end (could be any whitespace)
         if c in SINGLE_CHAR_TOKENS:
             # dice atom
@@ -196,13 +242,8 @@ def tokenise(inp: str) -> Dict[Token, Token]:
     tokens = list(filter(lambda x: x.token_type != TokenType.WHITESPACE, tokens))
     # print(tokens)
     i = 0
-    while i < len(tokens):
-        t = tokens[i]
-        if t.token_type in (TokenType.MULTIPLY_OPERATOR, TokenType.DIVIDE_FLOOR_OPERATOR):
-            tokens[i-1: i+2] = [Token.comulate(tokens[i-1: i+2])]
-            i -= 2
-        i += 1
-    i = 0
+
+    # Grouping
     last_bracket_queue = []
     while i < len(tokens):
         t = tokens[i]
@@ -213,6 +254,16 @@ def tokenise(inp: str) -> Dict[Token, Token]:
             tokens[last:i + 1] = [Token.comulate(tokens[last + 1: i])]
             i = last
         i += 1
+
+    i = 0
+    while i < len(tokens):
+        t = tokens[i]
+        if t.token_type in (TokenType.MULTIPLY_OPERATOR, TokenType.DIVIDE_FLOOR_OPERATOR):
+            tokens[i-1: i+2] = [Token.comulate(tokens[i-1: i+2])]
+            i -= 2
+        i += 1
+    # print(tokens)
+
     i = 0
     last = 0
     """
@@ -319,4 +370,12 @@ def legacy(args: List[str], author_id: int) -> str:
 
 if __name__ == '__main__':
     # print(interprete_roll("(10d10 - 10) x (1d5 * (1d2 + 3) / 2d8)"))
-    print(interprete_roll("1x3 & 5+3x4 && 3", -1))
+    # print(interprete_roll("1x3 & 5+3x4 && 3", -1))
+    #print(analyse_roll("1d12"))
+    #print(analyse_roll("2d6"))
+    #print(analyse_roll("3d4"))
+    #print(analyse_roll("4d3"))
+    #print(analyse_roll("6d2"))
+    print(analyse_roll("2d6 - 5"))
+    print(analyse_roll("(2d6 - 5) / 2"))
+    print(tokenise("(2d6 - 5) / 2"))

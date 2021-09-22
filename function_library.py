@@ -11,7 +11,7 @@ import numpy as np
 from program_base import get_globals, set_globals, push_message, register_response_function as register,\
     register_routine, update_server_data, reload
 from backend import ResponseOutput as Out, FunctionMaintenanceState, ResponseInput
-from dice_core import interprete_roll, HELP_TEXT, legacy, last_dice_rolls
+from dice_core import interprete_roll, HELP_TEXT, legacy, last_dice_rolls, analyse_roll
 from inarow import interprete_inarow, begin_inarow, end_inarow, win_condotion, purgable, can_play
 
 from random import randint
@@ -107,6 +107,10 @@ def dice(inp: ResponseInput):
     return Out("```" + interprete_roll(inp.content_text, inp.author.id) + "```", inp.channel)
 
 
+def analyse_dice(inp: ResponseInput):
+    return Out("```" + analyse_roll(inp.content_text) + "```", inp.channel)
+
+
 def iar_begin(inp: ResponseInput):
     return Out("```" + begin_inarow(*inp.args, **inp.kwargs) + "```", inp.channel)
 
@@ -128,6 +132,7 @@ def iar_play(inp: ResponseInput):
 
 def iar_end(inp: ResponseInput):
     return Out(end_inarow(), inp.channel)
+
 
 def gather_initiative(inp):
     def get_user_name(i):
@@ -474,6 +479,7 @@ def run():
     register(dice_help,      "dice_help",   "gets help about rolling dice")
     register(dice,           "roll",        "rolls dice")
     register(dice,           "r",           "c.f. \"roll\"")
+    register(analyse_dice,   "analyse_roll","Gives some probabalystic insight into the roll's nature")
     register(my_permissions, "permissions", "Tells you what you are allowed to do")
     register(approves,       "approve",     "Considers the ongoing discussion and gives a commentary "
                                             "to your last argument using coding and algorytms, "
