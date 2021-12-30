@@ -22,6 +22,9 @@ from datetime import datetime
 YOUTUBE_RED = 0xff0000
 YOUTUBE_IMAGE_URL = "https://www.stichtingnorma.nl/wp-content/uploads/2018/10/YouTube-icon-1.png"
 
+CCP_RED = 0xd00000
+CCP_IMAGE_URL = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Danghui.svg/150px-Danghui.svg.png"
+
 
 def isint(input_: str):
     try:
@@ -437,6 +440,40 @@ def reload_data(inp):
     return Out("Reload sucessfully", inp.channel)
 
 
+def scp_initiate(inp):
+    scp_good, scp_bad = inp.args[1:3]
+    em = discord.Embed(title="Initiate SCP system", colour=CCP_RED,
+                       description="父親回衙 冒認收了 汗流如雨 吉安而來")\
+                .add_field(name=" 意 關雎 出 矣", value=
+f"""誨 貢院 第八回 」 了」 第二回 第六回 矣 出 覽 招」 意 事. 誨 ，可 」 曰： 去 關雎. 分得意 ﻿白圭志 第十一回 在一處 訖乃返. ，愈聽愈惱 饒爾
+去罷」 也懊悔不了. 事 曰： 意 出 誨 ，可 關雎 去.{scp_good} 矣 事 曰： 去 覽 關雎 出 」. 關雎 曰： 矣 了」 第七回 意 招」 」 誨 第六回 覽 ，可. 意 」
+出 去 覽 關雎. 去 關雎 意 曰： 覽. 第七回 驚異 第九回 第三回. 去 耳 ，可 」 覽. ﻿白圭志 不稱讚 去 建章曰： 訖乃返 關雎 覽 曰： 」 矣. 汗流
+如雨 吉安而來 父親回衙 玉，不題 冒認收了. 曰： 意 誨 關雎 {scp_bad} ，可 覽. 關雎 」 耳 去 矣 誨. 誨 關雎 覽 意.""", inline=False)\
+                .set_footer(text="为人民服务")\
+                .set_author(name="Executer 中国共产党", icon_url=CCP_IMAGE_URL)
+
+    update_server_data(inp.channel.guild.id, scp_emojis=[scp_good, scp_bad])
+    return Out(em, inp.channel)
+
+
+def scp_count(inp):
+    list = inp.data["server data"]["scp_list"]
+    em = discord.Embed(title="Social Credit points so far:", colour=CCP_RED,
+                       description="父親回衙 冒認收了 汗流如雨 吉安而來")\
+                .set_footer(text="为人民服务")\
+                .set_author(name="Executer 中国共产党", icon_url=CCP_IMAGE_URL)
+
+    name_list = []
+    for m in inp.channel.guild.members:
+        if str(m.id) in list:
+            name_list.append((m.display_name, list[str(m.id)]))
+    name_list.sort(key=lambda x: x[1])
+    for name, points in name_list:
+        em.add_field(name=name, value=str(points), inline=False)
+
+    return Out(em, inp.channel)
+
+
 def yt_check(data):
     client = get_globals("client")
 
@@ -493,12 +530,21 @@ def run():
     register(get_latest,     "latest",      "Get the latest video of a particular yt channel")
     register(search_youtube, "yt",          "Search for a keyword on youtube")
     register(analyse,        "analysis",    "Analyses a file and gives you it's details")
-    register(set_default_channel, "set_default_channel", "Sets the default channel to the indicated one or to the current one if no arguments provided")
+    register(set_default_channel, "set_default_channel", "Sets the default channel to the indicated one or to the "
+                                                         "current one if no arguments provided")
     register(random_sentence, "random_sentence", "Generates a random sentence")
     register(brain_fuck,     "bf",          "Executes brainfuck command")
     register(gather_initiative, "initiative", "Reads the latest results")
-    register(minesweeper, "minesweeper", "Gives you a round of minesweeper. arguments are boardwidth = 10, boardheight = 10, mines = 10")
+    register(minesweeper, "minesweeper", "Gives you a round of minesweeper. "
+                                         "arguments are boardwidth = 10, boardheight = 10, mines = 10")
     register(reload_data, "reload_data", "Reloads data after it is modified. A more technical function")
+    register(scp_initiate, "start_social_credit_system", " 關雎 父親回衙 吉安而來 耳 矣 曰：. 去 饒爾去罷」 也懊悔不了 ，愈聽愈惱 矣 "
+                                                         "關雎 此是後話 曰： 誨 出. 父親回衙 吉安而來 玉，不題. 意 」 矣 出 ，可 曰："
+                                                         " 誨 去. 去 覽 出 」 耳 ，可 關雎 事. 矣 意 第十回 去 不題 耳 第三回 第七"
+                                                         "回 ，可 第五回 第一回 」 關雎. ，愈聽愈惱 也懊悔不了 ，可 矣 此是後話 饒爾"
+                                                         "去罷」 意 事 去. 第七")
+    register(scp_count, "show_social_credit", "處 訖乃返. 」 耳 出 曰： 覽 矣. 也懊悔不了 ，愈聽愈惱 此是後話 饒爾去罷」. 誨 也懊悔不"
+                                              "了 去 」 ，可 事 ，愈聽愈惱 饒爾去罷」")
 
     register(iar_begin, "4start", "starts a 3d 4-in-a-row game")
     register(iar_play, "4play", "signals a move in the 3d 4-in-a-row game")

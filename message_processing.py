@@ -2,8 +2,7 @@ import asyncio
 import datetime
 import discord
 
-from program_base import get_globals, restore_client, set_globals, pop_message, push_message, get_response_function, special_reaction,\
-    can_pop
+from program_base import *
 from traceback import format_exc
 
 from backend import ResponseInput, ResponseOutput
@@ -74,9 +73,10 @@ async def on_message(message):
     if message.author == client.user:
         return
 
+    # Server data
     if isinstance(message.channel, (discord.DMChannel, discord.GroupChannel)) or not get_globals("database_access"):
         server_data = get_globals("default server data")
-        server_data["default_channel_id"] = message.id
+        server_data["default_channel_id"] = message.channel.id
     else:
         server_data = get_globals("database_client|executer_database|servers").find({"discord_id": message.guild.id})[0]
 
@@ -111,6 +111,18 @@ async def on_message(message):
         await empty_queue()
 
 
+@client.event
+async def on_reaction_add(reaction, user):
+    """Handles added reactions"""
+    handle_reaction(reaction, 1)
+
+
+@client.event
+async def on_reaction_remove(reaction, user):
+    """Handles removed reactions"""
+    handle_reaction(reaction, -1)
+
+
 async def empty_queue():
     i = 0
     while can_pop():
@@ -137,6 +149,24 @@ def initiate_routines(loop):
                     loop.create_task(routine_def(func, x, time))
                     logger.log_line(f"\t\"{func.__name__}\" routine initiated  ({time}s) for {x['name']}")
         set_globals(routine_list=routine_list)
+
+
+def handle_reaction(reaction, ammount):
+    server_data = get_globals("database_client|executer_database|servers").find({"discord_id": reaction.message.guild.id})[0]
+    scp_list = server_data.get("scp_list", {})
+    scp_emojis = server_data.get("scp_emojis", [])
+    true_name = str(reaction.emoji)
+    # only handle if in submission channel, not authored by bot and emoji valid
+    if reaction.me or true_name not in scp_emojis:
+        return
+    user_id = str(reaction.message.author.id)
+    increase = ammount * (1 if true_name == scp_emojis[0] else -1)
+    if user_id in scp_list:
+        scp_list[user_id] += increase
+    else:
+        scp_list[user_id] = increase
+    server_data["scp_list"] = scp_emojis
+    update_server_data(reaction.message.guild.id, scp_list=scp_list)
 
 
 def run():

@@ -6,6 +6,7 @@ import data_backend
 from pymongo import MongoClient
 from pymongo.database import Database
 from copy import deepcopy
+from collections.abc import Sequence
 
 __author__ = "ech#5002"
 
@@ -120,8 +121,12 @@ def get_globals(*args):
     return res if len(res) > 1 else res[0]
 
 
-def set_globals(**kwargs):
+def set_globals(*args, **kwargs):
     global _global_dict
+    for arg in args:
+        if isinstance(arg, Sequence) and len(arg) == 2:
+            key, value = arg
+            __set_dict(_global_dict, key.split("|"), value)
     for kw, value in kwargs.items():
         path = kw.split("|")
         __set_dict(_global_dict, path, value)
@@ -186,15 +191,13 @@ def update_server_data(server_id, **kwargs):
     """
     servers = get_globals("database_client|executer_database|servers")
     for keyword, value in kwargs.items():
-        if keyword in servers.find_one({"discord_id": server_id}):
-            servers.update_one({"discord_id": server_id}, {"$set": {keyword: value}}, upsert=True)
-        else:
-            raise KeyError(f"Error occurred trying to update the database {keyword} not a valid keyword\n")
+        servers.update_one({"discord_id": server_id}, {"$set": {keyword: value}}, upsert=True)
 
 
 def restore_client():
     global __client, _global_dict
-    intents = Intents.all()
+    intents = discord.Intents.all()
+    intents.reactions = True
     __client = discord.Client(intents=intents)
     _global_dict["client"] = __client
     return __client
