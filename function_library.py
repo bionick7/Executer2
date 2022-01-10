@@ -464,7 +464,7 @@ def scp_count(inp):
                 .set_author(name="Executer 中国共产党", icon_url=CCP_IMAGE_URL)
 
     name_list = []
-    for m in inp.channel.guild.members:
+    for m in inp.channel.guild.fetch_members(limit=None):
         if str(m.id) in list:
             name_list.append((m.display_name, list[str(m.id)]))
     name_list.sort(key=lambda x: x[1])

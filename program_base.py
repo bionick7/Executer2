@@ -1,4 +1,5 @@
 import discord
+from discord.ext import commands
 
 import backend
 import data_backend
@@ -12,10 +13,14 @@ __author__ = "ech#5002"
 
 DEFAULT_FUNCTIONS = []
 
+intents = discord.Intents.none()
+intents.reactions = True
+intents.members = True
+
 __data = data_backend.load_all()
 __safe_data = deepcopy(__data)
 del (__safe_data["auth"])
-__client = discord.Client()
+__client = discord.Client(intents=intents)
 __output_queue = backend.Queue()
 __database_client = None
 
@@ -57,7 +62,7 @@ def reload():
     __data = data_backend.load_all()
     __safe_data = deepcopy(__data)
     del (__safe_data["auth"])
-    __client = discord.Client()
+    __client = discord.Client(intents=intents)
     __output_queue = backend.Queue()
     __database_client = None
 
@@ -196,8 +201,9 @@ def update_server_data(server_id, **kwargs):
 
 def restore_client():
     global __client, _global_dict
-    intents = discord.Intents.all()
+    intents = discord.Intents.none()
     intents.reactions = True
-    __client = discord.Client(intents=intents)
+    intents.members = True
+    __client = commands.Bot(command_prefix="%", intents=intents)
     _global_dict["client"] = __client
     return __client
