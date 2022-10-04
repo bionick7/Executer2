@@ -2,6 +2,8 @@ import json
 import sys
 import os
 import traceback
+import discord
+from discord.ext import commands
 
 from shutil import get_terminal_size
 
@@ -55,7 +57,16 @@ class Logger:
         return f"<Logger object @ ({out[0]}; {out[1]})| Error ({err[0]}; {err[1]})>"
 
 
-logger = Logger()
+def make_client() -> discord.Client:
+    intents = discord.Intents.default()
+    intents.reactions = True
+    intents.members = True
+    intents.message_content = True
+    intents.dm_messages = True
+    intents.guild_messages = True
+    intents.dm_reactions = True
+    intents.guild_reactions = True
+    return commands.Bot(command_prefix="%", intents=intents)
 
 
 def correct_dict(dict_):
@@ -70,12 +81,13 @@ def correct_dict(dict_):
     return dict_
 
 
-def load(name, encoding="utf-8"):
+def load(name, logger=None, encoding="utf-8"):
     """
     loads a json module and returns the result s a dictionary
     """
     path = f"configs/{name}.json"
-    logger.indicate_process_start("Loading: " + path + "...")
+    if logger is not None:
+        logger.indicate_process_start("Loading: " + path + "...")
     try:
         with open(path, encoding=encoding) as f:
             data = json.load(f)
@@ -88,7 +100,9 @@ def load(name, encoding="utf-8"):
                 "filename": path.split("/")[-1]
             }
           }
-    logger.indicate_process_outcome("Success")
+
+    if logger is not None:
+        logger.indicate_process_outcome("Success")
     data = correct_dict(data)
 
     data["__meta__"] = {
@@ -117,15 +131,23 @@ def save(name, data):
         json.dump(data, f)
 
 
-def load_all():
+def load_all(logger=None):
     """
     loads all modules specified in the entrance file
     """
-    gen = load("entrance")
-    for f, v in gen.items():
-        if f != "__meta__":
-            gen[f] = load(v)
-    return gen
+    res = {}
+    if can_load("config"):
+        res["config"] = load("config", logger)
+    if can_load("cah_config"):
+        res["cah_config"] = load("cah_config", logger)
+    return res
+
+
+async def get_dm_channel(user: discord.User) -> discord.DMChannel:
+    channel = user.dm_channel
+    if channel is None:
+        channel = await user.create_dm()
+    return channel
 
 
 if __name__ == '__main__':
