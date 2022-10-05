@@ -3,5 +3,7 @@
   "delete prefix": "!",
 
   "offline simulation": true,
-  "time display template": "[%a, %d %b %Y at %H:%M:%S]"
+  "time display template": "[%a, %d %b %Y at %H:%M:%S]",
+
+  "namesgen_path": "configs/namesgen_source.txt"
 }

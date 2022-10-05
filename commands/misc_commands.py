@@ -80,7 +80,7 @@ async def msg(ctx, *args):
 async def approves(ctx):
     em = discord.Embed(title="Executor approval Rating", color=0x51ff00,
                        description=f"{client.user.name} approves :white_check_mark:")
-    em.set_author(name=client.user.name, icon_url=client.user.avatar_url)
+    em.set_author(name=client.user.name, icon_url=client.user.avatar.url)
     em.set_footer(text="determined after long consideration")
     await ctx.send("", embed=em)
 
@@ -92,5 +92,4 @@ async def shutup(ctx):
 
 @client.command(name="test")
 async def test_message(ctx, *args):
-
     await ctx.send("Test: " + ", ".join(args))
