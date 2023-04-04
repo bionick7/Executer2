@@ -1,12 +1,7 @@
 # Executer 2
-This is a new approach to the executer bot, including basically all the features from before in a more organised fashion
-and using an online database for certain applications.
+This is a new approach to the executer bot
 
 ## Requirements
-To run the bot, you need Python 3.7 or newer with the following modules:
- - discord      (1.0.1)
- - PyMongo      (3.9.0)
- - Pillow
- - requests
+To run the bot, you need Python 3.8 or newer with the following modules:
+ - discord      (2.0)
  - numpy
- - dnspython (for PyMongo)
