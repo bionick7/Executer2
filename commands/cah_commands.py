@@ -49,7 +49,7 @@ async def cah_host(ctx, *args):
 @client.command(name="Cplay", help="Plays a card")
 async def cah_play(ctx, args):
     global current_cah_game
-    if any([re.match(r"^\w*\d$", x) is None for x in args[1:]]):
+    if any([re.match(r"^\w*\d$", x) is None for x in args]):
         await ctx.send("All arguments must be positive integers between 0 and 9")
         return
 
@@ -57,7 +57,7 @@ async def cah_play(ctx, args):
         await ctx.send("You cannot play now")
         return
 
-    if len(args) - 1 != current_cah_game.cards_needed:
+    if len(args) != current_cah_game.cards_needed:
         await ctx.send(f"You have to play exactly {current_cah_game.cards_needed} cards")
         return
 
@@ -65,7 +65,7 @@ async def cah_play(ctx, args):
         await ctx.send(f"The tsar cannot play")
         return
 
-    await ctx.send(current_cah_game.lay_card(ctx.author.display_name, [int(x) for x in args[1:]]))
+    await ctx.send(current_cah_game.lay_card(ctx.author.display_name, [int(x) for x in args]))
 
     if current_cah_game.all_played:
         em = discord.Embed(title="The Cards are laid out", colour=BLACK)
@@ -102,7 +102,7 @@ async def cah_choose(ctx, choice):
     await ctx.send(current_cah_game.choose(player_chosen))
 
 
-@client.command(name="Cclose", help="Starts the actual game. No players will be allowed to join after")
+@client.command(name="Cstart", help="Starts the actual game. No players will be allowed to join after")
 async def cah_close_host(ctx):
     global current_cah_game
     if current_cah_game.game_stat != 0:
@@ -120,16 +120,17 @@ async def cah_close_host(ctx):
     em.set_author(name="CaH", icon_url=CAH_IMAGE_URL)
     # Close the joining
     for player in current_cah_game.player_list:
-        cards_em = discord.Embed(title="White Cards", colour=WHITE)
-        cards_em.description = player.get_cards()
-        cards_em.set_author(name="CaH", icon_url=CAH_IMAGE_URL)
-        dm_channel = await get_dm_channel(player.discord_implement)
-        await dm_channel.send("", embed=cards_em)
+        if not player.isrando:
+            cards_em = discord.Embed(title="White Cards", colour=WHITE)
+            cards_em.description = player.get_cards()
+            cards_em.set_author(name="CaH", icon_url=CAH_IMAGE_URL)
+            dm_channel = await get_dm_channel(player.discord_implement)
+            await dm_channel.send("", embed=cards_em)
 
     await ctx.send("", embed=em)
 
 
-@client.command(name="Cstats", help="Shows the score of each player")
+@client.command(name="Cscore", help="Shows the score of each player")
 async def cah_stats(ctx):
     global current_cah_game
     em = discord.Embed(title="Game statistics",  colour=BLACK)
@@ -150,7 +151,7 @@ async def cah_join(ctx):
     current_cah_game.join(ctx.author)
 
     em = discord.Embed(title="User Joined", colour=0x20ff1d)
-    em.set_thumbnail(url=ctx.author.avatar_url)
+    em.set_thumbnail(url=ctx.author.avatar.url)
     em.description = ctx.author.display_name + " just joined ..."
     em.set_author(name="CaH", icon_url=CAH_IMAGE_URL)
     await ctx.send("", embed=em)
@@ -162,7 +163,7 @@ async def cah_leave(ctx):
     current_cah_game.leave(ctx.author)
 
     em = discord.Embed(title="User Left", colour=0xa305d5)
-    em.set_thumbnail(url=ctx.author.avatar_url)
+    em.set_thumbnail(url=ctx.author.avatar.url)
     em.description = ctx.author.mention() + " just left ..."
     em.set_author(name="CaH", icon_url=CAH_IMAGE_URL)
     await ctx.send("", embed=em)
