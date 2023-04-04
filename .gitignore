@@ -1,3 +1,5 @@
 configs/auth.json
 error_log.log
 output_log.log
+.idea/*
+__pycache__/*
