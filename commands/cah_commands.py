@@ -183,9 +183,10 @@ async def cah_end(ctx):
 
 
 @client.command(name="Crandom", help="Plays a random card combination")
-async def cah_random(ctx):
+async def cah_random(ctx, times: int = 1):
     global current_cah_game
     if current_cah_game.closed:
         current_cah_game.open()
         current_cah_game.add_libs(["cah_lib"])
-    await ctx.send(current_cah_game.random())
+    for i in range(times):
+        await ctx.send(current_cah_game.random())
