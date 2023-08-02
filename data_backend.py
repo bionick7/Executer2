@@ -4,6 +4,7 @@ import os
 import traceback
 import discord
 from discord.ext import commands
+from typing import Any
 
 from shutil import get_terminal_size
 
@@ -69,7 +70,7 @@ def make_client() -> discord.Client:
     return commands.Bot(command_prefix="%", intents=intents)
 
 
-def correct_dict(dict_):
+def correct_dict(dict_: dict) -> dict:
     for k, field in dict_.items():
         if isinstance(field, dict):
             dict_[k] = correct_dict(field)
@@ -81,7 +82,7 @@ def correct_dict(dict_):
     return dict_
 
 
-def load(name, logger=None, encoding="utf-8"):
+def load(name, logger=None, encoding="utf-8") -> dict[str, Any]:
     """
     loads a json module and returns the result s a dictionary
     """
@@ -90,7 +91,7 @@ def load(name, logger=None, encoding="utf-8"):
         logger.indicate_process_start("Loading: " + path + "...")
     try:
         with open(path, encoding=encoding) as f:
-            data = json.load(f)
+            data: dict = json.load(f)
     except (json.JSONDecodeError, UnicodeDecodeError) as e:
         return {
             "__meta__": {

@@ -1,7 +1,10 @@
 import datetime
+import importlib
+from typing import Any
+
 from data_backend import *
 
-auth_data: dict
+auth_data: dict[str, Any]
 data: dict
 logger: Logger
 client = make_client()
@@ -10,11 +13,12 @@ client = make_client()
 data = load_all()
 auth_data = load("auth")
 logger = Logger()
+
 import commands.randomgen_commands
 import commands.cah_commands
 import commands.dice_commands
 import commands.misc_commands
-
+import commands.battlegroup_commands
 
 def run():
     """
@@ -25,7 +29,6 @@ def run():
     if client.is_closed():
         client = make_client()
     client.run(auth_data["token"])
-
 
 @client.event
 async def on_ready():

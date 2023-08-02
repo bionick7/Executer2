@@ -1,0 +1,209 @@
+{
+    "npc_escorts": [
+        {
+            "name": "battlethreads",
+            "hp": [10, 10],
+            "defense": 8,
+            "tags": ["unique"]
+        },
+        {
+            "name": "brothers_in_arms",
+            "hp": [8, 8],
+            "defense": 8,
+            "tags": [],
+            "charges": {"short-spool spinal guns": 2}
+        },
+        {
+            "name": "daggerflight",
+            "hp": [6, 6, 6, 6],
+            "defense": 10,
+            "tags": []
+        },
+        {
+            "name": "den_mother",
+            "+hp": 5,
+            "+defense": 0,
+            "tags": ["template"],
+            "wings": {
+                "name": "mounted chassis",
+                "hp": [5, 5, 5, 5],
+                "range": "0-3",
+                "tenacity": 11
+            }
+        },
+        {
+            "name": "diluvia",
+            "hp": [18],
+            "defense": 8,
+            "tags": []
+        },
+        {
+            "name": "giant",
+            "+hp": 20,
+            "+defense": -2,
+            "tags": ["template"],
+            "charges": {"tyrant cannon": 4}
+        },
+        {
+            "name": "loyal_guardian",
+            "hp": [20],
+            "defense": 8,
+            "tags": ["unique"]
+        },
+        {
+            "name": "mastermind",
+            "tags": ["template"]
+        },
+        {
+            "name": "roughnecks",
+            "hp": [8, 8],
+            "defense": 10,
+            "+interdiction": "2",
+            "tags": []
+        },
+        {
+            "name": "starfield_furies",
+            "hp": [10, 10],
+            "defense": 8,
+            "tags": [],
+            "wings": [{
+                "name": "fighter",
+                "hp": [5, 5],
+                "range": "0-2",
+                "assiciate": 0
+            },
+            {
+                "name": "bomber",
+                "hp": [6],
+                "range": "0-2",
+                "assiciate": 0
+            },
+            {
+                "name": "fighter",
+                "hp": [5, 5],
+                "range": "0-2",
+                "assiciate": 1
+            },
+            {
+                "name": "bomber",
+                "hp": [6],
+                "range": "0-2",
+                "assiciate": 1
+            }
+            ]
+        },
+        {
+            "name": "stalwards",
+            "hp": [10, 10],
+            "defense": 8,
+            "tags": []
+        },
+        {
+            "name": "wardogs",
+            "hp": [8, 8],
+            "defense": 10,
+            "tags": []
+        },
+        {
+            "name": "[unknown]",
+            "+hp": 5,
+            "tags": ["template"],
+            "charges": {"naophoros omnigun": "[ERROR]"}
+        }
+    ],
+    "npc_capital": [
+        {
+            "name": "breakwater",
+            "hp": 25,
+            "defense": 10,
+            "interdiction": "1d6",
+            "wings": {
+                "name": "fighter/bomber squadron",
+                "hp": [5, 5, 5, 5],
+                "range": "0-3"
+            }
+        },
+        {
+            "name": "cornicen",
+            "hp": 25,
+            "defense": 10,
+            "interdiction": "1d6"
+        },
+        {
+            "name": "corsair",
+            "hp": 25,
+            "defense": 10,
+            "interdiction": "1d6",
+            "wings": {
+                "name": "motely crew",
+                "hp": [5, 5, 5, 5],
+                "range": "0-3",
+                "tenacity": 12
+            }
+        },
+        {
+            "name": "highline",
+            "hp": 20,
+            "defense": 10,
+            "interdiction": "1d6+4"
+        },
+        {
+            "name": "hivequeen",
+            "hp": 30,
+            "defense": 8,
+            "interdiction": "2d6"
+        },
+        {
+            "name": "man_o_war",
+            "hp": 30,
+            "defense": 6,
+            "interdiction": "2d6",
+            "charges": {"demisolar_lance": 4}
+        },
+        {
+            "name": "narcissus",
+            "hp": 16,
+            "defense": 10,
+            "interdiction": "1d6"
+        },
+        {
+            "name": "needleship",
+            "hp": 25,
+            "defense": 12,
+            "interdiction": "1d6"
+        },
+        {
+            "name": "paladin",
+            "hp": 25,
+            "defense": 8,
+            "interdiction": "2d6",
+            "charges": {"redgiant_solar_lance": 3}
+        },
+        {
+            "name": "phantasm",
+            "hp": 20,
+            "defense": 15,
+            "interdiction": "1d6",
+            "charges": {"killdart_coherent_nuclear_actuated_laser": 3}
+        },
+        {
+            "name": "starkiller",
+            "hp": 25,
+            "defense": 8,
+            "interdiction": "2d6",
+            "charges": {"starkiller_cannon": 2}
+        },
+        {
+            "name": "triton",
+            "hp": 30,
+            "defense": 6,
+            "interdiction": "3d6"
+        },
+        {
+            "name": "turtleback",
+            "hp": 35,
+            "defense": 6,
+            "interdiction": "1d6"
+        }
+    ]
+}

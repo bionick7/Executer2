@@ -92,4 +92,4 @@ async def shutup(ctx):
 
 @client.command(name="test")
 async def test_message(ctx, *args):
-    await ctx.send("Test: " + ", ".join(args))
+    await ctx.send("Test1: " + ", ".join(args))

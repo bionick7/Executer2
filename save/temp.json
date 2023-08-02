@@ -1,0 +1,305 @@
+{
+  "npcs": [
+    {
+      "name": "alpha",
+      "capitalship": {
+        "name": "breakwater",
+        "hp0": 25,
+        "defense": 10,
+        "interdiction": "1d6",
+        "wings": [
+          {
+            "name": "fighter/bomber squadron",
+            "hp": [
+              5,
+              5,
+              5,
+              5
+            ],
+            "range": "0-3"
+          }
+        ],
+        "charges": {},
+        "counters": {
+          "lockon": 0,
+          "greywash": 0
+        },
+        "_valid": true,
+        "hp": 25,
+        "max_hp": 25,
+        "+interdiction": [],
+        "+defense": []
+      },
+      "escorts": {
+        "loyal_guardian": {
+          "name": "loyal_guardian",
+          "hp0": [
+            20
+          ],
+          "defense": 8,
+          "+defense": 0,
+          "+interdiction": "",
+          "+hp": 0,
+          "is_template": false,
+          "is_unique": true,
+          "wings": [],
+          "charges": {},
+          "counters": {
+            "lockon": 0,
+            "greywash": 0
+          },
+          "_valid": true,
+          "hp": [
+            20
+          ],
+          "max_hp": [
+            20
+          ],
+          "_init": true
+        },
+        "den_mother": {
+          "name": "den_mother",
+          "hp0": [],
+          "defense": 5,
+          "+defense": 0,
+          "+interdiction": "",
+          "+hp": 5,
+          "is_template": true,
+          "is_unique": false,
+          "wings": [
+            {
+              "name": "mounted chassis",
+              "hp": [
+                5,
+                5,
+                5,
+                5
+              ],
+              "range": "0-3",
+              "tenacity": 11
+            }
+          ],
+          "charges": {},
+          "counters": {
+            "lockon": 0,
+            "greywash": 0
+          },
+          "_valid": true,
+          "hp": [],
+          "max_hp": [],
+          "_init": true
+        },
+        "brothers_in_arms": {
+          "name": "brothers_in_arms",
+          "hp0": [
+            8,
+            8
+          ],
+          "defense": 8,
+          "+defense": 0,
+          "+interdiction": "",
+          "+hp": 0,
+          "is_template": false,
+          "is_unique": false,
+          "wings": [],
+          "charges": {
+            "short-spool spinal guns": 2
+          },
+          "counters": {
+            "lockon": 0,
+            "greywash": 1
+          },
+          "_valid": true,
+          "hp": [
+            8,
+            8
+          ],
+          "max_hp": [
+            8,
+            8
+          ],
+          "_init": true
+        }
+      }
+    },
+    {
+      "name": "bg2",
+      "capitalship": {
+        "name": "paladin",
+        "hp0": 25,
+        "defense": 8,
+        "interdiction": "2d6",
+        "wings": [],
+        "charges": {
+          "redgiant_solar_lance": 3
+        },
+        "counters": {
+          "lockon": 0,
+          "greywash": 0
+        },
+        "_valid": true,
+        "hp": 21,
+        "max_hp": 25,
+        "+interdiction": [],
+        "+defense": []
+      },
+      "escorts": {
+        "roughnecks": {
+          "name": "roughnecks",
+          "hp0": [
+            4,
+            4,
+            4,
+            4
+          ],
+          "defense": 10,
+          "+defense": 0,
+          "+interdiction": "2",
+          "+hp": 0,
+          "is_template": false,
+          "is_unique": false,
+          "wings": [],
+          "charges": {},
+          "counters": {
+            "lockon": 0,
+            "greywash": 0
+          },
+          "_valid": true,
+          "hp": [
+            4,
+            4,
+            4,
+            4
+          ],
+          "max_hp": [
+            4,
+            4,
+            4,
+            4
+          ],
+          "_init": true
+        },
+        "starfield_furies": {
+          "name": "starfield_furies",
+          "hp0": [
+            6,
+            6
+          ],
+          "defense": 8,
+          "+defense": 0,
+          "+interdiction": "",
+          "+hp": 0,
+          "is_template": false,
+          "is_unique": false,
+          "wings": [
+            {
+              "name": "fighter",
+              "hp": [
+                1,
+                1
+              ],
+              "range": "0-2",
+              "assiciate": 0
+            },
+            {
+              "name": "bomber",
+              "hp": [
+                2
+              ],
+              "range": "0-2",
+              "assiciate": 0
+            },
+            {
+              "name": "fighter",
+              "hp": [
+                0,
+                -1
+              ],
+              "range": "0-2",
+              "assiciate": 1
+            },
+            {
+              "name": "bomber",
+              "hp": [
+                2
+              ],
+              "range": "0-2",
+              "assiciate": 1
+            }
+          ],
+          "charges": {},
+          "counters": {
+            "lockon": 0,
+            "greywash": 0
+          },
+          "_valid": true,
+          "hp": [
+            6,
+            6
+          ],
+          "max_hp": [
+            6,
+            6
+          ],
+          "_init": true
+        }
+      }
+    },
+    {
+      "name": "bg3",
+      "capitalship": {
+        "name": "highline",
+        "hp0": 20,
+        "defense": 10,
+        "interdiction": "1d6+4",
+        "wings": [],
+        "charges": {},
+        "counters": {
+          "lockon": 1,
+          "greywash": 0
+        },
+        "_valid": true,
+        "hp": 20,
+        "max_hp": 20,
+        "+interdiction": [],
+        "+defense": []
+      },
+      "escorts": {}
+    },
+    {
+      "name": "bg4",
+      "capitalship": {
+        "name": "corsair",
+        "hp0": 25,
+        "defense": 10,
+        "interdiction": "1d6",
+        "wings": [
+          {
+            "name": "motely crew",
+            "hp": [
+              5,
+              5,
+              5,
+              5
+            ],
+            "range": "0-3",
+            "tenacity": 12
+          }
+        ],
+        "charges": {},
+        "counters": {
+          "lockon": 0,
+          "greywash": 0
+        },
+        "_valid": true,
+        "hp": 25,
+        "max_hp": 25,
+        "+interdiction": [],
+        "+defense": []
+      },
+      "escorts": {}
+    }
+  ],
+  "modifiers": [],
+  "opened": true
+}
