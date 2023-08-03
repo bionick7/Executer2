@@ -1,4 +1,5 @@
 import random
+from typing import Any
 from message_processing import data
 
 
@@ -16,8 +17,8 @@ class NameGenerator:
                 elif current_text_list_name in self.name_data and line.strip() != "":
                     self.name_data[current_text_list_name].append(line.strip())
 
-        self.name_templates = self.name_data.get("name templates", "<NAME T>")
-        self.ship_templates = self.name_data.get("ship templates", "<SHIP T>")
+        self.name_templates = self.name_data.get("name templates", ["<NAME T>"])
+        self.ship_templates = self.name_data.get("ship templates", ["<SHIP T>"])
 
         self.nouns = self.name_data.get("nouns", ["<NOUN>"])
         self.adjectives = self.name_data.get("adjectives", ["<ADJ"])
@@ -80,7 +81,7 @@ class NameGenerator:
             return res
 
     def _choose_template(self, templates: list[str]) -> str:
-        weighted_templates: list[(str, float)] = []
+        weighted_templates: list[tuple[str, float]] = []
         for template_index, template in enumerate(templates):
             start = -1
             num = 1
@@ -123,7 +124,7 @@ class NameGenerator:
         return res
 
     @staticmethod
-    def _choose_weighted(weighted_list: list[(any, float)]) -> any:
+    def _choose_weighted(weighted_list: list[tuple[Any, float]]) -> Any:
         objs, weights = zip(*weighted_list)
         d = random.random() * sum(weights)
         acc = 0

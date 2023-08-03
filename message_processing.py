@@ -14,16 +14,16 @@ data = load_all()
 auth_data = load("auth")
 logger = Logger()
 
-import commands.randomgen_commands
-import commands.cah_commands
-import commands.dice_commands
-import commands.misc_commands
-import commands.battlegroup_commands
 
 def run():
     """
     entry point; gets bot to run
     """
+    import commands.randomgen_commands
+    import commands.cah_commands
+    import commands.dice_commands
+    import commands.misc_commands
+    import commands.battlegroup_commands
     logger.indicate_process_start("Connecting ..." + " " * 85)
     global client
     if client.is_closed():

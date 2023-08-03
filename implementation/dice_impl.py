@@ -103,6 +103,7 @@ class Token:
                 return self.number * sum([x * x for x in range(1, self.sides + 1)]) / self.sides
             elif modus_op == "var":
                 return self.evaluate("exp2") - self.evaluate("exp")**2 / self.number
+        return 0
 
     def string_evaluate(self) -> str:
         if self.token_type == TokenType.INTEGER:
@@ -266,15 +267,6 @@ def tokenise(inp: str) -> Dict[Token, Token]:
 
     i = 0
     last = 0
-    """
-    while i < len(tokens):
-        if tokens[i].token_type in (TokenType.AND_OPERATOR, TokenType.TIMES_OPERATOR):
-            print(i, tokens[i], tokens)
-            if i - last > 2:
-                print(last, i)
-                tokens[last+1: i] = [Token(TokenType.TOKEN_SET, tokens[last+1: i])]
-            last = i
-        i += 1"""
     times, rolls, add_times = [], [], True
     res = {}
     # print(tokens)
@@ -294,79 +286,6 @@ def tokenise(inp: str) -> Dict[Token, Token]:
                 rolls.append(t)
 
     return res
-
-
-def legacy(args: List[str], author_id: int) -> str:
-    global last_dice_rolls
-
-    number, dice_faces = args[1].split("d")
-    is_sum = "/s" in args
-    mult = 2 if "/crit" in args else 1
-
-    dice_list = []
-    dice_int = int(dice_faces)
-
-    for i in range(int(number)):
-        dice_list.append(randint(1, dice_int))
-
-    bonus = 0
-    for arg in args[2:]:
-        if arg.startswith("+"):
-            if "d" in arg:
-                number, dice_int = arg[1:].split("d")
-                dice_int = int(dice_int)
-                for i in range(int(number)):
-                    dice_list.append(randint(1, dice_int))
-            else:
-                try:
-                    bonus += int(arg[1:])
-                except ValueError:
-                    pass
-        if arg.startswith("-"):
-            if "d" in arg:
-                number, dice_int = arg[1:].split("d")
-                dice_int = int(dice_int)
-                for i in range(int(number)):
-                    dice_list.append(-randint(1, dice_int))
-            else:
-                try:
-                    bonus -= int(arg[1:])
-                except ValueError:
-                    pass
-
-    if is_sum:
-        collective_bonus = bonus
-        individual_bonus = 0
-    else:
-        collective_bonus = 0
-        individual_bonus = bonus
-
-    conclude_individual = not (individual_bonus == 0 and mult == 1)
-
-    results_list = [d * mult + individual_bonus for d in dice_list]
-    formated_string_list = []
-    for i in range(len(dice_list)):
-        formated_string = str(dice_list[i])
-        if mult != 1:
-            formated_string += " * 2 "
-        if individual_bonus != 0:
-            formated_string += (" + " if individual_bonus > 0 else " - ") + str(abs(individual_bonus))
-        if conclude_individual:
-            formated_string += " = " + str(results_list[i])
-        formated_string_list.append(formated_string)
-
-    return_string = ("\n + " if is_sum else "\n").join(formated_string_list) +\
-                    ("\n+" + str(collective_bonus) if collective_bonus != 0 else "")
-
-    if is_sum:
-        end_result = sum([x * mult + individual_bonus for x in dice_list]) + collective_bonus
-        end_result += f" = {end_result}"
-        last_dice_rolls[author_id] = end_result
-    else:
-        last_dice_rolls[author_id] = results_list[-1]
-
-    return return_string
-
 
 if __name__ == '__main__':
     # print(interprete_roll("(10d10 - 10) x (1d5 * (1d2 + 3) / 2d8)"))

@@ -2,121 +2,126 @@
   "npcs": [
     {
       "name": "alpha",
-      "capitalship": {
-        "name": "breakwater",
-        "hp0": 25,
-        "defense": 10,
-        "interdiction": "1d6",
-        "wings": [
-          {
-            "name": "fighter/bomber squadron",
-            "hp": [
-              5,
-              5,
-              5,
-              5
-            ],
-            "range": "0-3"
-          }
-        ],
-        "charges": {},
-        "counters": {
+      "content": {
+        "_name": "breakwater",
+        "_defense": 10,
+        "_interdiction": "1d6",
+        "_valid": true,
+        "_hp0": 25,
+        ".": {
+          "hp": 25,
+          "max_hp": 25,
           "lockon": 0,
           "greywash": 0
         },
-        "_valid": true,
-        "hp": 25,
-        "max_hp": 25,
-        "+interdiction": [],
-        "+defense": []
-      },
-      "escorts": {
-        "loyal_guardian": {
-          "name": "loyal_guardian",
-          "hp0": [
-            20
-          ],
-          "defense": 8,
+        ".w1": {
+          "_name": "fighter/bomber squadron",
+          "_range": "0-3",
+          "_tenacity": 0,
+          ".": [
+            {
+              "hp": 5,
+              "lockon": 0,
+              "greywash": 0
+            },
+            {
+              "hp": 5,
+              "lockon": 0,
+              "greywash": 0
+            },
+            {
+              "hp": 5,
+              "lockon": 0,
+              "greywash": 0
+            },
+            {
+              "hp": 5,
+              "lockon": 0,
+              "greywash": 0
+            }
+          ]
+        },
+        ".e1": {
+          "_name": "loyal_guardian",
+          "_defense": 8,
           "+defense": 0,
           "+interdiction": "",
           "+hp": 0,
-          "is_template": false,
-          "is_unique": true,
-          "wings": [],
-          "charges": {},
-          "counters": {
-            "lockon": 0,
-            "greywash": 0
-          },
+          "_is_template": false,
+          "_is_unique": true,
           "_valid": true,
-          "hp": [
-            20
-          ],
-          "max_hp": [
-            20
+          ".": [
+            {
+              "hp": 20,
+              "lockon": 0,
+              "greywash": 0
+            }
           ],
           "_init": true
         },
-        "den_mother": {
-          "name": "den_mother",
-          "hp0": [],
-          "defense": 5,
+        ".e2": {
+          "_name": "den_mother",
+          "_defense": 5,
           "+defense": 0,
           "+interdiction": "",
           "+hp": 5,
-          "is_template": true,
-          "is_unique": false,
-          "wings": [
-            {
-              "name": "mounted chassis",
-              "hp": [
-                5,
-                5,
-                5,
-                5
-              ],
-              "range": "0-3",
-              "tenacity": 11
-            }
-          ],
-          "charges": {},
-          "counters": {
-            "lockon": 0,
-            "greywash": 0
-          },
+          "_is_template": true,
+          "_is_unique": false,
           "_valid": true,
-          "hp": [],
-          "max_hp": [],
+          ".": [],
+          ".w1": {
+            "_name": "mounted chassis",
+            "_range": "0-3",
+            "_tenacity": 11,
+            ".": [
+              {
+                "hp": 5,
+                "lockon": 0,
+                "greywash": 0
+              },
+              {
+                "hp": 5,
+                "lockon": 0,
+                "greywash": 0
+              },
+              {
+                "hp": 5,
+                "lockon": 0,
+                "greywash": 0
+              },
+              {
+                "hp": 5,
+                "lockon": 0,
+                "greywash": 0
+              }
+            ]
+          },
           "_init": true
         },
-        "brothers_in_arms": {
-          "name": "brothers_in_arms",
-          "hp0": [
-            8,
-            8
-          ],
-          "defense": 8,
+        ".e3": {
+          "_name": "brothers_in_arms",
+          "_defense": 8,
           "+defense": 0,
           "+interdiction": "",
           "+hp": 0,
-          "is_template": false,
-          "is_unique": false,
-          "wings": [],
-          "charges": {
-            "short-spool spinal guns": 2
-          },
-          "counters": {
-            "lockon": 0,
-            "greywash": 1
-          },
+          "_is_template": false,
+          "_is_unique": false,
           "_valid": true,
-          "hp": [
-            8,
-            8
-          ],
-          "max_hp": [
-            8,
-            8
+          ".": [
+            {
+              "hp": 8,
+              "&short-spool spinal guns": 0,
+              "0short-spool spinal guns": 2,
+              "lockon": 0,
+              "greywash": 1
+            },
+            {
+              "hp": 8,
+              "&short-spool spinal guns": 0,
+              "0short-spool spinal guns": 2,
+              "lockon": 0,
+              "greywash": 1
+            }
           ],
           "_init": true
         }
@@ -124,122 +129,144 @@
     },
     {
       "name": "bg2",
-      "capitalship": {
-        "name": "paladin",
-        "hp0": 25,
-        "defense": 8,
-        "interdiction": "2d6",
-        "wings": [],
-        "charges": {
-          "redgiant_solar_lance": 3
-        },
-        "counters": {
+      "content": {
+        "_name": "paladin",
+        "_defense": 8,
+        "_interdiction": "2d6",
+        "_valid": true,
+        "_hp0": 25,
+        ".": {
+          "hp": 21,
+          "max_hp": 25,
+          "&redgiant_solar_lance": 0,
+          "0redgiant_solar_lance": 3,
           "lockon": 0,
           "greywash": 0
         },
-        "_valid": true,
-        "hp": 21,
-        "max_hp": 25,
-        "+interdiction": [],
-        "+defense": []
-      },
-      "escorts": {
-        "roughnecks": {
-          "name": "roughnecks",
-          "hp0": [
-            4,
-            4,
-            4,
-            4
-          ],
-          "defense": 10,
+        ".e1": {
+          "_name": "roughnecks",
+          "_defense": 10,
           "+defense": 0,
           "+interdiction": "2",
           "+hp": 0,
-          "is_template": false,
-          "is_unique": false,
-          "wings": [],
-          "charges": {},
-          "counters": {
-            "lockon": 0,
-            "greywash": 0
-          },
+          "_is_template": false,
+          "_is_unique": false,
           "_valid": true,
-          "hp": [
-            4,
-            4,
-            4,
-            4
-          ],
-          "max_hp": [
-            4,
-            4,
-            4,
-            4
+          ".": [
+            {
+              "hp": 4,
+              "lockon": 0,
+              "greywash": 0
+            },
+            {
+              "hp": 4,
+              "lockon": 0,
+              "greywash": 0
+            }
           ],
           "_init": true
         },
-        "starfield_furies": {
-          "name": "starfield_furies",
-          "hp0": [
-            6,
-            6
-          ],
-          "defense": 8,
+        ".e2": {
+          "_name": "starfield_furies",
+          "_defense": 8,
           "+defense": 0,
           "+interdiction": "",
           "+hp": 0,
-          "is_template": false,
-          "is_unique": false,
-          "wings": [
+          "_is_template": false,
+          "_is_unique": false,
+          "_valid": true,
+          ".": [
             {
-              "name": "fighter",
-              "hp": [
-                1,
-                1
-              ],
-              "range": "0-2",
-              "assiciate": 0
+              "hp": 6,
+              "lockon": 0,
+              "greywash": 0
             },
             {
-              "name": "bomber",
-              "hp": [
-                2
-              ],
-              "range": "0-2",
-              "assiciate": 0
-            },
-            {
-              "name": "fighter",
-              "hp": [
-                0,
-                -1
-              ],
-              "range": "0-2",
-              "assiciate": 1
-            },
-            {
-              "name": "bomber",
-              "hp": [
-                2
-              ],
-              "range": "0-2",
-              "assiciate": 1
+              "hp": 6,
+              "lockon": 0,
+              "greywash": 0
             }
           ],
-          "charges": {},
-          "counters": {
-            "lockon": 0,
-            "greywash": 0
+          ".w1": {
+            "_name": "fighter",
+            "_range": "0-2",
+            "_tenacity": 0,
+            ".": [
+              {
+                "hp": 1,
+                "lockon": 0,
+                "greywash": 0
+              },
+              {
+                "hp": 1,
+                "lockon": 0,
+                "greywash": 0
+              }
+            ]
           },
+          ".w2": {
+            "_name": "bomber",
+            "_range": "0-2",
+            "_tenacity": 0,
+            ".": [
+              {
+                "hp": 2,
+                "lockon": 0,
+                "greywash": 0
+              }
+            ]
+          },
+          ".w3": {
+            "_name": "fighter",
+            "_range": "0-2",
+            "_tenacity": 0,
+            ".": [
+              {
+                "hp": 0,
+                "lockon": 0,
+                "greywash": 0
+              },
+              {
+                "hp": -2,
+                "lockon": 0,
+                "greywash": 0
+              }
+            ]
+          },
+          ".w4": {
+            "_name": "bomber",
+            "_range": "0-2",
+            "_tenacity": 0,
+            ".": [
+              {
+                "hp": 2,
+                "lockon": 0,
+                "greywash": 0
+              }
+            ]
+          },
+          "_init": true
+        },
+        ".e3": {
+          "_name": "roughnecks",
+          "_defense": 10,
+          "+defense": 0,
+          "+interdiction": "2",
+          "+hp": 0,
+          "_is_template": false,
+          "_is_unique": false,
           "_valid": true,
-          "hp": [
-            6,
-            6
-          ],
-          "max_hp": [
-            6,
-            6
+          ".": [
+            {
+              "hp": 4,
+              "lockon": 0,
+              "greywash": 0
+            },
+            {
+              "hp": 4,
+              "lockon": 0,
+              "greywash": 0
+            }
           ],
           "_init": true
         }
@@ -247,59 +274,65 @@
     },
     {
       "name": "bg3",
-      "capitalship": {
-        "name": "highline",
-        "hp0": 20,
-        "defense": 10,
-        "interdiction": "1d6+4",
-        "wings": [],
-        "charges": {},
-        "counters": {
+      "content": {
+        "_name": "highline",
+        "_defense": 10,
+        "_interdiction": "1d6+4",
+        "_valid": true,
+        "_hp0": 20,
+        ".": {
+          "hp": 20,
+          "max_hp": 20,
           "lockon": 1,
           "greywash": 0
-        },
-        "_valid": true,
-        "hp": 20,
-        "max_hp": 20,
-        "+interdiction": [],
-        "+defense": []
-      },
-      "escorts": {}
+        }
+      }
     },
     {
       "name": "bg4",
-      "capitalship": {
-        "name": "corsair",
-        "hp0": 25,
-        "defense": 10,
-        "interdiction": "1d6",
-        "wings": [
-          {
-            "name": "motely crew",
-            "hp": [
-              5,
-              5,
-              5,
-              5
-            ],
-            "range": "0-3",
-            "tenacity": 12
-          }
-        ],
-        "charges": {},
-        "counters": {
+      "content": {
+        "_name": "corsair",
+        "_defense": 10,
+        "_interdiction": "1d6",
+        "_valid": true,
+        "_hp0": 25,
+        ".": {
+          "hp": 25,
+          "max_hp": 25,
           "lockon": 0,
           "greywash": 0
         },
-        "_valid": true,
-        "hp": 25,
-        "max_hp": 25,
-        "+interdiction": [],
-        "+defense": []
-      },
-      "escorts": {}
+        ".w1": {
+          "_name": "motely crew",
+          "_range": "0-3",
+          "_tenacity": 12,
+          ".": [
+            {
+              "hp": 5,
+              "lockon": 0,
+              "greywash": 0
+            },
+            {
+              "hp": 5,
+              "lockon": 0,
+              "greywash": 0
+            },
+            {
+              "hp": 5,
+              "lockon": 0,
+              "greywash": 0
+            },
+            {
+              "hp": 5,
+              "lockon": 0,
+              "greywash": 0
+            }
+          ]
+        }
+      }
     }
   ],
   "modifiers": [],
-  "opened": true
+  "opened": true,
+  "turn": 4
 }

@@ -1,111 +1,140 @@
-import discord
-import time
+import asyncio
+import discord.ext as dext
 
 from implementation.battlegroup_impl import *
+from implementation.battlegroup_output import *
+from commands.battlegroup_console import bg_cmd
 from message_processing import client, data, get_dm_channel
 
 #D = data["bg_data"]  # TODO
 current_battle = BGBattle()
 
-no_battle_text = acm_embed("Out of combat right now")
-
-async def bg_cmd(cmd, ctx, *args, **kwargs):
+async def bg_discord(cmd: str, ctx, *args, **kwargs):
     global current_battle
-    if not current_battle.opened:
-        await ctx.send(no_battle_text)
+    if kwargs.get("require_open", True) and not current_battle.opened:
+        await ctx.send(acm_embed("Out of combat right now"))
         return
     if kwargs.get("gm_only", True) and ctx.author != current_battle.gm:
         await ctx.send(acm_embed("authotisation denied"))
         return
-    if cmd == "open":
-        current_battle.open(ctx.author, "")
-        await ctx.send(acm_embed("Entering combat mode ..."))
-        time.sleep(0.5)
-        await ctx.send(acm_embed("Constructing Legion ..."))
-        time.sleep(0.5)
-        await ctx.send(acm_embed("All ready"))
-    elif cmd == "close":
-        current_battle.close()
-        await ctx.send(acm_embed("disengaged"))
-    elif cmd == "add":
-        bg_code, name = args
-        current_battle.add_npc(bg_code, name)
-    elif cmd == "rm":
-        path = args[0]
-        current_battle.kill(path)
-    elif cmd == "reassign":
-        path, to = args
-        current_battle.reassign_escort(path, to)
-    elif cmd == "set":
-        path, value = args
-        current_battle.check_path_valid(path, True)
-        current_battle.set_counter(path, value)
-    elif cmd == "dmg":
-        current_battle.check_path_valid(path)
-        current_battle.ship_dmg(path, dmg)
-    elif cmd == "area_dmg":
-        fleet_name, dmg = args
-        current_battle.area_dmg(fleet_name, dmg)
-    elif cmd == "load":
-        path = args[0]
-        current_battle.load_from(path)
-    elif cmd == "save":
-        path = args[0]
-        current_battle.save_to(path)
-    elif cmd == "show":
-        await ctx.send(acm_long_embed(current_battle.get_player_rapport()))
-    elif cmd == "gm":
-        await ctx.send(acm_long_embed(current_battle.get_gm_rapport()))
-    no_error = current_battle.error_queue == []
+
+    try:
+        bg_cmd(current_battle, cmd.lower(), *args, **kwargs, author=ctx.author)
+    except Exception as e:
+        await ctx.send(str(e))
+    
+    is_error = len(current_battle.error_queue) > 0
     while len(current_battle.error_queue) > 0:
         error = current_battle.error_queue.pop(0)
-        ctx.send(acm_embed(error))
+        await ctx.send(acm_embed(error))
+    if is_error:
+        return
+    while len(current_battle.message_queue) > 0:
+        msg = current_battle.message_queue.pop(0)
+        if msg.startswith("$WAIT:"):
+            delay = float(msg[6:])
+            await asyncio.sleep(delay)
+        elif msg.startswith("$LONG"):
+            await ctx.send(acm_long_embed(msg[5:]))
+        else:
+            await ctx.send(acm_embed(msg))
 
 
-@client.command(name="BGopen", help="")
+@client.command(name="BGopen")
 async def bg_open_battle(ctx):
-    await bg_cmd("open", ctx)
+    """ Opens a new battle. Author of the message is considered the GM """
+    await bg_discord("open", ctx, require_open=False)
 
-@client.command(name="BGclose", help="")
+@client.command(name="BGclose")
 async def bg_close_battle(ctx):
-    await bg_cmd("close", ctx)
+    """ Closes a battle. prevents any more changes """
+    await bg_discord("close", ctx)
 
-@client.command(name="BGadd", help="")
+@client.command(name="BGadd")
 async def bg_add_NPC_bg(ctx, bg_code: str, name: str=""):
-    await bg_cmd("add", ctx, bg_code, name)
+    """ Adds a battlegroup, uder the syntax \"Flagship:::(Escort1, Escort2, ...)\" """
+    await bg_discord("add", ctx, bg_code, name)
 
-@client.command(name="BGshow", help="")
+@client.command(name="BGshow")
 async def bg_show(ctx):
-    await bg_cmd("show", ctx, gm_only=False)
+    """ Show a version of the battlefield with all information players should know """
+    await bg_discord("show", ctx, gm_only=False)
 
-@client.command(name="BGgm", help="")
+@client.command(name="BGgm")
 async def bg_gm_show(ctx):
-    await bg_cmd("gm", ctx)
+    """ Shows a detailed version of the bettlefield, including all of the information for the gm """
+    await bg_discord("gm", ctx)
 
-@client.command(name="BGset", help="")
-async def bg_status(ctx, path: str, value: str):
-    await bg_cmd("set", ctx, path, value)
+@client.command(name="BGset")
+async def bg_set(ctx, path: str, value: str):
+    """
+    Sets an arbitrary counter at an arbitrary path to a value. Default counters include lockon (0 or 1) and greywash
+    
+    :param path: The path to the ship(s) + name of the counter. EG: "bg1.e3.2.greywash"
+    :param value: The value to set the counter to. An integer sets the counter to the integer.
+    Prefacing the integer with '+' or '-' increases or decreases the counter.
+    Charge counters get reset by 'r'. When resetting the charge counter, refer to the index of the counter by ship, instead of the name
+    """
+    await bg_discord("set", ctx, path, value)
 
-@client.command(name="BGarea_dmg", help="")
-async def bg_area_dmg(ctx, dmg: int, fleet_name: str):
-    await bg_cmd("area_dmg", ctx, dmg, fleet_name)
+@client.command(name="BGarea_dmg")
+async def bg_area_dmg(ctx, fleet_name: str, dmg: int):
+    """
+    Equivalent to BGset [fleet_name].**.hp -[dmg]
+    
+    fleet_name: name of the attacked fleet
+    dmg: integer dammage
+    """
+    await bg_discord("area_dmg", ctx, fleet_name, dmg)
 
-@client.command(name="BGdmg", help="")
+@client.command(name="BGdmg")
 async def bg_ship_dmg(ctx, path: str, dmg: int):
-    await bg_cmd("dmg", ctx, path, dmg)
+    """
+    Equivalent to BGset [path].hp -[dmg]
+    
+    :param path: name of the attacked battlegroup
+    :param dmg: integer dammage
+    """
+    await bg_discord("dmg", ctx, path, dmg)
 
-@client.command(name="BGrm", help="")
+@client.command(name="BGrm")
 async def bg_rm(ctx, path: str):
-    await bg_cmd("rm", ctx, path)
+    """
+    Removes escort or battlegroup
+    
+    :param path: name of the attacked battlegroup or path to escort
+    """
+    await bg_discord("rm", ctx, path)
 
-@client.command(name="BGreassign", help="")
+@client.command(name="BGreassign")
 async def bg_reassign(ctx, path: str, to: str):
-    await bg_cmd("reassign", ctx, path, to)
+    """
+    Reassign escort
+    
+    :param path: path to escort
+    :to: name of new battlegroup
+    """
+    await bg_discord("reassign", ctx, path, to)
 
-@client.command(name="BGsave", help="")
+@client.command(name="BGsave")
 async def bg_save(ctx, path: str = "save/temp"):
-    await bg_cmd("save", path)
+    """
+    Saves current battle as file
+    
+    :param path: relative filepath. Defaults to "save/temp"
+    """
+    await bg_discord("save", ctx, path)
 
-@client.command(name="BGload", help="")
+@client.command(name="BGload")
 async def bg_load(ctx, path: str = "save/temp"):
-    await bg_cmd("load", path)
+    """
+    Opens and loads battle from file
+    
+    :param path: relative filepath. Defaults to "save/temp"
+    """
+    await bg_discord("load", ctx, path, require_open=False, gm_only=False)
+
+@client.command(name="BGturn")
+async def bg_turn(ctx):
+    """ Finishes turn """
+    await bg_discord("turn", ctx)

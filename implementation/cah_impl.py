@@ -1,18 +1,18 @@
 from data_backend import load, can_load
 import random
-from discord import Member
+from discord.user import BaseUser
 from message_processing import client
 #from program_base import *
 
 
 class CahPlayer:
-    def __init__(self, discord_implement: Member, p_game, id: int, p_rando: bool = False):
+    def __init__(self, discord_implement: BaseUser, p_game, id: int, p_rando: bool = False):
         self.name = "Rando Calrissian" if p_rando else discord_implement.display_name
         self.game = p_game
         self.id = id
         self._points = 0
         self.cards = []
-        self.discord_implement: Member = discord_implement
+        self.discord_implement: BaseUser = discord_implement
         self.isrando = p_rando
 
     def get_cards(self):
@@ -44,7 +44,7 @@ class CahGame:
         self.blacks_tot: list[str] = []
         self.packs: list[str] = []
         self.white_pass: list[str] = []
-        self.black_card: list[str] = []
+        self.black_cards: list[str] = []
         self.white_poss: list[str] = []
         self.black_poss: list[str] = []
 
@@ -89,7 +89,7 @@ class CahGame:
 
         return outp
 
-    def join(self, p_player: Member):
+    def join(self, p_player: BaseUser):
         """
         Called, when a player joins
         :param p_player: The discord member
@@ -104,7 +104,7 @@ class CahGame:
         self.player_list.append(player)
         return player
 
-    def leave(self, p_player: Member):
+    def leave(self, p_player: BaseUser):
         if not any([player.name == p_player.display_name for player in self.player_list]):
             return
         self.player_list = list(filter(lambda x: x.name != p_player.display_name, self.player_list))
