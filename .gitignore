@@ -2,6 +2,7 @@ configs/auth.json
 error_log.log
 output_log.log
 .idea/*
+.vscode/*
 **/__pycache__/
 venv/*
 Executer2.egg-info/*
