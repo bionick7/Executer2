@@ -42,8 +42,8 @@ class NPCBattleGroup:
         content = self.content
         content['+defense'] = []
         content['+interdiction'] = []
-        content['hp'] = content['hp0']
-        content['max_hp'] = content['hp0']
+        content['hp'] = content['_hp0']
+        content['max_hp'] = content['_hp0']
         for escort in self.escorts:
             if any(x['hp'] > 0 for x in escort['.']):
                 if escort['+defense'] > 0:

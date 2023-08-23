@@ -46,16 +46,16 @@ def format_bg(bg, gm: bool) -> str:
     res = f"{bg.name.upper()} :: "
     capital = bg.content
     capital_wings = [v for k, v in bg.content.items() if k.startswith(".w")]
-    cap_str = f"{capital['_name'].upper()}"
+    cap_txt = f"{capital['_name'].upper()}"
     if gm:
-        cap_str += f" Def: {capital['_defense']} " + "".join([f"+{x}" for x in capital.get('+defense', [])])
-        cap_str += f"I: {capital['_interdiction']}" + "".join([f"+{x}" for x in capital.get('+interdiction', [])])
-        cap_str += f" - {capital['.']['hp']}/{capital['.']['max_hp']}"
+        cap_txt += f" Def: {capital['_defense']} " + "".join([f"+{x}" for x in capital.get('+defense', [])])
+        cap_txt += f"I: {capital['_interdiction']}" + "".join([f"+{x}" for x in capital.get('+interdiction', [])])
+        cap_txt += f" - {capital['.']['hp']}/{capital['.']['max_hp']}"
     for _ in range(capital['.']['lockon']):
-        cap_str = f">{cap_str}<"
+        cap_txt = f">{cap_txt}<"
     if capital['.']['hp'] <= 0:
-        cap_str = corrupted(cap_str)
-    res += cap_str + "\n"
+        cap_txt = corrupted(cap_txt)
+    res += cap_txt + "\n"
     if gm:
         indent = "     |  "
         for name, value in *capital.items(), *capital["."].items():
@@ -83,6 +83,8 @@ def format_bg(bg, gm: bool) -> str:
             for i, ship in enumerate(escort['.']):
                 for name, value in ship.items():
                     escort_txt += format_counter(name, value, indent + f"({i})")
+        for _ in range(sum(x['lockon'] for x in escort['.'])):
+            escort_txt = f">{escort_txt}<"
         for wing_index, w in enumerate(escort_wings):
             border = f"e{escort_index+1:1}.w{wing_index+1:1}|" if gm else ""
             escort_txt += border + " "*8 + format_wing(w, gm)

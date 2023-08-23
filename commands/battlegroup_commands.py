@@ -43,7 +43,7 @@ async def bg_discord(cmd: str, ctx, *args, **kwargs):
 @client.command(name="BGopen")
 async def bg_open_battle(ctx):
     """ Opens a new battle. Author of the message is considered the GM """
-    await bg_discord("open", ctx, require_open=False)
+    await bg_discord("open", ctx, require_open=False, gm_only=False)
 
 @client.command(name="BGclose")
 async def bg_close_battle(ctx):

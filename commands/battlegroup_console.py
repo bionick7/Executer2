@@ -15,6 +15,7 @@ def fetch(args, default: Any) -> Any:
         return default
     return args.pop(0)
 
+
 def bg_cmd(battle: BGBattle, cmd: str, *args, **kwargs) -> None:
     args = list(args)
     if cmd == "open":

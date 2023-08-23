@@ -58,7 +58,7 @@ class Logger:
         return f"<Logger object @ ({out[0]}; {out[1]})| Error ({err[0]}; {err[1]})>"
 
 
-def make_client() -> discord.Client:
+def make_client() -> commands.Bot:
     intents = discord.Intents.default()
     intents.reactions = True
     intents.members = True

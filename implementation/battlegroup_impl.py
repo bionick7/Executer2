@@ -22,7 +22,7 @@ class BGBattle:
         self.opened = False
         self._load_compendium("core")
 
-        self.gm = None
+        self.gm_id :str = "NO-ONE"
         self.turn = -1
 
     def _load_compendium(self, name: str) -> list:
@@ -40,20 +40,17 @@ class BGBattle:
             print("No such compendium: " + path)
         return res
 
-    def open(self, p_gm, *p_modifiers: str):
+    def open(self, p_gm: str, *p_modifiers: str):
         self.modifiers = p_modifiers
         self.opened = True
-        self.gm = p_gm
+        self.gm_id = p_gm
         self.turn = 1
         self.message_queue.append("Constructing legion...")
         self.message_queue.append("$WAIT:0.5")
-        if p_gm is not None:
-            self.message_queue.append(f"Authorisation granted to {p_gm.name}")
-        else:
-            self.message_queue.append(f"Local Authorization")
+        self.message_queue.append(f"Authorisation granted to {p_gm}")
 
     def close(self):
-        self.gm = None
+        self.gm = "NO-ONE"
         self.opened = False
         self.modifiers = []
         self.npcs = {}
@@ -267,7 +264,7 @@ class BGBattle:
 
 def tests():
     battle = BGBattle()
-    battle.open("Threading the needle")
+    battle.open("Threading the needle", "LOCAL")
     battle.add_npc("BREAKWATER ::: (LOYAL_GUARDIAN, DEN_MOTHER, BROTHERS_IN_ARMS, ALBEDO_CAVALIER)", "Alpha")
     battle.add_npc("PALADIN ::: (ROUGHNECKS)")
     battle.add_npc("HIGHLINE ::: (BROTHERS_IN_ARMS, STARFIELD_FURIES)")

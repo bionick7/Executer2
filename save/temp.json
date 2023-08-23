@@ -59,6 +59,10 @@
           ],
           "_init": true
         },
+        "+defense": [],
+        "+interdiction": [],
+        "hp": 25,
+        "max_hp": 25,
         ".e2": {
           "_name": "den_mother",
           "_defense": 5,
@@ -110,14 +114,14 @@
           ".": [
             {
               "hp": 8,
-              "&short-spool spinal guns": 0,
+              "&short-spool spinal guns": 2,
               "0short-spool spinal guns": 2,
               "lockon": 0,
               "greywash": 1
             },
             {
               "hp": 8,
-              "&short-spool spinal guns": 0,
+              "&short-spool spinal guns": 2,
               "0short-spool spinal guns": 2,
               "lockon": 0,
               "greywash": 1
@@ -138,7 +142,7 @@
         ".": {
           "hp": 21,
           "max_hp": 25,
-          "&redgiant_solar_lance": 0,
+          "&redgiant_solar_lance": 3,
           "0redgiant_solar_lance": 3,
           "lockon": 0,
           "greywash": 0
@@ -166,6 +170,13 @@
           ],
           "_init": true
         },
+        "+defense": [],
+        "+interdiction": [
+          "2",
+          "2"
+        ],
+        "hp": 25,
+        "max_hp": 25,
         ".e2": {
           "_name": "starfield_furies",
           "_defense": 8,
@@ -285,7 +296,11 @@
           "max_hp": 20,
           "lockon": 1,
           "greywash": 0
-        }
+        },
+        "+defense": [],
+        "+interdiction": [],
+        "hp": 20,
+        "max_hp": 20
       }
     },
     {
@@ -328,11 +343,15 @@
               "greywash": 0
             }
           ]
-        }
+        },
+        "+defense": [],
+        "+interdiction": [],
+        "hp": 25,
+        "max_hp": 25
       }
     }
   ],
   "modifiers": [],
   "opened": true,
-  "turn": 4
+  "turn": 1
 }
