@@ -7,7 +7,6 @@ from implementation.battlegroup_npc import *
 
 DEFAULT_COUNTERS = {"lockon": 0, "greywash": 0}
  
-
 class BGBattle:
     def __init__(self):
         self.modifiers = []
@@ -170,7 +169,7 @@ class BGBattle:
         bg.recalc_boni()
         self.get_gm_detail(path)
 
-    def set_counter(self, path: str, value: str) -> None:
+    def set_attribute(self, path: str, value: str) -> None:
         steps = path.split(".")
         bg = self.npcs[steps[0]]
         if bg.is_path_valid(steps[1:-1]):
@@ -185,7 +184,7 @@ class BGBattle:
             bg.set_counter(steps[1:], int(value))
         self.get_gm_detail(path)
     
-    def logistics_phase(self):
+    def logistics_phase(self) -> None:
         charge_triggers = []
         for npc in self.npcs.values():
             charge_triggers += npc.logistics_phase()
@@ -241,7 +240,10 @@ class BGBattle:
             self.error_queue.append(f"No such battlegroup: {path}")
             return
         self.message_queue.append("$LONG" + format_bg(self.npcs[path], True) + "\n")
-        
+
+    def compile_actions(self, path: str, ) -> None:
+        pass
+
     def save_to(self, path: str) -> None:
         with open(path + ".json", "w") as f:
             save_dict = {
@@ -279,8 +281,8 @@ def tests():
     battle.reassign_escort("bg3.e1", "")
     battle.reassign_escort("bg4.e1", "bg2")
     battle.area_dmg("bg2", 4)
-    battle.set_counter("bg3.lockon", "1")
-    battle.set_counter("alpha.e3.greywash", "+1")
+    battle.set_attribute("bg3.lockon", "1")
+    battle.set_attribute("alpha.e3.greywash", "+1")
     d1 = battle.__dict__
     battle.save_to("save/temp")
     battle.load_from("save/temp")

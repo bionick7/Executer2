@@ -5,6 +5,7 @@ from typing import Callable, Any
 
 from implementation.battlegroup_impl import *
 from implementation.battlegroup_output import *
+from implementation.dice_impl import tokenise
 from message_processing import client, data, get_dm_channel
 
 #D = data["bg_data"]  # TODO
@@ -14,7 +15,6 @@ def fetch(args, default: Any) -> Any:
     if len(args) == 0:
         return default
     return args.pop(0)
-
 
 def bg_cmd(battle: BGBattle, cmd: str, *args, **kwargs) -> None:
     args = list(args)
@@ -31,7 +31,7 @@ def bg_cmd(battle: BGBattle, cmd: str, *args, **kwargs) -> None:
     elif cmd == "set":
         path = fetch(args, "")
         battle.check_path_valid(path, True)
-        battle.set_counter(path, fetch(args, "1"))
+        battle.set_attribute(path, fetch(args, "1"))
     elif cmd == "dmg":
         path = fetch(args, "")
         dmg = int(fetch(args, "0"))
@@ -57,7 +57,6 @@ def bg_cmd(battle: BGBattle, cmd: str, *args, **kwargs) -> None:
             battle.get_gm_detail(fleet_name)
         else:
             battle.get_gm_rapport()
-        
 
 def bg_console(cmd: str, *args, **kwargs):
     global current_battle
@@ -84,8 +83,17 @@ def bg_console(cmd: str, *args, **kwargs):
             print(acm(msg))
 
 def console_application():
+    cmds = """
+    set bg1.e2.w1 hp -1
+    set bg1.** hp (-2d6 + 5)
+    set bg1.* hp 5x(-2d6 + 5) & 3
+    set p1.e2.w1 hp -10
+    what bg1.** 0-5
+    """.split("\n")[1:-1]
     while True:
-        inp = input(">//[$USR]:: ")
+        #inp = input(">//[$USR]:: ")
+        inp = cmds.pop(0)
+        print(tokenise(inp))
         args = inp.split(" ")
         if args[0].lower() == "exit":
             return

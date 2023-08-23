@@ -1,10 +1,34 @@
 import discord
 
 from data_backend import get_dm_channel
-from implementation.dice_impl import interprete_roll, HELP_TEXT, last_dice_rolls, analyse_roll
+from implementation.dice_impl import interprete_roll, last_dice_rolls
 from message_processing import client
 
 
+HELP_TEXT = """
+```
+Syntax:
+    a # b: does [b] [a] times, returns array
+    a & b: concantenates [b] to [a]
+    a +-*/ b: operations on [a] and [b], [a], [b] can be array
+    NdM: rolls N M-sided dicea and adds the results
+    M(...): maximum between all values
+    m(...): minimum between [a] and [b]
+    
+Order of operations:
+    () > */ > +- > # > &
+
+Examples:
+    Rolls 1d20, adds the greater one of 2d6, then 4
+        1d20 + M(2#1d6) + 4
+    Takes the minimum between 2d20 minus a doubled d8 and 5. Does this 5 times
+        5#m(2d20 - 1d8*2 & 5)
+    Rolls 1d6 1d6 times
+        1d6#1d6
+    Should return (3, 3, 0, -1)
+        2#3 & 0*-2 & 1 + 2*(3-5)/2
+```
+"""
 @client.command(name="Dhelp", help="Gives more information about the dice rolling implementation")
 async def dice_help(ctx):
     await ctx.send(HELP_TEXT)
@@ -16,12 +40,6 @@ async def dice_roll(ctx, *args):
         await ctx.send("```0```")
     else:
         await ctx.send("```" + interprete_roll(" ".join(args), ctx.author.id) + "```")
-
-
-@client.command(name="Danalyse", help="Gives insight into probabilities of a roll")
-async def dice_analyse(ctx, *args):
-    await ctx.send("```" + analyse_roll(" ".join(args)) + "```")
-
 
 @client.command(name="Dinitiative", help="Shows a collection of lase d20 rolls")
 async def dice_gather_initiative(ctx):
