@@ -4,7 +4,7 @@ import os
 import traceback
 import discord
 from discord.ext import commands
-from typing import Any
+from typing import Any, Union
 
 from shutil import get_terminal_size
 
@@ -144,7 +144,7 @@ def load_all(logger=None):
     return res
 
 
-async def get_dm_channel(user: discord.User) -> discord.DMChannel:
+async def get_dm_channel(user: Union[discord.User, discord.Member]) -> discord.DMChannel:
     channel = user.dm_channel
     if channel is None:
         channel = await user.create_dm()

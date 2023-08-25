@@ -5,7 +5,7 @@ from typing import Callable, Any
 
 from implementation.battlegroup_impl import *
 from implementation.battlegroup_output import *
-from implementation.dice_impl import tokenise
+from implementation.battlegroup_parser import tokenise
 from message_processing import client, data, get_dm_channel
 
 #D = data["bg_data"]  # TODO

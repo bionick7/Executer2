@@ -1,7 +1,8 @@
 import discord
+import discord.ext.commands.context
 
 from data_backend import get_dm_channel
-from implementation.dice_impl import interprete_roll, last_dice_rolls
+from implementation.battlegroup_parser import Parser, tokenise
 from message_processing import client
 
 
@@ -29,29 +30,43 @@ Examples:
         2#3 & 0*-2 & 1 + 2*(3-5)/2
 ```
 """
+
+last_dice_rolls = {}
+
 @client.command(name="Dhelp", help="Gives more information about the dice rolling implementation")
 async def dice_help(ctx):
     await ctx.send(HELP_TEXT)
 
 
 @client.command(name="Droll", aliases=["r"], help="Rolls a dice")
-async def dice_roll(ctx, *args):
+async def dice_roll(ctx:discord.ext.commands.Context, *args):
     if len(args) == 0:
         await ctx.send("```0```")
+    
+    query = " ".join(args)
+    parser = Parser(tokenise(query))
+    root = parser.parse_roll()
+    if not parser.has_error():
+        res = root.evaluate()
+        last_dice_rolls[ctx.author.id] = res[0]
+        await ctx.send(root.string_evaluate())
+    while parser.has_error():
+        await ctx.send(parser.get_error())
+
+def get_user_name(ctx:discord.ext.commands.Context, i: int):
+    guild = ctx.guild
+    if guild is None:
+        return "NULL"
+    user = guild.get_member(i)
+    if user is None:
+        return "NULL"
     else:
-        await ctx.send("```" + interprete_roll(" ".join(args), ctx.author.id) + "```")
+        return user.display_name
 
 @client.command(name="Dinitiative", help="Shows a collection of lase d20 rolls")
-async def dice_gather_initiative(ctx):
-    def get_user_name(i):
-        user = ctx.guild.get_member(i)
-        if user is None:
-            return "NULL"
-        else:
-            return user.display_name
-
+async def dice_gather_initiative(ctx: discord.ext.commands.Context):
     ids_sorted = sorted(last_dice_rolls.items(), key=lambda x: x[1], reverse=True)
-    users_sorted = [(get_user_name(t[0]), t[1]) for t in ids_sorted]
+    users_sorted = [(get_user_name(ctx, t[0]), t[1]) for t in ids_sorted]
 
     em = discord.Embed(title="Initiative", colour=0xf0f000)
     if len(users_sorted) > 0:

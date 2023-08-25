@@ -86,7 +86,7 @@ class DiceSyntaxNode:
         self.id = p_id
         self.result = np.zeros(0, np.int32)
         self.has_result = False
-        assert self.id != ""
+        #assert self.id != ""
 
     def _show_recursive(self, indent: str = "") -> str:
         return indent + f"{self.id}"
@@ -102,11 +102,11 @@ class DiceSyntaxNode:
     def is_evaluable(self) -> bool:
         return self.id != "pending"
 
-    def evaluate_as_num(self, modus_op: str="num") -> int:
+    def evaluate_as_numeric(self, modus_op: str="num") -> int:
         return 0
 
     def evaluate(self, modus_op: str="num") -> EvalResult:
-        return np.ones(1, np.int32) * self.evaluate_as_num(modus_op)
+        return np.ones(1, np.int32) * self.evaluate_as_numeric(modus_op)
 
     def string_evaluate(self, modus_op: str="num", indent: str="") -> str:
         return ""
@@ -132,7 +132,8 @@ class DicePendingOpNode(DiceSyntaxNode):
     def __init__(self, p_token: Token):
         super().__init__("pending")
         self.token = p_token
-        assert self.token.value in "+-*/&#()" or self.token.token_type == TokenType.IDENTIFIER
+        if self.token.value not in "+-*/&#()" and self.token.token_type != TokenType.IDENTIFIER:
+            raise ValueError("Invalid Dice Operation")
     
     def _show_recursive(self, indent: str = "") -> str:
         return indent + f"PENDING: {self.token}"
@@ -146,7 +147,7 @@ class DiceIntegerNode(DiceSyntaxNode):
     def _show_recursive(self, indent: str = "") -> str:
         return indent + f"{self.value}"
 
-    def evaluate_as_num(self, modus_op: str="num") -> int:
+    def evaluate_as_numeric(self, modus_op: str="num") -> int:
         return self.value
 
     def string_evaluate(self, modus_op: str="num", indent: str="") -> str:
@@ -165,7 +166,7 @@ class DiceNode(DiceSyntaxNode):
     def _show_recursive(self, indent: str = "") -> str:
         return indent + f"{self.number}d{self.sides}"
 
-    def evaluate_as_num(self, modus_op: str="num") -> int:
+    def evaluate_as_numeric(self, modus_op: str="num") -> int:
         if modus_op == "num":
             if not self.has_result:  # Don't re-roll
                 self._set_result(np.random.randint(1, self.sides, self.number, np.int32))
@@ -301,6 +302,19 @@ class Parser():
     def __init__(self, p_tokens: list[Token]) -> None:
         self.consumed_tokens = 0
         self.tokens = p_tokens[:]
+        self.error_queue = []
+
+    def throw_error(self, msg: str) -> None:
+        self.error_queue.append(msg)
+    
+    def throw_fatal_error(self, msg: str) -> None:
+        raise ValueError(msg)
+
+    def has_error(self) -> bool:
+        return len(self.error_queue) > 0
+
+    def get_error(self) -> str:
+        return self.error_queue.pop()
 
     def _roll_parser_pass(self, nodes: list[DiceSyntaxNode], filter: list[str]) -> None:
         i = 0
@@ -308,11 +322,14 @@ class Parser():
             t = nodes[i]
             if isinstance(t, DicePendingOpNode) and t.token.value in filter:
                 if i <= 0:
-                    raise Exception(f"Unexpected start of input")
+                    self.throw_fatal_error(f"Unexpected start of input")
+                    return
                 if not nodes[i-1].is_evaluable():
-                    raise Exception(f"Invalid token encountered: {nodes[i-1]}")
+                    self.throw_fatal_error(f"Invalid token encountered: {nodes[i-1]}")
+                    return
                 if i >= len(nodes) - 1:
-                    raise Exception(f"Unexpected end of input")
+                    self.throw_fatal_error(f"Unexpected end of input")
+                    return
                 op_node = DiceOperatorNode.from_tokens(
                     self._roll_prep_next_token(nodes, i-1), t,
                     self._roll_prep_next_token(nodes, i+1)
@@ -326,13 +343,16 @@ class Parser():
         if nodes[i].is_evaluable():
             return nodes[i]
         n = nodes[i]
-        if isinstance(n, DicePendingOpNode) and DiceUnitaryNode.valid_tokens(n, nodes[i+1]):
+        if isinstance(n, DicePendingOpNode) :
+            if not DiceUnitaryNode.valid_tokens(n, nodes[i+1]):
+                self.throw_fatal_error(f"Invalid token for unitary node {n.token.value}")
             self._roll_prep_next_token(nodes, i+1)
             unitary = DiceUnitaryNode.from_tokens(n, nodes[i+1])
             nodes[i: i+2] = [unitary]
             self.consumed_tokens += 1
             return unitary
-        return DiceSyntaxNode("")
+        self.throw_fatal_error(f"Unevaluable dice syntax node: {n.id}")
+        return DiceSyntaxNode("error")
 
     def _parse_roll(self, nodes: list[DiceSyntaxNode]) -> DiceSyntaxNode:
         consumed_tokens = 0
@@ -344,7 +364,7 @@ class Parser():
                 last_bracket_stack.append(i)
             elif isinstance(n, DicePendingOpNode) and n.token.token_type == TokenType.BRACKET_CLOSE:
                 if len(last_bracket_stack) == 0:
-                    raise ValueError("Parenteses mismatch")
+                    self.throw_fatal_error("Parenteses mismatch")
                 last = last_bracket_stack.pop()
                 consumed_tokens += 2
                 nodes[last: i + 1] = [self._parse_roll(nodes[last + 1: i])]
@@ -352,7 +372,7 @@ class Parser():
             i += 1
 
         if len(last_bracket_stack) != 0:
-            raise ValueError("Parenteses mismatch")
+            self.throw_fatal_error("Parenteses mismatch")
 
         self._roll_prep_next_token(nodes, 0)
         self._roll_parser_pass(nodes, ["*", "/"])
@@ -364,4 +384,23 @@ class Parser():
         return nodes.pop(0)
 
     def parse_roll(self) -> DiceSyntaxNode:
-        return self._parse_roll(list(map(DiceSyntaxNode.from_token, self.tokens)))
+        try:
+            res = self._parse_roll(list(map(DiceSyntaxNode.from_token, self.tokens)))
+            self.tokens = self.tokens[self.consumed_tokens:]
+        #except ValueError as e:
+        except FileExistsError as e:
+            self.throw_error(str(e))
+            return DiceSyntaxNode("error")
+        return res
+    
+    def parse_path(self) -> list[str]:
+        res = []
+        i = 0
+        while i < len(self.tokens) - 1:
+            if self.tokens[i+1] == ".":
+                res.append(self.tokens[i])
+            else:
+                res.append(self.tokens[i])
+                return res
+        return res
+    
