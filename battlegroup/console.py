@@ -21,6 +21,7 @@ TESTING_INPUT = """
         p1.e2.w1.hp = R
         bg1.e2 => bg2
         bg1.** ?? 0::5
+        turn()
 """.split("\n")[1:-1]
 
 #D = data["bg_data"]  # TODO
@@ -62,7 +63,7 @@ class ArgumentList:
         if not self.can_fetch(): return default
         x = self.fetch_raw()
         if isinstance(x, (SyntaxNode)):
-            self._get_as_int(x.evaluate(), default)
+            return self._get_as_int(x.evaluate(), default)
         return self._get_as_int(x, default)
 
     @staticmethod
@@ -79,7 +80,7 @@ class ArgumentList:
         if not self.can_fetch(): return default
         x = self.fetch_raw()
         if isinstance(x, (SyntaxNode)):
-            self._get_as_arr(x.evaluate(), count, default)
+            return self._get_as_arr(x.evaluate(), count, default)
         return self._get_as_arr(x, count, default)
 
     def fetch_path(self, default: list[str]=[]) -> list[str]:
@@ -134,10 +135,11 @@ def bg_cmd(path: list[str], battle: BGBattle, cmd: str, args: ArgumentList, auth
     elif cmd == "??":
         fleet_name = path[0]
         if fleet_name == "**":
-            as_int = args.fetch_int(UNREACHABLE)
-            if as_int != UNREACHABLE:
-                print(as_int)
-            battle.get_gm_rapport()
+            x = args.fetch_raw()
+            if isinstance(x, SyntaxNode):
+                print(x.string_evaluate())
+            else:
+                battle.get_gm_rapport()
         else:
             battle.get_gm_detail(fleet_name)
 
@@ -170,10 +172,12 @@ def get_input():
         inp = input(">//[$USR]:: ")
         if inp == "exit":
             break
+        elif inp == "help":
+            print("Not Implemented")
         yield inp
 
 def console_application(input_gen):
-    for inp in input_gen:
+    for i, inp in enumerate(input_gen):
         try:
             path, cmd, args = parser.parse_command(inp)
             if not parser.has_error():
@@ -186,4 +190,13 @@ def console_application(input_gen):
 
 if __name__ == "__main__":
     #console_application(get_input())
-    console_application(TESTING_INPUT)
+    console_application([
+        'open()',
+        'alpha := Starkiller :: Brothers-in-arms',
+        'save("test")',
+        'turn()',
+        'turn()',
+        '//alpha.c1.current = alpha.c1.total',
+        '//alpha.c1 = R',
+        'alpha ??',
+    ])

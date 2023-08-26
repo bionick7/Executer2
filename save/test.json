@@ -1,0 +1,66 @@
+{
+  "npcs": [
+    {
+      "name": "alpha",
+      "content": {
+        "_name": "starkiller",
+        "_defense": 8,
+        "_interdiction": "2d6",
+        "_valid": true,
+        "_hp0": 25,
+        ".": {
+          "hp": 25,
+          "max_hp": 25,
+          "lockon": 0,
+          "greywash": 0
+        },
+        ".c1": {
+          "_name": "starkiller-cannon",
+          ".": {
+            "total": 2,
+            "current": 2
+          }
+        },
+        ".e1": {
+          "_name": "brothers-in-arms",
+          "_defense": 8,
+          "+defense": 0,
+          "+interdiction": "",
+          "+hp": 0,
+          "_is_template": false,
+          "_is_unique": false,
+          "_valid": true,
+          ".": [
+            {
+              "hp": 8,
+              "lockon": 0,
+              "greywash": 0
+            },
+            {
+              "hp": 8,
+              "lockon": 0,
+              "greywash": 0
+            }
+          ],
+          ".c1": {
+            "_name": "short-spool spinal guns",
+            ".": {
+              "total": 2,
+              "current": 2
+            }
+          },
+          "_init": true
+        },
+        "+defense": [],
+        "+interdiction": [],
+        "hp": 25,
+        "max_hp": 25
+      }
+    }
+  ],
+  "modifiers": [
+    ""
+  ],
+  "opened": true,
+  "turn": 1
+}

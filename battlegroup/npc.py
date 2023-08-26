@@ -37,6 +37,16 @@ class NPCBattleGroup:
         for key, value in self.content.items():
             if key.startswith(".e"):
                 yield value
+                
+    @property
+    def charge_weapons(self):
+        for k, v in self.content.items():
+            if k.startswith(".c"):
+                yield v
+        for e in self.escorts:
+            for k, v in e.items():
+                if k.startswith(".c"):
+                    yield v
     
     def recalc_boni(self):
         content = self.content
@@ -95,7 +105,7 @@ class NPCBattleGroup:
         index = path[0]
         if index in ["*", "**"]:
             if include_meta:
-                return "No wildcards supproted is include_meta is set"
+                return "No wildcards supproted if include_meta is set"
             for key in content:
                 if key.startswith(".") and key != ".":
                     err = self.__is_path_valid(path[1:] if index == "*" else ["**"], content[key], False)
@@ -165,12 +175,11 @@ class NPCBattleGroup:
 
     def logistics_phase(self) -> list[tuple[str, str]]:
         res = []
-        for obj in self.decode_path(["**"]):
-            for k in obj:
-                if k.startswith("&") and obj[k] > 0:
-                    obj[k] -= 1
-                if k.startswith("&") and obj[k] == 0:
-                    res.append((self.name, k[1:]))
+        for cw in self.charge_weapons:
+            if cw["."]["current"] == 0:
+                res.append((self.name, cw["_name"]))
+            else:
+                cw["."]["current"] -= 1
         return res
 
     def save(self) -> dict:

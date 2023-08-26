@@ -114,19 +114,22 @@
           ".": [
             {
               "hp": 8,
-              "&short-spool spinal guns": 2,
-              "0short-spool spinal guns": 2,
               "lockon": 0,
               "greywash": 0
             },
             {
               "hp": 8,
-              "&short-spool spinal guns": 2,
-              "0short-spool spinal guns": 2,
               "lockon": 0,
               "greywash": 0
             }
           ],
+          ".c1": {
+            "_name": "short-spool spinal guns",
+            ".": {
+              "total": 2,
+              "current": 2
+            }
+          },
           "_init": true
         }
       }
@@ -142,10 +145,15 @@
         ".": {
           "hp": 25,
           "max_hp": 25,
-          "&redgiant-solar-lance": 3,
-          "0redgiant-solar-lance": 3,
           "lockon": 0,
           "greywash": 0
+        },
+        ".c1": {
+          "_name": "redgiant-solar-lance",
+          ".": {
+            "total": 3,
+            "current": 3
+          }
         },
         ".e1": {
           "_name": "roughnecks",

@@ -72,10 +72,23 @@ class BGBattle:
                 ".": [{"hp": x, **DEFAULT_COUNTERS} for x in w["hp"]]
             }
         return wing_objs
+    
+    def _get_stats_charge_weapons(self, charge_weapons: dict) -> Obj:
+        charge_objs = {}
+        for i, (k, v) in enumerate(charge_weapons.items()):
+            charge_objs[f".c{i+1}"] = {
+                "_name": k,
+                ".": {
+                    "total": v,
+                    "current": v
+                }
+            }
+        return charge_objs
 
     def _get_stats_capitalship(self, name: str) -> Obj:
         comp = self.capitalship_compendium.get(name.lower(), {})
         wing_objs = self._get_stats_wings(comp.get("wings", []))
+        charge_objs = self._get_stats_charge_weapons(comp.get("charges", {}))
         return {
             "_name": name.lower(),
             "_defense": comp.get("defense", 5),
@@ -85,17 +98,17 @@ class BGBattle:
             ".": {
                 "hp": comp.get("hp", 1),
                 "max_hp": comp.get("hp", 1),
-                **{"&" + k: v for k, v in comp.get("charges", {}).items()},
-                **{"0" + k: v for k, v in comp.get("charges", {}).items()},
                 **comp.get("counters", {}),
                 **DEFAULT_COUNTERS
             },
-            **wing_objs
+            **wing_objs,
+            **charge_objs,
         }
     
     def _get_stats_escort(self, name: str) -> Obj:
         comp = self.escorts_compendium.get(name.lower(), {})
         wing_objs = self._get_stats_wings(comp.get("wings", []))
+        charge_objs = self._get_stats_charge_weapons(comp.get("charges", {}))
         tags = [x.lower() for x in comp.get("tags", [])]
         return {
             "_name": name.lower(),
@@ -109,11 +122,10 @@ class BGBattle:
             ".": [{
                 "hp": x,
                 **comp.get("counters", {}),
-                **{"&" + k: v for k, v in comp.get("charges", {}).items()},
-                **{"0" + k: v for k, v in comp.get("charges", {}).items()},
                 **DEFAULT_COUNTERS,
             } for x in comp.get("hp", [])],
             **wing_objs,
+            **charge_objs,
         }
 
     def add_npc(self, flagship_name: str, escorts_names: list[str], name: str) -> typing.Optional[NPCBattleGroup]:
@@ -226,14 +238,13 @@ class BGBattle:
             return
         self.message_queue.append("$LONG" + res)
         
-    def get_gm_detail(self, path: str):
-        query = path[0]
+    def get_gm_detail(self, query: str):
         if query not in self.npcs:
             self.error_queue.append(f"No such battlegroup: {query}")
             return
         self.message_queue.append("$LONG" + format_bg(self.npcs[query], True) + "\n")
 
-    def compile_actions(self, path: str, ) -> None:
+    def compile_actions(self, path: list[str], ) -> None:
         pass
 
     def save_to(self, filepath: str) -> None:
@@ -266,32 +277,3 @@ class BGBattle:
 
     def redo(self) -> None:
         pass
-
-def tests():
-    battle = BGBattle()
-    battle.open("Threading the needle", "LOCAL")
-    battle.add_npc("BREAKWATER", ["LOYAL_GUARDIAN", "DEN_MOTHER", "BROTHERS_IN_ARMS", "ALBEDO_CAVALIER"], "bg1")
-    battle.add_npc("PALADIN", ["ROUGHNECKS"], "bg2")
-    battle.add_npc("HIGHLINE", ["BROTHERS_IN_ARMS", "STARFIELD_FURIES"], "bg3")
-    battle.add_npc("CORSAIR", ["ROUGHNECKS"], "bg4")
-    battle.save_to("save/temp")
-    assert battle.check_path_valid("bg2".split(".")), battle.error_queue[-1]
-    assert battle.check_path_valid("bg3.e2.w3".split(".")), battle.error_queue[-1]
-    assert battle.check_path_valid("bg4.e1.2".split(".")), battle.error_queue[-1]
-    battle.set_attribute("bg3.e2.w3.dmg".split("."), 1)
-    battle.set_attribute("bg3.e2.w3.2.dmg".split("."), 2)
-    battle.inc_attribute("bg3.e2.w3.dmg".split("."), 1)
-    battle.inc_attribute("bg3.e2.w3.2.dmg".split("."), 2)
-    battle.reassign_escort("bg3.e2".split("."), "bg2")
-    battle.reassign_escort("bg3.e1".split("."), "")
-    battle.reassign_escort("bg4.e1".split("."), "bg2")
-    d1 = battle.__dict__
-    battle.save_to("save/temp")
-    battle.load_from("save/temp")
-    assert d1 == battle.__dict__
-    print(battle.get_gm_rapport())
-    print(battle.get_player_rapport())
-    #print(acm_long_embed("Message", "Author"))
-
-if __name__ == "__main__":
-    tests()

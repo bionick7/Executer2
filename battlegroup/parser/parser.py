@@ -83,7 +83,6 @@ class Parser:
     def t_COMMENT(self, t):
         r'(//.*(\n|$))'
 
-
     t_ignore  = ' \t'
 
     def p_command(self, p):
@@ -123,7 +122,14 @@ class Parser:
                          | DOUBLE_STAR
                          | IDENTIFIER
                          | INTEGER
-           expression    : d_expression
+                         """
+        lhs = p[1]
+        if isinstance(lhs, IntegerNode):
+            lhs = str(lhs.value)
+        p[0] = lhs
+        
+    def p_expression(self, p):
+        """expression    : d_expression
                          | path
                          | IDENTIFIER
                          | STRLITERAL
@@ -138,6 +144,8 @@ class Parser:
                          | MULTIPLY
         """
         lhs = p[1]
+        if isinstance(lhs, IntegerNode):
+            lhs = str(lhs.value)
         if not isinstance(lhs, list):
             lhs = [lhs]
         if len(p) == 2:
