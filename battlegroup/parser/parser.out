@@ -1,88 +1,92 @@
 Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
-Unused terminals:
-
-    COMMA
-
 Grammar
 
 Rule 0     S' -> command
 Rule 1     command -> path operator arglist
 Rule 2     command -> IDENTIFIER operator arglist
-Rule 3     arglist -> arglist BG_SEPERATOR expression
-Rule 4     arglist -> expression
-Rule 5     pathelem -> MULTIPLY
-Rule 6     pathelem -> DOUBLE_STAR
-Rule 7     pathelem -> IDENTIFIER
-Rule 8     pathelem -> INTEGER
-Rule 9     expression -> d_expression
-Rule 10    expression -> path
-Rule 11    expression -> IDENTIFIER
-Rule 12    path -> path DOT pathelem
-Rule 13    path -> pathelem DOT pathelem
-Rule 14    path -> DOUBLE_STAR
-Rule 15    path -> MULTIPLY
-Rule 16    d_expression -> d_expression AND d_term2
-Rule 17    d_term2 -> d_term2 TIMES d_term1
-Rule 18    d_term1 -> d_term1 PLUS d_term0
-Rule 19    d_term1 -> d_term1 MINUS d_term0
-Rule 20    d_term0 -> d_term0 MULTIPLY d_factor
-Rule 21    d_term0 -> d_term0 DIVIDE d_factor
-Rule 22    d_factor -> PLUS d_factor
-Rule 23    d_factor -> MINUS d_factor
-Rule 24    d_expression -> d_term2
-Rule 25    d_term2 -> d_term1
-Rule 26    d_term1 -> d_term0
-Rule 27    d_term0 -> d_factor
-Rule 28    d_factor -> INTEGER
-Rule 29    d_factor -> DICE
-Rule 30    d_factor -> LPAREN d_expression RPAREN
-Rule 31    operator -> ASSIGN
-Rule 32    operator -> INITIALIZE
-Rule 33    operator -> PLUSEQUAL
-Rule 34    operator -> MINUSEQUAL
-Rule 35    operator -> ARROWLEFT
-Rule 36    operator -> QUESTION
-Rule 37    d_factor -> IDENTIFIER LPAREN d_expression RPAREN
+Rule 3     command -> path operator
+Rule 4     command -> IDENTIFIER operator
+Rule 5     command -> IDENTIFIER LPAREN arglist RPAREN
+Rule 6     command -> IDENTIFIER LPAREN RPAREN
+Rule 7     command -> operator LPAREN arglist RPAREN
+Rule 8     command -> operator LPAREN RPAREN
+Rule 9     arglist -> arglist BG_SEPERATOR expression
+Rule 10    arglist -> expression
+Rule 11    pathelem -> MULTIPLY
+Rule 12    pathelem -> DOUBLE_STAR
+Rule 13    pathelem -> IDENTIFIER
+Rule 14    pathelem -> INTEGER
+Rule 15    expression -> d_expression
+Rule 16    expression -> path
+Rule 17    expression -> IDENTIFIER
+Rule 18    expression -> STRLITERAL
+Rule 19    path -> path DOT pathelem
+Rule 20    path -> IDENTIFIER DOT pathelem
+Rule 21    path -> INTEGER DOT pathelem
+Rule 22    path -> DOUBLE_STAR
+Rule 23    path -> MULTIPLY
+Rule 24    d_expression -> d_expression AND d_term2
+Rule 25    d_term2 -> d_term2 TIMES d_term1
+Rule 26    d_term1 -> d_term1 PLUS d_term0
+Rule 27    d_term1 -> d_term1 MINUS d_term0
+Rule 28    d_term0 -> d_term0 MULTIPLY d_factor
+Rule 29    d_term0 -> d_term0 DIVIDE d_factor
+Rule 30    d_factor -> PLUS d_factor
+Rule 31    d_factor -> MINUS d_factor
+Rule 32    d_expression -> d_term2
+Rule 33    d_term2 -> d_term1
+Rule 34    d_term1 -> d_term0
+Rule 35    d_term0 -> d_factor
+Rule 36    d_factor -> INTEGER
+Rule 37    d_factor -> DICE
+Rule 38    d_factor -> LPAREN d_expression RPAREN
+Rule 39    operator -> ASSIGN
+Rule 40    operator -> INITIALIZE
+Rule 41    operator -> PLUSEQUAL
+Rule 42    operator -> MINUSEQUAL
+Rule 43    operator -> ARROWLEFT
+Rule 44    operator -> QUESTION
+Rule 45    d_factor -> IDENTIFIER LPAREN d_expression RPAREN
 
 Terminals, with rules where they appear
 
-AND                  : 16
-ARROWLEFT            : 35
-ASSIGN               : 31
-BG_SEPERATOR         : 3
-COMMA                : 
-DICE                 : 29
-DIVIDE               : 21
-DOT                  : 12 13
-DOUBLE_STAR          : 6 14
-IDENTIFIER           : 2 7 11 37
-INITIALIZE           : 32
-INTEGER              : 8 28
-LPAREN               : 30 37
-MINUS                : 19 23
-MINUSEQUAL           : 34
-MULTIPLY             : 5 15 20
-PLUS                 : 18 22
-PLUSEQUAL            : 33
-QUESTION             : 36
-RPAREN               : 30 37
-TIMES                : 17
+AND                  : 24
+ARROWLEFT            : 43
+ASSIGN               : 39
+BG_SEPERATOR         : 9
+DICE                 : 37
+DIVIDE               : 29
+DOT                  : 19 20 21
+DOUBLE_STAR          : 12 22
+IDENTIFIER           : 2 4 5 6 13 17 20 45
+INITIALIZE           : 40
+INTEGER              : 14 21 36
+LPAREN               : 5 6 7 8 38 45
+MINUS                : 27 31
+MINUSEQUAL           : 42
+MULTIPLY             : 11 23 28
+PLUS                 : 26 30
+PLUSEQUAL            : 41
+QUESTION             : 44
+RPAREN               : 5 6 7 8 38 45
+STRLITERAL           : 18
+TIMES                : 25
 error                : 
 
 Nonterminals, with rules where they appear
 
-arglist              : 1 2 3
+arglist              : 1 2 5 7 9
 command              : 0
-d_expression         : 9 16 30 37
-d_factor             : 20 21 22 23 27
-d_term0              : 18 19 20 21 26
-d_term1              : 17 18 19 25
-d_term2              : 16 17 24
-expression           : 3 4
-operator             : 1 2
-path                 : 1 10 12
-pathelem             : 12 13 13
+d_expression         : 15 24 38 45
+d_factor             : 28 29 30 31 35
+d_term0              : 26 27 28 29 34
+d_term1              : 25 26 27 33
+d_term2              : 24 25 32
+expression           : 9 10
+operator             : 1 2 3 4 7 8
+path                 : 1 3 16 19
+pathelem             : 19 20 21
 
 Parsing method: LALR
 
@@ -91,23 +95,38 @@ state 0
     (0) S' -> . command
     (1) command -> . path operator arglist
     (2) command -> . IDENTIFIER operator arglist
-    (12) path -> . path DOT pathelem
-    (13) path -> . pathelem DOT pathelem
-    (14) path -> . DOUBLE_STAR
-    (15) path -> . MULTIPLY
-    (5) pathelem -> . MULTIPLY
-    (6) pathelem -> . DOUBLE_STAR
-    (7) pathelem -> . IDENTIFIER
-    (8) pathelem -> . INTEGER
+    (3) command -> . path operator
+    (4) command -> . IDENTIFIER operator
+    (5) command -> . IDENTIFIER LPAREN arglist RPAREN
+    (6) command -> . IDENTIFIER LPAREN RPAREN
+    (7) command -> . operator LPAREN arglist RPAREN
+    (8) command -> . operator LPAREN RPAREN
+    (19) path -> . path DOT pathelem
+    (20) path -> . IDENTIFIER DOT pathelem
+    (21) path -> . INTEGER DOT pathelem
+    (22) path -> . DOUBLE_STAR
+    (23) path -> . MULTIPLY
+    (39) operator -> . ASSIGN
+    (40) operator -> . INITIALIZE
+    (41) operator -> . PLUSEQUAL
+    (42) operator -> . MINUSEQUAL
+    (43) operator -> . ARROWLEFT
+    (44) operator -> . QUESTION
 
-    IDENTIFIER      shift and go to state 3
-    DOUBLE_STAR     shift and go to state 5
-    MULTIPLY        shift and go to state 6
-    INTEGER         shift and go to state 7
+    IDENTIFIER      shift and go to state 4
+    INTEGER         shift and go to state 5
+    DOUBLE_STAR     shift and go to state 6
+    MULTIPLY        shift and go to state 7
+    ASSIGN          shift and go to state 8
+    INITIALIZE      shift and go to state 9
+    PLUSEQUAL       shift and go to state 10
+    MINUSEQUAL      shift and go to state 11
+    ARROWLEFT       shift and go to state 12
+    QUESTION        shift and go to state 13
 
     command                        shift and go to state 1
     path                           shift and go to state 2
-    pathelem                       shift and go to state 4
+    operator                       shift and go to state 3
 
 state 1
 
@@ -118,1042 +137,1254 @@ state 1
 state 2
 
     (1) command -> path . operator arglist
-    (12) path -> path . DOT pathelem
-    (31) operator -> . ASSIGN
-    (32) operator -> . INITIALIZE
-    (33) operator -> . PLUSEQUAL
-    (34) operator -> . MINUSEQUAL
-    (35) operator -> . ARROWLEFT
-    (36) operator -> . QUESTION
+    (3) command -> path . operator
+    (19) path -> path . DOT pathelem
+    (39) operator -> . ASSIGN
+    (40) operator -> . INITIALIZE
+    (41) operator -> . PLUSEQUAL
+    (42) operator -> . MINUSEQUAL
+    (43) operator -> . ARROWLEFT
+    (44) operator -> . QUESTION
 
-    DOT             shift and go to state 9
-    ASSIGN          shift and go to state 10
-    INITIALIZE      shift and go to state 11
-    PLUSEQUAL       shift and go to state 12
-    MINUSEQUAL      shift and go to state 13
-    ARROWLEFT       shift and go to state 14
-    QUESTION        shift and go to state 15
+    DOT             shift and go to state 15
+    ASSIGN          shift and go to state 8
+    INITIALIZE      shift and go to state 9
+    PLUSEQUAL       shift and go to state 10
+    MINUSEQUAL      shift and go to state 11
+    ARROWLEFT       shift and go to state 12
+    QUESTION        shift and go to state 13
 
-    operator                       shift and go to state 8
+    operator                       shift and go to state 14
 
 state 3
 
-    (2) command -> IDENTIFIER . operator arglist
-    (7) pathelem -> IDENTIFIER .
-    (31) operator -> . ASSIGN
-    (32) operator -> . INITIALIZE
-    (33) operator -> . PLUSEQUAL
-    (34) operator -> . MINUSEQUAL
-    (35) operator -> . ARROWLEFT
-    (36) operator -> . QUESTION
+    (7) command -> operator . LPAREN arglist RPAREN
+    (8) command -> operator . LPAREN RPAREN
 
-    DOT             reduce using rule 7 (pathelem -> IDENTIFIER .)
-    ASSIGN          shift and go to state 10
-    INITIALIZE      shift and go to state 11
-    PLUSEQUAL       shift and go to state 12
-    MINUSEQUAL      shift and go to state 13
-    ARROWLEFT       shift and go to state 14
-    QUESTION        shift and go to state 15
+    LPAREN          shift and go to state 16
 
-    operator                       shift and go to state 16
 
 state 4
 
-    (13) path -> pathelem . DOT pathelem
+    (2) command -> IDENTIFIER . operator arglist
+    (4) command -> IDENTIFIER . operator
+    (5) command -> IDENTIFIER . LPAREN arglist RPAREN
+    (6) command -> IDENTIFIER . LPAREN RPAREN
+    (20) path -> IDENTIFIER . DOT pathelem
+    (39) operator -> . ASSIGN
+    (40) operator -> . INITIALIZE
+    (41) operator -> . PLUSEQUAL
+    (42) operator -> . MINUSEQUAL
+    (43) operator -> . ARROWLEFT
+    (44) operator -> . QUESTION
 
-    DOT             shift and go to state 17
+    LPAREN          shift and go to state 18
+    DOT             shift and go to state 19
+    ASSIGN          shift and go to state 8
+    INITIALIZE      shift and go to state 9
+    PLUSEQUAL       shift and go to state 10
+    MINUSEQUAL      shift and go to state 11
+    ARROWLEFT       shift and go to state 12
+    QUESTION        shift and go to state 13
 
+    operator                       shift and go to state 17
 
 state 5
 
-    (14) path -> DOUBLE_STAR .
-    (6) pathelem -> DOUBLE_STAR .
+    (21) path -> INTEGER . DOT pathelem
 
-  ! reduce/reduce conflict for DOT resolved using rule 6 (pathelem -> DOUBLE_STAR .)
-    ASSIGN          reduce using rule 14 (path -> DOUBLE_STAR .)
-    INITIALIZE      reduce using rule 14 (path -> DOUBLE_STAR .)
-    PLUSEQUAL       reduce using rule 14 (path -> DOUBLE_STAR .)
-    MINUSEQUAL      reduce using rule 14 (path -> DOUBLE_STAR .)
-    ARROWLEFT       reduce using rule 14 (path -> DOUBLE_STAR .)
-    QUESTION        reduce using rule 14 (path -> DOUBLE_STAR .)
-    BG_SEPERATOR    reduce using rule 14 (path -> DOUBLE_STAR .)
-    $end            reduce using rule 14 (path -> DOUBLE_STAR .)
-    DOT             reduce using rule 6 (pathelem -> DOUBLE_STAR .)
-
-  ! DOT             [ reduce using rule 14 (path -> DOUBLE_STAR .) ]
+    DOT             shift and go to state 20
 
 
 state 6
 
-    (15) path -> MULTIPLY .
-    (5) pathelem -> MULTIPLY .
+    (22) path -> DOUBLE_STAR .
 
-  ! reduce/reduce conflict for DOT resolved using rule 5 (pathelem -> MULTIPLY .)
-    ASSIGN          reduce using rule 15 (path -> MULTIPLY .)
-    INITIALIZE      reduce using rule 15 (path -> MULTIPLY .)
-    PLUSEQUAL       reduce using rule 15 (path -> MULTIPLY .)
-    MINUSEQUAL      reduce using rule 15 (path -> MULTIPLY .)
-    ARROWLEFT       reduce using rule 15 (path -> MULTIPLY .)
-    QUESTION        reduce using rule 15 (path -> MULTIPLY .)
-    BG_SEPERATOR    reduce using rule 15 (path -> MULTIPLY .)
-    $end            reduce using rule 15 (path -> MULTIPLY .)
-    DOT             reduce using rule 5 (pathelem -> MULTIPLY .)
-
-  ! DOT             [ reduce using rule 15 (path -> MULTIPLY .) ]
+    DOT             reduce using rule 22 (path -> DOUBLE_STAR .)
+    ASSIGN          reduce using rule 22 (path -> DOUBLE_STAR .)
+    INITIALIZE      reduce using rule 22 (path -> DOUBLE_STAR .)
+    PLUSEQUAL       reduce using rule 22 (path -> DOUBLE_STAR .)
+    MINUSEQUAL      reduce using rule 22 (path -> DOUBLE_STAR .)
+    ARROWLEFT       reduce using rule 22 (path -> DOUBLE_STAR .)
+    QUESTION        reduce using rule 22 (path -> DOUBLE_STAR .)
+    BG_SEPERATOR    reduce using rule 22 (path -> DOUBLE_STAR .)
+    $end            reduce using rule 22 (path -> DOUBLE_STAR .)
+    RPAREN          reduce using rule 22 (path -> DOUBLE_STAR .)
 
 
 state 7
 
-    (8) pathelem -> INTEGER .
+    (23) path -> MULTIPLY .
 
-    DOT             reduce using rule 8 (pathelem -> INTEGER .)
-    ASSIGN          reduce using rule 8 (pathelem -> INTEGER .)
-    INITIALIZE      reduce using rule 8 (pathelem -> INTEGER .)
-    PLUSEQUAL       reduce using rule 8 (pathelem -> INTEGER .)
-    MINUSEQUAL      reduce using rule 8 (pathelem -> INTEGER .)
-    ARROWLEFT       reduce using rule 8 (pathelem -> INTEGER .)
-    QUESTION        reduce using rule 8 (pathelem -> INTEGER .)
-    BG_SEPERATOR    reduce using rule 8 (pathelem -> INTEGER .)
-    $end            reduce using rule 8 (pathelem -> INTEGER .)
+    DOT             reduce using rule 23 (path -> MULTIPLY .)
+    ASSIGN          reduce using rule 23 (path -> MULTIPLY .)
+    INITIALIZE      reduce using rule 23 (path -> MULTIPLY .)
+    PLUSEQUAL       reduce using rule 23 (path -> MULTIPLY .)
+    MINUSEQUAL      reduce using rule 23 (path -> MULTIPLY .)
+    ARROWLEFT       reduce using rule 23 (path -> MULTIPLY .)
+    QUESTION        reduce using rule 23 (path -> MULTIPLY .)
+    BG_SEPERATOR    reduce using rule 23 (path -> MULTIPLY .)
+    $end            reduce using rule 23 (path -> MULTIPLY .)
+    RPAREN          reduce using rule 23 (path -> MULTIPLY .)
 
 
 state 8
 
-    (1) command -> path operator . arglist
-    (3) arglist -> . arglist BG_SEPERATOR expression
-    (4) arglist -> . expression
-    (9) expression -> . d_expression
-    (10) expression -> . path
-    (11) expression -> . IDENTIFIER
-    (16) d_expression -> . d_expression AND d_term2
-    (24) d_expression -> . d_term2
-    (12) path -> . path DOT pathelem
-    (13) path -> . pathelem DOT pathelem
-    (14) path -> . DOUBLE_STAR
-    (15) path -> . MULTIPLY
-    (17) d_term2 -> . d_term2 TIMES d_term1
-    (25) d_term2 -> . d_term1
-    (5) pathelem -> . MULTIPLY
-    (6) pathelem -> . DOUBLE_STAR
-    (7) pathelem -> . IDENTIFIER
-    (8) pathelem -> . INTEGER
-    (18) d_term1 -> . d_term1 PLUS d_term0
-    (19) d_term1 -> . d_term1 MINUS d_term0
-    (26) d_term1 -> . d_term0
-    (20) d_term0 -> . d_term0 MULTIPLY d_factor
-    (21) d_term0 -> . d_term0 DIVIDE d_factor
-    (27) d_term0 -> . d_factor
-    (22) d_factor -> . PLUS d_factor
-    (23) d_factor -> . MINUS d_factor
-    (28) d_factor -> . INTEGER
-    (29) d_factor -> . DICE
-    (30) d_factor -> . LPAREN d_expression RPAREN
-    (37) d_factor -> . IDENTIFIER LPAREN d_expression RPAREN
+    (39) operator -> ASSIGN .
 
-    IDENTIFIER      shift and go to state 22
-    DOUBLE_STAR     shift and go to state 5
-    MULTIPLY        shift and go to state 6
-    INTEGER         shift and go to state 25
-    PLUS            shift and go to state 26
-    MINUS           shift and go to state 28
-    DICE            shift and go to state 30
-    LPAREN          shift and go to state 31
+    LPAREN          reduce using rule 39 (operator -> ASSIGN .)
+    IDENTIFIER      reduce using rule 39 (operator -> ASSIGN .)
+    STRLITERAL      reduce using rule 39 (operator -> ASSIGN .)
+    INTEGER         reduce using rule 39 (operator -> ASSIGN .)
+    DOUBLE_STAR     reduce using rule 39 (operator -> ASSIGN .)
+    MULTIPLY        reduce using rule 39 (operator -> ASSIGN .)
+    PLUS            reduce using rule 39 (operator -> ASSIGN .)
+    MINUS           reduce using rule 39 (operator -> ASSIGN .)
+    DICE            reduce using rule 39 (operator -> ASSIGN .)
+    $end            reduce using rule 39 (operator -> ASSIGN .)
 
-    path                           shift and go to state 18
-    arglist                        shift and go to state 19
-    expression                     shift and go to state 20
-    d_expression                   shift and go to state 21
-    d_term2                        shift and go to state 23
-    pathelem                       shift and go to state 4
-    d_term1                        shift and go to state 24
-    d_term0                        shift and go to state 27
-    d_factor                       shift and go to state 29
 
 state 9
 
-    (12) path -> path DOT . pathelem
-    (5) pathelem -> . MULTIPLY
-    (6) pathelem -> . DOUBLE_STAR
-    (7) pathelem -> . IDENTIFIER
-    (8) pathelem -> . INTEGER
+    (40) operator -> INITIALIZE .
 
-    MULTIPLY        shift and go to state 33
-    DOUBLE_STAR     shift and go to state 34
-    IDENTIFIER      shift and go to state 35
-    INTEGER         shift and go to state 7
+    LPAREN          reduce using rule 40 (operator -> INITIALIZE .)
+    IDENTIFIER      reduce using rule 40 (operator -> INITIALIZE .)
+    STRLITERAL      reduce using rule 40 (operator -> INITIALIZE .)
+    INTEGER         reduce using rule 40 (operator -> INITIALIZE .)
+    DOUBLE_STAR     reduce using rule 40 (operator -> INITIALIZE .)
+    MULTIPLY        reduce using rule 40 (operator -> INITIALIZE .)
+    PLUS            reduce using rule 40 (operator -> INITIALIZE .)
+    MINUS           reduce using rule 40 (operator -> INITIALIZE .)
+    DICE            reduce using rule 40 (operator -> INITIALIZE .)
+    $end            reduce using rule 40 (operator -> INITIALIZE .)
 
-    pathelem                       shift and go to state 32
 
 state 10
 
-    (31) operator -> ASSIGN .
+    (41) operator -> PLUSEQUAL .
 
-    IDENTIFIER      reduce using rule 31 (operator -> ASSIGN .)
-    DOUBLE_STAR     reduce using rule 31 (operator -> ASSIGN .)
-    MULTIPLY        reduce using rule 31 (operator -> ASSIGN .)
-    INTEGER         reduce using rule 31 (operator -> ASSIGN .)
-    PLUS            reduce using rule 31 (operator -> ASSIGN .)
-    MINUS           reduce using rule 31 (operator -> ASSIGN .)
-    DICE            reduce using rule 31 (operator -> ASSIGN .)
-    LPAREN          reduce using rule 31 (operator -> ASSIGN .)
+    LPAREN          reduce using rule 41 (operator -> PLUSEQUAL .)
+    IDENTIFIER      reduce using rule 41 (operator -> PLUSEQUAL .)
+    STRLITERAL      reduce using rule 41 (operator -> PLUSEQUAL .)
+    INTEGER         reduce using rule 41 (operator -> PLUSEQUAL .)
+    DOUBLE_STAR     reduce using rule 41 (operator -> PLUSEQUAL .)
+    MULTIPLY        reduce using rule 41 (operator -> PLUSEQUAL .)
+    PLUS            reduce using rule 41 (operator -> PLUSEQUAL .)
+    MINUS           reduce using rule 41 (operator -> PLUSEQUAL .)
+    DICE            reduce using rule 41 (operator -> PLUSEQUAL .)
+    $end            reduce using rule 41 (operator -> PLUSEQUAL .)
 
 
 state 11
 
-    (32) operator -> INITIALIZE .
+    (42) operator -> MINUSEQUAL .
 
-    IDENTIFIER      reduce using rule 32 (operator -> INITIALIZE .)
-    DOUBLE_STAR     reduce using rule 32 (operator -> INITIALIZE .)
-    MULTIPLY        reduce using rule 32 (operator -> INITIALIZE .)
-    INTEGER         reduce using rule 32 (operator -> INITIALIZE .)
-    PLUS            reduce using rule 32 (operator -> INITIALIZE .)
-    MINUS           reduce using rule 32 (operator -> INITIALIZE .)
-    DICE            reduce using rule 32 (operator -> INITIALIZE .)
-    LPAREN          reduce using rule 32 (operator -> INITIALIZE .)
+    LPAREN          reduce using rule 42 (operator -> MINUSEQUAL .)
+    IDENTIFIER      reduce using rule 42 (operator -> MINUSEQUAL .)
+    STRLITERAL      reduce using rule 42 (operator -> MINUSEQUAL .)
+    INTEGER         reduce using rule 42 (operator -> MINUSEQUAL .)
+    DOUBLE_STAR     reduce using rule 42 (operator -> MINUSEQUAL .)
+    MULTIPLY        reduce using rule 42 (operator -> MINUSEQUAL .)
+    PLUS            reduce using rule 42 (operator -> MINUSEQUAL .)
+    MINUS           reduce using rule 42 (operator -> MINUSEQUAL .)
+    DICE            reduce using rule 42 (operator -> MINUSEQUAL .)
+    $end            reduce using rule 42 (operator -> MINUSEQUAL .)
 
 
 state 12
 
-    (33) operator -> PLUSEQUAL .
+    (43) operator -> ARROWLEFT .
 
-    IDENTIFIER      reduce using rule 33 (operator -> PLUSEQUAL .)
-    DOUBLE_STAR     reduce using rule 33 (operator -> PLUSEQUAL .)
-    MULTIPLY        reduce using rule 33 (operator -> PLUSEQUAL .)
-    INTEGER         reduce using rule 33 (operator -> PLUSEQUAL .)
-    PLUS            reduce using rule 33 (operator -> PLUSEQUAL .)
-    MINUS           reduce using rule 33 (operator -> PLUSEQUAL .)
-    DICE            reduce using rule 33 (operator -> PLUSEQUAL .)
-    LPAREN          reduce using rule 33 (operator -> PLUSEQUAL .)
+    LPAREN          reduce using rule 43 (operator -> ARROWLEFT .)
+    IDENTIFIER      reduce using rule 43 (operator -> ARROWLEFT .)
+    STRLITERAL      reduce using rule 43 (operator -> ARROWLEFT .)
+    INTEGER         reduce using rule 43 (operator -> ARROWLEFT .)
+    DOUBLE_STAR     reduce using rule 43 (operator -> ARROWLEFT .)
+    MULTIPLY        reduce using rule 43 (operator -> ARROWLEFT .)
+    PLUS            reduce using rule 43 (operator -> ARROWLEFT .)
+    MINUS           reduce using rule 43 (operator -> ARROWLEFT .)
+    DICE            reduce using rule 43 (operator -> ARROWLEFT .)
+    $end            reduce using rule 43 (operator -> ARROWLEFT .)
 
 
 state 13
 
-    (34) operator -> MINUSEQUAL .
+    (44) operator -> QUESTION .
 
-    IDENTIFIER      reduce using rule 34 (operator -> MINUSEQUAL .)
-    DOUBLE_STAR     reduce using rule 34 (operator -> MINUSEQUAL .)
-    MULTIPLY        reduce using rule 34 (operator -> MINUSEQUAL .)
-    INTEGER         reduce using rule 34 (operator -> MINUSEQUAL .)
-    PLUS            reduce using rule 34 (operator -> MINUSEQUAL .)
-    MINUS           reduce using rule 34 (operator -> MINUSEQUAL .)
-    DICE            reduce using rule 34 (operator -> MINUSEQUAL .)
-    LPAREN          reduce using rule 34 (operator -> MINUSEQUAL .)
+    LPAREN          reduce using rule 44 (operator -> QUESTION .)
+    IDENTIFIER      reduce using rule 44 (operator -> QUESTION .)
+    STRLITERAL      reduce using rule 44 (operator -> QUESTION .)
+    INTEGER         reduce using rule 44 (operator -> QUESTION .)
+    DOUBLE_STAR     reduce using rule 44 (operator -> QUESTION .)
+    MULTIPLY        reduce using rule 44 (operator -> QUESTION .)
+    PLUS            reduce using rule 44 (operator -> QUESTION .)
+    MINUS           reduce using rule 44 (operator -> QUESTION .)
+    DICE            reduce using rule 44 (operator -> QUESTION .)
+    $end            reduce using rule 44 (operator -> QUESTION .)
 
 
 state 14
 
-    (35) operator -> ARROWLEFT .
+    (1) command -> path operator . arglist
+    (3) command -> path operator .
+    (9) arglist -> . arglist BG_SEPERATOR expression
+    (10) arglist -> . expression
+    (15) expression -> . d_expression
+    (16) expression -> . path
+    (17) expression -> . IDENTIFIER
+    (18) expression -> . STRLITERAL
+    (24) d_expression -> . d_expression AND d_term2
+    (32) d_expression -> . d_term2
+    (19) path -> . path DOT pathelem
+    (20) path -> . IDENTIFIER DOT pathelem
+    (21) path -> . INTEGER DOT pathelem
+    (22) path -> . DOUBLE_STAR
+    (23) path -> . MULTIPLY
+    (25) d_term2 -> . d_term2 TIMES d_term1
+    (33) d_term2 -> . d_term1
+    (26) d_term1 -> . d_term1 PLUS d_term0
+    (27) d_term1 -> . d_term1 MINUS d_term0
+    (34) d_term1 -> . d_term0
+    (28) d_term0 -> . d_term0 MULTIPLY d_factor
+    (29) d_term0 -> . d_term0 DIVIDE d_factor
+    (35) d_term0 -> . d_factor
+    (30) d_factor -> . PLUS d_factor
+    (31) d_factor -> . MINUS d_factor
+    (36) d_factor -> . INTEGER
+    (37) d_factor -> . DICE
+    (38) d_factor -> . LPAREN d_expression RPAREN
+    (45) d_factor -> . IDENTIFIER LPAREN d_expression RPAREN
 
-    IDENTIFIER      reduce using rule 35 (operator -> ARROWLEFT .)
-    DOUBLE_STAR     reduce using rule 35 (operator -> ARROWLEFT .)
-    MULTIPLY        reduce using rule 35 (operator -> ARROWLEFT .)
-    INTEGER         reduce using rule 35 (operator -> ARROWLEFT .)
-    PLUS            reduce using rule 35 (operator -> ARROWLEFT .)
-    MINUS           reduce using rule 35 (operator -> ARROWLEFT .)
-    DICE            reduce using rule 35 (operator -> ARROWLEFT .)
-    LPAREN          reduce using rule 35 (operator -> ARROWLEFT .)
+    $end            reduce using rule 3 (command -> path operator .)
+    IDENTIFIER      shift and go to state 25
+    STRLITERAL      shift and go to state 26
+    INTEGER         shift and go to state 28
+    DOUBLE_STAR     shift and go to state 6
+    MULTIPLY        shift and go to state 7
+    PLUS            shift and go to state 30
+    MINUS           shift and go to state 32
+    DICE            shift and go to state 34
+    LPAREN          shift and go to state 35
 
+    path                           shift and go to state 21
+    arglist                        shift and go to state 22
+    expression                     shift and go to state 23
+    d_expression                   shift and go to state 24
+    d_term2                        shift and go to state 27
+    d_term1                        shift and go to state 29
+    d_term0                        shift and go to state 31
+    d_factor                       shift and go to state 33
 
 state 15
 
-    (36) operator -> QUESTION .
+    (19) path -> path DOT . pathelem
+    (11) pathelem -> . MULTIPLY
+    (12) pathelem -> . DOUBLE_STAR
+    (13) pathelem -> . IDENTIFIER
+    (14) pathelem -> . INTEGER
 
-    IDENTIFIER      reduce using rule 36 (operator -> QUESTION .)
-    DOUBLE_STAR     reduce using rule 36 (operator -> QUESTION .)
-    MULTIPLY        reduce using rule 36 (operator -> QUESTION .)
-    INTEGER         reduce using rule 36 (operator -> QUESTION .)
-    PLUS            reduce using rule 36 (operator -> QUESTION .)
-    MINUS           reduce using rule 36 (operator -> QUESTION .)
-    DICE            reduce using rule 36 (operator -> QUESTION .)
-    LPAREN          reduce using rule 36 (operator -> QUESTION .)
+    MULTIPLY        shift and go to state 37
+    DOUBLE_STAR     shift and go to state 38
+    IDENTIFIER      shift and go to state 39
+    INTEGER         shift and go to state 40
 
+    pathelem                       shift and go to state 36
 
 state 16
 
-    (2) command -> IDENTIFIER operator . arglist
-    (3) arglist -> . arglist BG_SEPERATOR expression
-    (4) arglist -> . expression
-    (9) expression -> . d_expression
-    (10) expression -> . path
-    (11) expression -> . IDENTIFIER
-    (16) d_expression -> . d_expression AND d_term2
-    (24) d_expression -> . d_term2
-    (12) path -> . path DOT pathelem
-    (13) path -> . pathelem DOT pathelem
-    (14) path -> . DOUBLE_STAR
-    (15) path -> . MULTIPLY
-    (17) d_term2 -> . d_term2 TIMES d_term1
-    (25) d_term2 -> . d_term1
-    (5) pathelem -> . MULTIPLY
-    (6) pathelem -> . DOUBLE_STAR
-    (7) pathelem -> . IDENTIFIER
-    (8) pathelem -> . INTEGER
-    (18) d_term1 -> . d_term1 PLUS d_term0
-    (19) d_term1 -> . d_term1 MINUS d_term0
-    (26) d_term1 -> . d_term0
-    (20) d_term0 -> . d_term0 MULTIPLY d_factor
-    (21) d_term0 -> . d_term0 DIVIDE d_factor
-    (27) d_term0 -> . d_factor
-    (22) d_factor -> . PLUS d_factor
-    (23) d_factor -> . MINUS d_factor
-    (28) d_factor -> . INTEGER
-    (29) d_factor -> . DICE
-    (30) d_factor -> . LPAREN d_expression RPAREN
-    (37) d_factor -> . IDENTIFIER LPAREN d_expression RPAREN
+    (7) command -> operator LPAREN . arglist RPAREN
+    (8) command -> operator LPAREN . RPAREN
+    (9) arglist -> . arglist BG_SEPERATOR expression
+    (10) arglist -> . expression
+    (15) expression -> . d_expression
+    (16) expression -> . path
+    (17) expression -> . IDENTIFIER
+    (18) expression -> . STRLITERAL
+    (24) d_expression -> . d_expression AND d_term2
+    (32) d_expression -> . d_term2
+    (19) path -> . path DOT pathelem
+    (20) path -> . IDENTIFIER DOT pathelem
+    (21) path -> . INTEGER DOT pathelem
+    (22) path -> . DOUBLE_STAR
+    (23) path -> . MULTIPLY
+    (25) d_term2 -> . d_term2 TIMES d_term1
+    (33) d_term2 -> . d_term1
+    (26) d_term1 -> . d_term1 PLUS d_term0
+    (27) d_term1 -> . d_term1 MINUS d_term0
+    (34) d_term1 -> . d_term0
+    (28) d_term0 -> . d_term0 MULTIPLY d_factor
+    (29) d_term0 -> . d_term0 DIVIDE d_factor
+    (35) d_term0 -> . d_factor
+    (30) d_factor -> . PLUS d_factor
+    (31) d_factor -> . MINUS d_factor
+    (36) d_factor -> . INTEGER
+    (37) d_factor -> . DICE
+    (38) d_factor -> . LPAREN d_expression RPAREN
+    (45) d_factor -> . IDENTIFIER LPAREN d_expression RPAREN
 
-    IDENTIFIER      shift and go to state 22
-    DOUBLE_STAR     shift and go to state 5
-    MULTIPLY        shift and go to state 6
-    INTEGER         shift and go to state 25
-    PLUS            shift and go to state 26
-    MINUS           shift and go to state 28
-    DICE            shift and go to state 30
-    LPAREN          shift and go to state 31
+    RPAREN          shift and go to state 42
+    IDENTIFIER      shift and go to state 25
+    STRLITERAL      shift and go to state 26
+    INTEGER         shift and go to state 28
+    DOUBLE_STAR     shift and go to state 6
+    MULTIPLY        shift and go to state 7
+    PLUS            shift and go to state 30
+    MINUS           shift and go to state 32
+    DICE            shift and go to state 34
+    LPAREN          shift and go to state 35
 
-    arglist                        shift and go to state 36
-    expression                     shift and go to state 20
-    d_expression                   shift and go to state 21
-    path                           shift and go to state 18
-    d_term2                        shift and go to state 23
-    pathelem                       shift and go to state 4
-    d_term1                        shift and go to state 24
-    d_term0                        shift and go to state 27
-    d_factor                       shift and go to state 29
+    arglist                        shift and go to state 41
+    expression                     shift and go to state 23
+    d_expression                   shift and go to state 24
+    path                           shift and go to state 21
+    d_term2                        shift and go to state 27
+    d_term1                        shift and go to state 29
+    d_term0                        shift and go to state 31
+    d_factor                       shift and go to state 33
 
 state 17
 
-    (13) path -> pathelem DOT . pathelem
-    (5) pathelem -> . MULTIPLY
-    (6) pathelem -> . DOUBLE_STAR
-    (7) pathelem -> . IDENTIFIER
-    (8) pathelem -> . INTEGER
+    (2) command -> IDENTIFIER operator . arglist
+    (4) command -> IDENTIFIER operator .
+    (9) arglist -> . arglist BG_SEPERATOR expression
+    (10) arglist -> . expression
+    (15) expression -> . d_expression
+    (16) expression -> . path
+    (17) expression -> . IDENTIFIER
+    (18) expression -> . STRLITERAL
+    (24) d_expression -> . d_expression AND d_term2
+    (32) d_expression -> . d_term2
+    (19) path -> . path DOT pathelem
+    (20) path -> . IDENTIFIER DOT pathelem
+    (21) path -> . INTEGER DOT pathelem
+    (22) path -> . DOUBLE_STAR
+    (23) path -> . MULTIPLY
+    (25) d_term2 -> . d_term2 TIMES d_term1
+    (33) d_term2 -> . d_term1
+    (26) d_term1 -> . d_term1 PLUS d_term0
+    (27) d_term1 -> . d_term1 MINUS d_term0
+    (34) d_term1 -> . d_term0
+    (28) d_term0 -> . d_term0 MULTIPLY d_factor
+    (29) d_term0 -> . d_term0 DIVIDE d_factor
+    (35) d_term0 -> . d_factor
+    (30) d_factor -> . PLUS d_factor
+    (31) d_factor -> . MINUS d_factor
+    (36) d_factor -> . INTEGER
+    (37) d_factor -> . DICE
+    (38) d_factor -> . LPAREN d_expression RPAREN
+    (45) d_factor -> . IDENTIFIER LPAREN d_expression RPAREN
 
-    MULTIPLY        shift and go to state 33
-    DOUBLE_STAR     shift and go to state 34
-    IDENTIFIER      shift and go to state 35
-    INTEGER         shift and go to state 7
+    $end            reduce using rule 4 (command -> IDENTIFIER operator .)
+    IDENTIFIER      shift and go to state 25
+    STRLITERAL      shift and go to state 26
+    INTEGER         shift and go to state 28
+    DOUBLE_STAR     shift and go to state 6
+    MULTIPLY        shift and go to state 7
+    PLUS            shift and go to state 30
+    MINUS           shift and go to state 32
+    DICE            shift and go to state 34
+    LPAREN          shift and go to state 35
 
-    pathelem                       shift and go to state 37
+    arglist                        shift and go to state 43
+    expression                     shift and go to state 23
+    d_expression                   shift and go to state 24
+    path                           shift and go to state 21
+    d_term2                        shift and go to state 27
+    d_term1                        shift and go to state 29
+    d_term0                        shift and go to state 31
+    d_factor                       shift and go to state 33
 
 state 18
 
-    (10) expression -> path .
-    (12) path -> path . DOT pathelem
+    (5) command -> IDENTIFIER LPAREN . arglist RPAREN
+    (6) command -> IDENTIFIER LPAREN . RPAREN
+    (9) arglist -> . arglist BG_SEPERATOR expression
+    (10) arglist -> . expression
+    (15) expression -> . d_expression
+    (16) expression -> . path
+    (17) expression -> . IDENTIFIER
+    (18) expression -> . STRLITERAL
+    (24) d_expression -> . d_expression AND d_term2
+    (32) d_expression -> . d_term2
+    (19) path -> . path DOT pathelem
+    (20) path -> . IDENTIFIER DOT pathelem
+    (21) path -> . INTEGER DOT pathelem
+    (22) path -> . DOUBLE_STAR
+    (23) path -> . MULTIPLY
+    (25) d_term2 -> . d_term2 TIMES d_term1
+    (33) d_term2 -> . d_term1
+    (26) d_term1 -> . d_term1 PLUS d_term0
+    (27) d_term1 -> . d_term1 MINUS d_term0
+    (34) d_term1 -> . d_term0
+    (28) d_term0 -> . d_term0 MULTIPLY d_factor
+    (29) d_term0 -> . d_term0 DIVIDE d_factor
+    (35) d_term0 -> . d_factor
+    (30) d_factor -> . PLUS d_factor
+    (31) d_factor -> . MINUS d_factor
+    (36) d_factor -> . INTEGER
+    (37) d_factor -> . DICE
+    (38) d_factor -> . LPAREN d_expression RPAREN
+    (45) d_factor -> . IDENTIFIER LPAREN d_expression RPAREN
 
-    BG_SEPERATOR    reduce using rule 10 (expression -> path .)
-    $end            reduce using rule 10 (expression -> path .)
-    DOT             shift and go to state 9
+    RPAREN          shift and go to state 45
+    IDENTIFIER      shift and go to state 25
+    STRLITERAL      shift and go to state 26
+    INTEGER         shift and go to state 28
+    DOUBLE_STAR     shift and go to state 6
+    MULTIPLY        shift and go to state 7
+    PLUS            shift and go to state 30
+    MINUS           shift and go to state 32
+    DICE            shift and go to state 34
+    LPAREN          shift and go to state 35
 
+    arglist                        shift and go to state 44
+    expression                     shift and go to state 23
+    d_expression                   shift and go to state 24
+    path                           shift and go to state 21
+    d_term2                        shift and go to state 27
+    d_term1                        shift and go to state 29
+    d_term0                        shift and go to state 31
+    d_factor                       shift and go to state 33
 
 state 19
 
-    (1) command -> path operator arglist .
-    (3) arglist -> arglist . BG_SEPERATOR expression
+    (20) path -> IDENTIFIER DOT . pathelem
+    (11) pathelem -> . MULTIPLY
+    (12) pathelem -> . DOUBLE_STAR
+    (13) pathelem -> . IDENTIFIER
+    (14) pathelem -> . INTEGER
 
-    $end            reduce using rule 1 (command -> path operator arglist .)
-    BG_SEPERATOR    shift and go to state 38
+    MULTIPLY        shift and go to state 37
+    DOUBLE_STAR     shift and go to state 38
+    IDENTIFIER      shift and go to state 39
+    INTEGER         shift and go to state 40
 
+    pathelem                       shift and go to state 46
 
 state 20
 
-    (4) arglist -> expression .
+    (21) path -> INTEGER DOT . pathelem
+    (11) pathelem -> . MULTIPLY
+    (12) pathelem -> . DOUBLE_STAR
+    (13) pathelem -> . IDENTIFIER
+    (14) pathelem -> . INTEGER
 
-    BG_SEPERATOR    reduce using rule 4 (arglist -> expression .)
-    $end            reduce using rule 4 (arglist -> expression .)
+    MULTIPLY        shift and go to state 37
+    DOUBLE_STAR     shift and go to state 38
+    IDENTIFIER      shift and go to state 39
+    INTEGER         shift and go to state 40
 
+    pathelem                       shift and go to state 47
 
 state 21
 
-    (9) expression -> d_expression .
-    (16) d_expression -> d_expression . AND d_term2
+    (16) expression -> path .
+    (19) path -> path . DOT pathelem
 
-    BG_SEPERATOR    reduce using rule 9 (expression -> d_expression .)
-    $end            reduce using rule 9 (expression -> d_expression .)
-    AND             shift and go to state 39
+    BG_SEPERATOR    reduce using rule 16 (expression -> path .)
+    $end            reduce using rule 16 (expression -> path .)
+    RPAREN          reduce using rule 16 (expression -> path .)
+    DOT             shift and go to state 15
 
 
 state 22
 
-    (11) expression -> IDENTIFIER .
-    (7) pathelem -> IDENTIFIER .
-    (37) d_factor -> IDENTIFIER . LPAREN d_expression RPAREN
+    (1) command -> path operator arglist .
+    (9) arglist -> arglist . BG_SEPERATOR expression
 
-    BG_SEPERATOR    reduce using rule 11 (expression -> IDENTIFIER .)
-    $end            reduce using rule 11 (expression -> IDENTIFIER .)
-    DOT             reduce using rule 7 (pathelem -> IDENTIFIER .)
-    LPAREN          shift and go to state 40
+    $end            reduce using rule 1 (command -> path operator arglist .)
+    BG_SEPERATOR    shift and go to state 48
 
 
 state 23
 
-    (24) d_expression -> d_term2 .
-    (17) d_term2 -> d_term2 . TIMES d_term1
+    (10) arglist -> expression .
 
-    AND             reduce using rule 24 (d_expression -> d_term2 .)
-    BG_SEPERATOR    reduce using rule 24 (d_expression -> d_term2 .)
-    $end            reduce using rule 24 (d_expression -> d_term2 .)
-    RPAREN          reduce using rule 24 (d_expression -> d_term2 .)
-    TIMES           shift and go to state 41
+    BG_SEPERATOR    reduce using rule 10 (arglist -> expression .)
+    $end            reduce using rule 10 (arglist -> expression .)
+    RPAREN          reduce using rule 10 (arglist -> expression .)
 
 
 state 24
 
-    (25) d_term2 -> d_term1 .
-    (18) d_term1 -> d_term1 . PLUS d_term0
-    (19) d_term1 -> d_term1 . MINUS d_term0
+    (15) expression -> d_expression .
+    (24) d_expression -> d_expression . AND d_term2
 
-    TIMES           reduce using rule 25 (d_term2 -> d_term1 .)
-    AND             reduce using rule 25 (d_term2 -> d_term1 .)
-    BG_SEPERATOR    reduce using rule 25 (d_term2 -> d_term1 .)
-    $end            reduce using rule 25 (d_term2 -> d_term1 .)
-    RPAREN          reduce using rule 25 (d_term2 -> d_term1 .)
-    PLUS            shift and go to state 42
-    MINUS           shift and go to state 43
+    BG_SEPERATOR    reduce using rule 15 (expression -> d_expression .)
+    $end            reduce using rule 15 (expression -> d_expression .)
+    RPAREN          reduce using rule 15 (expression -> d_expression .)
+    AND             shift and go to state 49
 
 
 state 25
 
-    (8) pathelem -> INTEGER .
-    (28) d_factor -> INTEGER .
+    (17) expression -> IDENTIFIER .
+    (20) path -> IDENTIFIER . DOT pathelem
+    (45) d_factor -> IDENTIFIER . LPAREN d_expression RPAREN
 
-    DOT             reduce using rule 8 (pathelem -> INTEGER .)
-    MULTIPLY        reduce using rule 28 (d_factor -> INTEGER .)
-    DIVIDE          reduce using rule 28 (d_factor -> INTEGER .)
-    PLUS            reduce using rule 28 (d_factor -> INTEGER .)
-    MINUS           reduce using rule 28 (d_factor -> INTEGER .)
-    TIMES           reduce using rule 28 (d_factor -> INTEGER .)
-    AND             reduce using rule 28 (d_factor -> INTEGER .)
-    BG_SEPERATOR    reduce using rule 28 (d_factor -> INTEGER .)
-    $end            reduce using rule 28 (d_factor -> INTEGER .)
+    BG_SEPERATOR    reduce using rule 17 (expression -> IDENTIFIER .)
+    $end            reduce using rule 17 (expression -> IDENTIFIER .)
+    RPAREN          reduce using rule 17 (expression -> IDENTIFIER .)
+    DOT             shift and go to state 19
+    LPAREN          shift and go to state 50
 
 
 state 26
 
-    (22) d_factor -> PLUS . d_factor
-    (22) d_factor -> . PLUS d_factor
-    (23) d_factor -> . MINUS d_factor
-    (28) d_factor -> . INTEGER
-    (29) d_factor -> . DICE
-    (30) d_factor -> . LPAREN d_expression RPAREN
-    (37) d_factor -> . IDENTIFIER LPAREN d_expression RPAREN
+    (18) expression -> STRLITERAL .
 
-    PLUS            shift and go to state 26
-    MINUS           shift and go to state 28
-    INTEGER         shift and go to state 45
-    DICE            shift and go to state 30
-    LPAREN          shift and go to state 31
-    IDENTIFIER      shift and go to state 46
+    BG_SEPERATOR    reduce using rule 18 (expression -> STRLITERAL .)
+    $end            reduce using rule 18 (expression -> STRLITERAL .)
+    RPAREN          reduce using rule 18 (expression -> STRLITERAL .)
 
-    d_factor                       shift and go to state 44
 
 state 27
 
-    (26) d_term1 -> d_term0 .
-    (20) d_term0 -> d_term0 . MULTIPLY d_factor
-    (21) d_term0 -> d_term0 . DIVIDE d_factor
+    (32) d_expression -> d_term2 .
+    (25) d_term2 -> d_term2 . TIMES d_term1
 
-    PLUS            reduce using rule 26 (d_term1 -> d_term0 .)
-    MINUS           reduce using rule 26 (d_term1 -> d_term0 .)
-    TIMES           reduce using rule 26 (d_term1 -> d_term0 .)
-    AND             reduce using rule 26 (d_term1 -> d_term0 .)
-    BG_SEPERATOR    reduce using rule 26 (d_term1 -> d_term0 .)
-    $end            reduce using rule 26 (d_term1 -> d_term0 .)
-    RPAREN          reduce using rule 26 (d_term1 -> d_term0 .)
-    MULTIPLY        shift and go to state 47
-    DIVIDE          shift and go to state 48
+    AND             reduce using rule 32 (d_expression -> d_term2 .)
+    BG_SEPERATOR    reduce using rule 32 (d_expression -> d_term2 .)
+    $end            reduce using rule 32 (d_expression -> d_term2 .)
+    RPAREN          reduce using rule 32 (d_expression -> d_term2 .)
+    TIMES           shift and go to state 51
 
 
 state 28
 
-    (23) d_factor -> MINUS . d_factor
-    (22) d_factor -> . PLUS d_factor
-    (23) d_factor -> . MINUS d_factor
-    (28) d_factor -> . INTEGER
-    (29) d_factor -> . DICE
-    (30) d_factor -> . LPAREN d_expression RPAREN
-    (37) d_factor -> . IDENTIFIER LPAREN d_expression RPAREN
+    (21) path -> INTEGER . DOT pathelem
+    (36) d_factor -> INTEGER .
 
-    PLUS            shift and go to state 26
-    MINUS           shift and go to state 28
-    INTEGER         shift and go to state 45
-    DICE            shift and go to state 30
-    LPAREN          shift and go to state 31
-    IDENTIFIER      shift and go to state 46
+    DOT             shift and go to state 20
+    MULTIPLY        reduce using rule 36 (d_factor -> INTEGER .)
+    DIVIDE          reduce using rule 36 (d_factor -> INTEGER .)
+    PLUS            reduce using rule 36 (d_factor -> INTEGER .)
+    MINUS           reduce using rule 36 (d_factor -> INTEGER .)
+    TIMES           reduce using rule 36 (d_factor -> INTEGER .)
+    AND             reduce using rule 36 (d_factor -> INTEGER .)
+    BG_SEPERATOR    reduce using rule 36 (d_factor -> INTEGER .)
+    $end            reduce using rule 36 (d_factor -> INTEGER .)
+    RPAREN          reduce using rule 36 (d_factor -> INTEGER .)
 
-    d_factor                       shift and go to state 49
 
 state 29
 
-    (27) d_term0 -> d_factor .
+    (33) d_term2 -> d_term1 .
+    (26) d_term1 -> d_term1 . PLUS d_term0
+    (27) d_term1 -> d_term1 . MINUS d_term0
 
-    MULTIPLY        reduce using rule 27 (d_term0 -> d_factor .)
-    DIVIDE          reduce using rule 27 (d_term0 -> d_factor .)
-    PLUS            reduce using rule 27 (d_term0 -> d_factor .)
-    MINUS           reduce using rule 27 (d_term0 -> d_factor .)
-    TIMES           reduce using rule 27 (d_term0 -> d_factor .)
-    AND             reduce using rule 27 (d_term0 -> d_factor .)
-    BG_SEPERATOR    reduce using rule 27 (d_term0 -> d_factor .)
-    $end            reduce using rule 27 (d_term0 -> d_factor .)
-    RPAREN          reduce using rule 27 (d_term0 -> d_factor .)
+    TIMES           reduce using rule 33 (d_term2 -> d_term1 .)
+    AND             reduce using rule 33 (d_term2 -> d_term1 .)
+    BG_SEPERATOR    reduce using rule 33 (d_term2 -> d_term1 .)
+    $end            reduce using rule 33 (d_term2 -> d_term1 .)
+    RPAREN          reduce using rule 33 (d_term2 -> d_term1 .)
+    PLUS            shift and go to state 52
+    MINUS           shift and go to state 53
 
 
 state 30
 
-    (29) d_factor -> DICE .
+    (30) d_factor -> PLUS . d_factor
+    (30) d_factor -> . PLUS d_factor
+    (31) d_factor -> . MINUS d_factor
+    (36) d_factor -> . INTEGER
+    (37) d_factor -> . DICE
+    (38) d_factor -> . LPAREN d_expression RPAREN
+    (45) d_factor -> . IDENTIFIER LPAREN d_expression RPAREN
 
-    MULTIPLY        reduce using rule 29 (d_factor -> DICE .)
-    DIVIDE          reduce using rule 29 (d_factor -> DICE .)
-    PLUS            reduce using rule 29 (d_factor -> DICE .)
-    MINUS           reduce using rule 29 (d_factor -> DICE .)
-    TIMES           reduce using rule 29 (d_factor -> DICE .)
-    AND             reduce using rule 29 (d_factor -> DICE .)
-    BG_SEPERATOR    reduce using rule 29 (d_factor -> DICE .)
-    $end            reduce using rule 29 (d_factor -> DICE .)
-    RPAREN          reduce using rule 29 (d_factor -> DICE .)
+    PLUS            shift and go to state 30
+    MINUS           shift and go to state 32
+    INTEGER         shift and go to state 55
+    DICE            shift and go to state 34
+    LPAREN          shift and go to state 35
+    IDENTIFIER      shift and go to state 56
 
+    d_factor                       shift and go to state 54
 
 state 31
 
-    (30) d_factor -> LPAREN . d_expression RPAREN
-    (16) d_expression -> . d_expression AND d_term2
-    (24) d_expression -> . d_term2
-    (17) d_term2 -> . d_term2 TIMES d_term1
-    (25) d_term2 -> . d_term1
-    (18) d_term1 -> . d_term1 PLUS d_term0
-    (19) d_term1 -> . d_term1 MINUS d_term0
-    (26) d_term1 -> . d_term0
-    (20) d_term0 -> . d_term0 MULTIPLY d_factor
-    (21) d_term0 -> . d_term0 DIVIDE d_factor
-    (27) d_term0 -> . d_factor
-    (22) d_factor -> . PLUS d_factor
-    (23) d_factor -> . MINUS d_factor
-    (28) d_factor -> . INTEGER
-    (29) d_factor -> . DICE
-    (30) d_factor -> . LPAREN d_expression RPAREN
-    (37) d_factor -> . IDENTIFIER LPAREN d_expression RPAREN
+    (34) d_term1 -> d_term0 .
+    (28) d_term0 -> d_term0 . MULTIPLY d_factor
+    (29) d_term0 -> d_term0 . DIVIDE d_factor
 
-    PLUS            shift and go to state 26
-    MINUS           shift and go to state 28
-    INTEGER         shift and go to state 45
-    DICE            shift and go to state 30
-    LPAREN          shift and go to state 31
-    IDENTIFIER      shift and go to state 46
+    PLUS            reduce using rule 34 (d_term1 -> d_term0 .)
+    MINUS           reduce using rule 34 (d_term1 -> d_term0 .)
+    TIMES           reduce using rule 34 (d_term1 -> d_term0 .)
+    AND             reduce using rule 34 (d_term1 -> d_term0 .)
+    BG_SEPERATOR    reduce using rule 34 (d_term1 -> d_term0 .)
+    $end            reduce using rule 34 (d_term1 -> d_term0 .)
+    RPAREN          reduce using rule 34 (d_term1 -> d_term0 .)
+    MULTIPLY        shift and go to state 57
+    DIVIDE          shift and go to state 58
 
-    d_expression                   shift and go to state 50
-    d_term2                        shift and go to state 23
-    d_term1                        shift and go to state 24
-    d_term0                        shift and go to state 27
-    d_factor                       shift and go to state 29
 
 state 32
 
-    (12) path -> path DOT pathelem .
+    (31) d_factor -> MINUS . d_factor
+    (30) d_factor -> . PLUS d_factor
+    (31) d_factor -> . MINUS d_factor
+    (36) d_factor -> . INTEGER
+    (37) d_factor -> . DICE
+    (38) d_factor -> . LPAREN d_expression RPAREN
+    (45) d_factor -> . IDENTIFIER LPAREN d_expression RPAREN
 
-    DOT             reduce using rule 12 (path -> path DOT pathelem .)
-    ASSIGN          reduce using rule 12 (path -> path DOT pathelem .)
-    INITIALIZE      reduce using rule 12 (path -> path DOT pathelem .)
-    PLUSEQUAL       reduce using rule 12 (path -> path DOT pathelem .)
-    MINUSEQUAL      reduce using rule 12 (path -> path DOT pathelem .)
-    ARROWLEFT       reduce using rule 12 (path -> path DOT pathelem .)
-    QUESTION        reduce using rule 12 (path -> path DOT pathelem .)
-    BG_SEPERATOR    reduce using rule 12 (path -> path DOT pathelem .)
-    $end            reduce using rule 12 (path -> path DOT pathelem .)
+    PLUS            shift and go to state 30
+    MINUS           shift and go to state 32
+    INTEGER         shift and go to state 55
+    DICE            shift and go to state 34
+    LPAREN          shift and go to state 35
+    IDENTIFIER      shift and go to state 56
 
+    d_factor                       shift and go to state 59
 
 state 33
 
-    (5) pathelem -> MULTIPLY .
+    (35) d_term0 -> d_factor .
 
-    DOT             reduce using rule 5 (pathelem -> MULTIPLY .)
-    ASSIGN          reduce using rule 5 (pathelem -> MULTIPLY .)
-    INITIALIZE      reduce using rule 5 (pathelem -> MULTIPLY .)
-    PLUSEQUAL       reduce using rule 5 (pathelem -> MULTIPLY .)
-    MINUSEQUAL      reduce using rule 5 (pathelem -> MULTIPLY .)
-    ARROWLEFT       reduce using rule 5 (pathelem -> MULTIPLY .)
-    QUESTION        reduce using rule 5 (pathelem -> MULTIPLY .)
-    BG_SEPERATOR    reduce using rule 5 (pathelem -> MULTIPLY .)
-    $end            reduce using rule 5 (pathelem -> MULTIPLY .)
+    MULTIPLY        reduce using rule 35 (d_term0 -> d_factor .)
+    DIVIDE          reduce using rule 35 (d_term0 -> d_factor .)
+    PLUS            reduce using rule 35 (d_term0 -> d_factor .)
+    MINUS           reduce using rule 35 (d_term0 -> d_factor .)
+    TIMES           reduce using rule 35 (d_term0 -> d_factor .)
+    AND             reduce using rule 35 (d_term0 -> d_factor .)
+    BG_SEPERATOR    reduce using rule 35 (d_term0 -> d_factor .)
+    $end            reduce using rule 35 (d_term0 -> d_factor .)
+    RPAREN          reduce using rule 35 (d_term0 -> d_factor .)
 
 
 state 34
 
-    (6) pathelem -> DOUBLE_STAR .
+    (37) d_factor -> DICE .
 
-    DOT             reduce using rule 6 (pathelem -> DOUBLE_STAR .)
-    ASSIGN          reduce using rule 6 (pathelem -> DOUBLE_STAR .)
-    INITIALIZE      reduce using rule 6 (pathelem -> DOUBLE_STAR .)
-    PLUSEQUAL       reduce using rule 6 (pathelem -> DOUBLE_STAR .)
-    MINUSEQUAL      reduce using rule 6 (pathelem -> DOUBLE_STAR .)
-    ARROWLEFT       reduce using rule 6 (pathelem -> DOUBLE_STAR .)
-    QUESTION        reduce using rule 6 (pathelem -> DOUBLE_STAR .)
-    BG_SEPERATOR    reduce using rule 6 (pathelem -> DOUBLE_STAR .)
-    $end            reduce using rule 6 (pathelem -> DOUBLE_STAR .)
+    MULTIPLY        reduce using rule 37 (d_factor -> DICE .)
+    DIVIDE          reduce using rule 37 (d_factor -> DICE .)
+    PLUS            reduce using rule 37 (d_factor -> DICE .)
+    MINUS           reduce using rule 37 (d_factor -> DICE .)
+    TIMES           reduce using rule 37 (d_factor -> DICE .)
+    AND             reduce using rule 37 (d_factor -> DICE .)
+    BG_SEPERATOR    reduce using rule 37 (d_factor -> DICE .)
+    $end            reduce using rule 37 (d_factor -> DICE .)
+    RPAREN          reduce using rule 37 (d_factor -> DICE .)
 
 
 state 35
 
-    (7) pathelem -> IDENTIFIER .
+    (38) d_factor -> LPAREN . d_expression RPAREN
+    (24) d_expression -> . d_expression AND d_term2
+    (32) d_expression -> . d_term2
+    (25) d_term2 -> . d_term2 TIMES d_term1
+    (33) d_term2 -> . d_term1
+    (26) d_term1 -> . d_term1 PLUS d_term0
+    (27) d_term1 -> . d_term1 MINUS d_term0
+    (34) d_term1 -> . d_term0
+    (28) d_term0 -> . d_term0 MULTIPLY d_factor
+    (29) d_term0 -> . d_term0 DIVIDE d_factor
+    (35) d_term0 -> . d_factor
+    (30) d_factor -> . PLUS d_factor
+    (31) d_factor -> . MINUS d_factor
+    (36) d_factor -> . INTEGER
+    (37) d_factor -> . DICE
+    (38) d_factor -> . LPAREN d_expression RPAREN
+    (45) d_factor -> . IDENTIFIER LPAREN d_expression RPAREN
 
-    DOT             reduce using rule 7 (pathelem -> IDENTIFIER .)
-    ASSIGN          reduce using rule 7 (pathelem -> IDENTIFIER .)
-    INITIALIZE      reduce using rule 7 (pathelem -> IDENTIFIER .)
-    PLUSEQUAL       reduce using rule 7 (pathelem -> IDENTIFIER .)
-    MINUSEQUAL      reduce using rule 7 (pathelem -> IDENTIFIER .)
-    ARROWLEFT       reduce using rule 7 (pathelem -> IDENTIFIER .)
-    QUESTION        reduce using rule 7 (pathelem -> IDENTIFIER .)
-    BG_SEPERATOR    reduce using rule 7 (pathelem -> IDENTIFIER .)
-    $end            reduce using rule 7 (pathelem -> IDENTIFIER .)
+    PLUS            shift and go to state 30
+    MINUS           shift and go to state 32
+    INTEGER         shift and go to state 55
+    DICE            shift and go to state 34
+    LPAREN          shift and go to state 35
+    IDENTIFIER      shift and go to state 56
 
+    d_expression                   shift and go to state 60
+    d_term2                        shift and go to state 27
+    d_term1                        shift and go to state 29
+    d_term0                        shift and go to state 31
+    d_factor                       shift and go to state 33
 
 state 36
 
-    (2) command -> IDENTIFIER operator arglist .
-    (3) arglist -> arglist . BG_SEPERATOR expression
+    (19) path -> path DOT pathelem .
 
-    $end            reduce using rule 2 (command -> IDENTIFIER operator arglist .)
-    BG_SEPERATOR    shift and go to state 38
+    DOT             reduce using rule 19 (path -> path DOT pathelem .)
+    ASSIGN          reduce using rule 19 (path -> path DOT pathelem .)
+    INITIALIZE      reduce using rule 19 (path -> path DOT pathelem .)
+    PLUSEQUAL       reduce using rule 19 (path -> path DOT pathelem .)
+    MINUSEQUAL      reduce using rule 19 (path -> path DOT pathelem .)
+    ARROWLEFT       reduce using rule 19 (path -> path DOT pathelem .)
+    QUESTION        reduce using rule 19 (path -> path DOT pathelem .)
+    BG_SEPERATOR    reduce using rule 19 (path -> path DOT pathelem .)
+    $end            reduce using rule 19 (path -> path DOT pathelem .)
+    RPAREN          reduce using rule 19 (path -> path DOT pathelem .)
 
 
 state 37
 
-    (13) path -> pathelem DOT pathelem .
+    (11) pathelem -> MULTIPLY .
 
-    DOT             reduce using rule 13 (path -> pathelem DOT pathelem .)
-    ASSIGN          reduce using rule 13 (path -> pathelem DOT pathelem .)
-    INITIALIZE      reduce using rule 13 (path -> pathelem DOT pathelem .)
-    PLUSEQUAL       reduce using rule 13 (path -> pathelem DOT pathelem .)
-    MINUSEQUAL      reduce using rule 13 (path -> pathelem DOT pathelem .)
-    ARROWLEFT       reduce using rule 13 (path -> pathelem DOT pathelem .)
-    QUESTION        reduce using rule 13 (path -> pathelem DOT pathelem .)
-    BG_SEPERATOR    reduce using rule 13 (path -> pathelem DOT pathelem .)
-    $end            reduce using rule 13 (path -> pathelem DOT pathelem .)
+    DOT             reduce using rule 11 (pathelem -> MULTIPLY .)
+    ASSIGN          reduce using rule 11 (pathelem -> MULTIPLY .)
+    INITIALIZE      reduce using rule 11 (pathelem -> MULTIPLY .)
+    PLUSEQUAL       reduce using rule 11 (pathelem -> MULTIPLY .)
+    MINUSEQUAL      reduce using rule 11 (pathelem -> MULTIPLY .)
+    ARROWLEFT       reduce using rule 11 (pathelem -> MULTIPLY .)
+    QUESTION        reduce using rule 11 (pathelem -> MULTIPLY .)
+    BG_SEPERATOR    reduce using rule 11 (pathelem -> MULTIPLY .)
+    $end            reduce using rule 11 (pathelem -> MULTIPLY .)
+    RPAREN          reduce using rule 11 (pathelem -> MULTIPLY .)
 
 
 state 38
 
-    (3) arglist -> arglist BG_SEPERATOR . expression
-    (9) expression -> . d_expression
-    (10) expression -> . path
-    (11) expression -> . IDENTIFIER
-    (16) d_expression -> . d_expression AND d_term2
-    (24) d_expression -> . d_term2
-    (12) path -> . path DOT pathelem
-    (13) path -> . pathelem DOT pathelem
-    (14) path -> . DOUBLE_STAR
-    (15) path -> . MULTIPLY
-    (17) d_term2 -> . d_term2 TIMES d_term1
-    (25) d_term2 -> . d_term1
-    (5) pathelem -> . MULTIPLY
-    (6) pathelem -> . DOUBLE_STAR
-    (7) pathelem -> . IDENTIFIER
-    (8) pathelem -> . INTEGER
-    (18) d_term1 -> . d_term1 PLUS d_term0
-    (19) d_term1 -> . d_term1 MINUS d_term0
-    (26) d_term1 -> . d_term0
-    (20) d_term0 -> . d_term0 MULTIPLY d_factor
-    (21) d_term0 -> . d_term0 DIVIDE d_factor
-    (27) d_term0 -> . d_factor
-    (22) d_factor -> . PLUS d_factor
-    (23) d_factor -> . MINUS d_factor
-    (28) d_factor -> . INTEGER
-    (29) d_factor -> . DICE
-    (30) d_factor -> . LPAREN d_expression RPAREN
-    (37) d_factor -> . IDENTIFIER LPAREN d_expression RPAREN
+    (12) pathelem -> DOUBLE_STAR .
 
-    IDENTIFIER      shift and go to state 22
-    DOUBLE_STAR     shift and go to state 5
-    MULTIPLY        shift and go to state 6
-    INTEGER         shift and go to state 25
-    PLUS            shift and go to state 26
-    MINUS           shift and go to state 28
-    DICE            shift and go to state 30
-    LPAREN          shift and go to state 31
+    DOT             reduce using rule 12 (pathelem -> DOUBLE_STAR .)
+    ASSIGN          reduce using rule 12 (pathelem -> DOUBLE_STAR .)
+    INITIALIZE      reduce using rule 12 (pathelem -> DOUBLE_STAR .)
+    PLUSEQUAL       reduce using rule 12 (pathelem -> DOUBLE_STAR .)
+    MINUSEQUAL      reduce using rule 12 (pathelem -> DOUBLE_STAR .)
+    ARROWLEFT       reduce using rule 12 (pathelem -> DOUBLE_STAR .)
+    QUESTION        reduce using rule 12 (pathelem -> DOUBLE_STAR .)
+    BG_SEPERATOR    reduce using rule 12 (pathelem -> DOUBLE_STAR .)
+    $end            reduce using rule 12 (pathelem -> DOUBLE_STAR .)
+    RPAREN          reduce using rule 12 (pathelem -> DOUBLE_STAR .)
 
-    expression                     shift and go to state 51
-    d_expression                   shift and go to state 21
-    path                           shift and go to state 18
-    d_term2                        shift and go to state 23
-    pathelem                       shift and go to state 4
-    d_term1                        shift and go to state 24
-    d_term0                        shift and go to state 27
-    d_factor                       shift and go to state 29
 
 state 39
 
-    (16) d_expression -> d_expression AND . d_term2
-    (17) d_term2 -> . d_term2 TIMES d_term1
-    (25) d_term2 -> . d_term1
-    (18) d_term1 -> . d_term1 PLUS d_term0
-    (19) d_term1 -> . d_term1 MINUS d_term0
-    (26) d_term1 -> . d_term0
-    (20) d_term0 -> . d_term0 MULTIPLY d_factor
-    (21) d_term0 -> . d_term0 DIVIDE d_factor
-    (27) d_term0 -> . d_factor
-    (22) d_factor -> . PLUS d_factor
-    (23) d_factor -> . MINUS d_factor
-    (28) d_factor -> . INTEGER
-    (29) d_factor -> . DICE
-    (30) d_factor -> . LPAREN d_expression RPAREN
-    (37) d_factor -> . IDENTIFIER LPAREN d_expression RPAREN
+    (13) pathelem -> IDENTIFIER .
 
-    PLUS            shift and go to state 26
-    MINUS           shift and go to state 28
-    INTEGER         shift and go to state 45
-    DICE            shift and go to state 30
-    LPAREN          shift and go to state 31
-    IDENTIFIER      shift and go to state 46
+    DOT             reduce using rule 13 (pathelem -> IDENTIFIER .)
+    ASSIGN          reduce using rule 13 (pathelem -> IDENTIFIER .)
+    INITIALIZE      reduce using rule 13 (pathelem -> IDENTIFIER .)
+    PLUSEQUAL       reduce using rule 13 (pathelem -> IDENTIFIER .)
+    MINUSEQUAL      reduce using rule 13 (pathelem -> IDENTIFIER .)
+    ARROWLEFT       reduce using rule 13 (pathelem -> IDENTIFIER .)
+    QUESTION        reduce using rule 13 (pathelem -> IDENTIFIER .)
+    BG_SEPERATOR    reduce using rule 13 (pathelem -> IDENTIFIER .)
+    $end            reduce using rule 13 (pathelem -> IDENTIFIER .)
+    RPAREN          reduce using rule 13 (pathelem -> IDENTIFIER .)
 
-    d_term2                        shift and go to state 52
-    d_term1                        shift and go to state 24
-    d_term0                        shift and go to state 27
-    d_factor                       shift and go to state 29
 
 state 40
 
-    (37) d_factor -> IDENTIFIER LPAREN . d_expression RPAREN
-    (16) d_expression -> . d_expression AND d_term2
-    (24) d_expression -> . d_term2
-    (17) d_term2 -> . d_term2 TIMES d_term1
-    (25) d_term2 -> . d_term1
-    (18) d_term1 -> . d_term1 PLUS d_term0
-    (19) d_term1 -> . d_term1 MINUS d_term0
-    (26) d_term1 -> . d_term0
-    (20) d_term0 -> . d_term0 MULTIPLY d_factor
-    (21) d_term0 -> . d_term0 DIVIDE d_factor
-    (27) d_term0 -> . d_factor
-    (22) d_factor -> . PLUS d_factor
-    (23) d_factor -> . MINUS d_factor
-    (28) d_factor -> . INTEGER
-    (29) d_factor -> . DICE
-    (30) d_factor -> . LPAREN d_expression RPAREN
-    (37) d_factor -> . IDENTIFIER LPAREN d_expression RPAREN
+    (14) pathelem -> INTEGER .
 
-    PLUS            shift and go to state 26
-    MINUS           shift and go to state 28
-    INTEGER         shift and go to state 45
-    DICE            shift and go to state 30
-    LPAREN          shift and go to state 31
-    IDENTIFIER      shift and go to state 46
+    DOT             reduce using rule 14 (pathelem -> INTEGER .)
+    ASSIGN          reduce using rule 14 (pathelem -> INTEGER .)
+    INITIALIZE      reduce using rule 14 (pathelem -> INTEGER .)
+    PLUSEQUAL       reduce using rule 14 (pathelem -> INTEGER .)
+    MINUSEQUAL      reduce using rule 14 (pathelem -> INTEGER .)
+    ARROWLEFT       reduce using rule 14 (pathelem -> INTEGER .)
+    QUESTION        reduce using rule 14 (pathelem -> INTEGER .)
+    BG_SEPERATOR    reduce using rule 14 (pathelem -> INTEGER .)
+    $end            reduce using rule 14 (pathelem -> INTEGER .)
+    RPAREN          reduce using rule 14 (pathelem -> INTEGER .)
 
-    d_expression                   shift and go to state 53
-    d_term2                        shift and go to state 23
-    d_term1                        shift and go to state 24
-    d_term0                        shift and go to state 27
-    d_factor                       shift and go to state 29
 
 state 41
 
-    (17) d_term2 -> d_term2 TIMES . d_term1
-    (18) d_term1 -> . d_term1 PLUS d_term0
-    (19) d_term1 -> . d_term1 MINUS d_term0
-    (26) d_term1 -> . d_term0
-    (20) d_term0 -> . d_term0 MULTIPLY d_factor
-    (21) d_term0 -> . d_term0 DIVIDE d_factor
-    (27) d_term0 -> . d_factor
-    (22) d_factor -> . PLUS d_factor
-    (23) d_factor -> . MINUS d_factor
-    (28) d_factor -> . INTEGER
-    (29) d_factor -> . DICE
-    (30) d_factor -> . LPAREN d_expression RPAREN
-    (37) d_factor -> . IDENTIFIER LPAREN d_expression RPAREN
+    (7) command -> operator LPAREN arglist . RPAREN
+    (9) arglist -> arglist . BG_SEPERATOR expression
 
-    PLUS            shift and go to state 26
-    MINUS           shift and go to state 28
-    INTEGER         shift and go to state 45
-    DICE            shift and go to state 30
-    LPAREN          shift and go to state 31
-    IDENTIFIER      shift and go to state 46
+    RPAREN          shift and go to state 61
+    BG_SEPERATOR    shift and go to state 48
 
-    d_term1                        shift and go to state 54
-    d_term0                        shift and go to state 27
-    d_factor                       shift and go to state 29
 
 state 42
 
-    (18) d_term1 -> d_term1 PLUS . d_term0
-    (20) d_term0 -> . d_term0 MULTIPLY d_factor
-    (21) d_term0 -> . d_term0 DIVIDE d_factor
-    (27) d_term0 -> . d_factor
-    (22) d_factor -> . PLUS d_factor
-    (23) d_factor -> . MINUS d_factor
-    (28) d_factor -> . INTEGER
-    (29) d_factor -> . DICE
-    (30) d_factor -> . LPAREN d_expression RPAREN
-    (37) d_factor -> . IDENTIFIER LPAREN d_expression RPAREN
+    (8) command -> operator LPAREN RPAREN .
 
-    PLUS            shift and go to state 26
-    MINUS           shift and go to state 28
-    INTEGER         shift and go to state 45
-    DICE            shift and go to state 30
-    LPAREN          shift and go to state 31
-    IDENTIFIER      shift and go to state 46
+    $end            reduce using rule 8 (command -> operator LPAREN RPAREN .)
 
-    d_term0                        shift and go to state 55
-    d_factor                       shift and go to state 29
 
 state 43
 
-    (19) d_term1 -> d_term1 MINUS . d_term0
-    (20) d_term0 -> . d_term0 MULTIPLY d_factor
-    (21) d_term0 -> . d_term0 DIVIDE d_factor
-    (27) d_term0 -> . d_factor
-    (22) d_factor -> . PLUS d_factor
-    (23) d_factor -> . MINUS d_factor
-    (28) d_factor -> . INTEGER
-    (29) d_factor -> . DICE
-    (30) d_factor -> . LPAREN d_expression RPAREN
-    (37) d_factor -> . IDENTIFIER LPAREN d_expression RPAREN
+    (2) command -> IDENTIFIER operator arglist .
+    (9) arglist -> arglist . BG_SEPERATOR expression
 
-    PLUS            shift and go to state 26
-    MINUS           shift and go to state 28
-    INTEGER         shift and go to state 45
-    DICE            shift and go to state 30
-    LPAREN          shift and go to state 31
-    IDENTIFIER      shift and go to state 46
+    $end            reduce using rule 2 (command -> IDENTIFIER operator arglist .)
+    BG_SEPERATOR    shift and go to state 48
 
-    d_term0                        shift and go to state 56
-    d_factor                       shift and go to state 29
 
 state 44
 
-    (22) d_factor -> PLUS d_factor .
+    (5) command -> IDENTIFIER LPAREN arglist . RPAREN
+    (9) arglist -> arglist . BG_SEPERATOR expression
 
-    MULTIPLY        reduce using rule 22 (d_factor -> PLUS d_factor .)
-    DIVIDE          reduce using rule 22 (d_factor -> PLUS d_factor .)
-    PLUS            reduce using rule 22 (d_factor -> PLUS d_factor .)
-    MINUS           reduce using rule 22 (d_factor -> PLUS d_factor .)
-    TIMES           reduce using rule 22 (d_factor -> PLUS d_factor .)
-    AND             reduce using rule 22 (d_factor -> PLUS d_factor .)
-    BG_SEPERATOR    reduce using rule 22 (d_factor -> PLUS d_factor .)
-    $end            reduce using rule 22 (d_factor -> PLUS d_factor .)
-    RPAREN          reduce using rule 22 (d_factor -> PLUS d_factor .)
+    RPAREN          shift and go to state 62
+    BG_SEPERATOR    shift and go to state 48
 
 
 state 45
 
-    (28) d_factor -> INTEGER .
+    (6) command -> IDENTIFIER LPAREN RPAREN .
 
-    MULTIPLY        reduce using rule 28 (d_factor -> INTEGER .)
-    DIVIDE          reduce using rule 28 (d_factor -> INTEGER .)
-    PLUS            reduce using rule 28 (d_factor -> INTEGER .)
-    MINUS           reduce using rule 28 (d_factor -> INTEGER .)
-    TIMES           reduce using rule 28 (d_factor -> INTEGER .)
-    AND             reduce using rule 28 (d_factor -> INTEGER .)
-    BG_SEPERATOR    reduce using rule 28 (d_factor -> INTEGER .)
-    $end            reduce using rule 28 (d_factor -> INTEGER .)
-    RPAREN          reduce using rule 28 (d_factor -> INTEGER .)
+    $end            reduce using rule 6 (command -> IDENTIFIER LPAREN RPAREN .)
 
 
 state 46
 
-    (37) d_factor -> IDENTIFIER . LPAREN d_expression RPAREN
+    (20) path -> IDENTIFIER DOT pathelem .
 
-    LPAREN          shift and go to state 40
+    DOT             reduce using rule 20 (path -> IDENTIFIER DOT pathelem .)
+    ASSIGN          reduce using rule 20 (path -> IDENTIFIER DOT pathelem .)
+    INITIALIZE      reduce using rule 20 (path -> IDENTIFIER DOT pathelem .)
+    PLUSEQUAL       reduce using rule 20 (path -> IDENTIFIER DOT pathelem .)
+    MINUSEQUAL      reduce using rule 20 (path -> IDENTIFIER DOT pathelem .)
+    ARROWLEFT       reduce using rule 20 (path -> IDENTIFIER DOT pathelem .)
+    QUESTION        reduce using rule 20 (path -> IDENTIFIER DOT pathelem .)
+    BG_SEPERATOR    reduce using rule 20 (path -> IDENTIFIER DOT pathelem .)
+    $end            reduce using rule 20 (path -> IDENTIFIER DOT pathelem .)
+    RPAREN          reduce using rule 20 (path -> IDENTIFIER DOT pathelem .)
 
 
 state 47
 
-    (20) d_term0 -> d_term0 MULTIPLY . d_factor
-    (22) d_factor -> . PLUS d_factor
-    (23) d_factor -> . MINUS d_factor
-    (28) d_factor -> . INTEGER
-    (29) d_factor -> . DICE
-    (30) d_factor -> . LPAREN d_expression RPAREN
-    (37) d_factor -> . IDENTIFIER LPAREN d_expression RPAREN
+    (21) path -> INTEGER DOT pathelem .
 
-    PLUS            shift and go to state 26
-    MINUS           shift and go to state 28
-    INTEGER         shift and go to state 45
-    DICE            shift and go to state 30
-    LPAREN          shift and go to state 31
-    IDENTIFIER      shift and go to state 46
+    DOT             reduce using rule 21 (path -> INTEGER DOT pathelem .)
+    ASSIGN          reduce using rule 21 (path -> INTEGER DOT pathelem .)
+    INITIALIZE      reduce using rule 21 (path -> INTEGER DOT pathelem .)
+    PLUSEQUAL       reduce using rule 21 (path -> INTEGER DOT pathelem .)
+    MINUSEQUAL      reduce using rule 21 (path -> INTEGER DOT pathelem .)
+    ARROWLEFT       reduce using rule 21 (path -> INTEGER DOT pathelem .)
+    QUESTION        reduce using rule 21 (path -> INTEGER DOT pathelem .)
+    BG_SEPERATOR    reduce using rule 21 (path -> INTEGER DOT pathelem .)
+    $end            reduce using rule 21 (path -> INTEGER DOT pathelem .)
+    RPAREN          reduce using rule 21 (path -> INTEGER DOT pathelem .)
 
-    d_factor                       shift and go to state 57
 
 state 48
 
-    (21) d_term0 -> d_term0 DIVIDE . d_factor
-    (22) d_factor -> . PLUS d_factor
-    (23) d_factor -> . MINUS d_factor
-    (28) d_factor -> . INTEGER
-    (29) d_factor -> . DICE
-    (30) d_factor -> . LPAREN d_expression RPAREN
-    (37) d_factor -> . IDENTIFIER LPAREN d_expression RPAREN
+    (9) arglist -> arglist BG_SEPERATOR . expression
+    (15) expression -> . d_expression
+    (16) expression -> . path
+    (17) expression -> . IDENTIFIER
+    (18) expression -> . STRLITERAL
+    (24) d_expression -> . d_expression AND d_term2
+    (32) d_expression -> . d_term2
+    (19) path -> . path DOT pathelem
+    (20) path -> . IDENTIFIER DOT pathelem
+    (21) path -> . INTEGER DOT pathelem
+    (22) path -> . DOUBLE_STAR
+    (23) path -> . MULTIPLY
+    (25) d_term2 -> . d_term2 TIMES d_term1
+    (33) d_term2 -> . d_term1
+    (26) d_term1 -> . d_term1 PLUS d_term0
+    (27) d_term1 -> . d_term1 MINUS d_term0
+    (34) d_term1 -> . d_term0
+    (28) d_term0 -> . d_term0 MULTIPLY d_factor
+    (29) d_term0 -> . d_term0 DIVIDE d_factor
+    (35) d_term0 -> . d_factor
+    (30) d_factor -> . PLUS d_factor
+    (31) d_factor -> . MINUS d_factor
+    (36) d_factor -> . INTEGER
+    (37) d_factor -> . DICE
+    (38) d_factor -> . LPAREN d_expression RPAREN
+    (45) d_factor -> . IDENTIFIER LPAREN d_expression RPAREN
 
-    PLUS            shift and go to state 26
-    MINUS           shift and go to state 28
-    INTEGER         shift and go to state 45
-    DICE            shift and go to state 30
-    LPAREN          shift and go to state 31
-    IDENTIFIER      shift and go to state 46
+    IDENTIFIER      shift and go to state 25
+    STRLITERAL      shift and go to state 26
+    INTEGER         shift and go to state 28
+    DOUBLE_STAR     shift and go to state 6
+    MULTIPLY        shift and go to state 7
+    PLUS            shift and go to state 30
+    MINUS           shift and go to state 32
+    DICE            shift and go to state 34
+    LPAREN          shift and go to state 35
 
-    d_factor                       shift and go to state 58
+    expression                     shift and go to state 63
+    d_expression                   shift and go to state 24
+    path                           shift and go to state 21
+    d_term2                        shift and go to state 27
+    d_term1                        shift and go to state 29
+    d_term0                        shift and go to state 31
+    d_factor                       shift and go to state 33
 
 state 49
 
-    (23) d_factor -> MINUS d_factor .
+    (24) d_expression -> d_expression AND . d_term2
+    (25) d_term2 -> . d_term2 TIMES d_term1
+    (33) d_term2 -> . d_term1
+    (26) d_term1 -> . d_term1 PLUS d_term0
+    (27) d_term1 -> . d_term1 MINUS d_term0
+    (34) d_term1 -> . d_term0
+    (28) d_term0 -> . d_term0 MULTIPLY d_factor
+    (29) d_term0 -> . d_term0 DIVIDE d_factor
+    (35) d_term0 -> . d_factor
+    (30) d_factor -> . PLUS d_factor
+    (31) d_factor -> . MINUS d_factor
+    (36) d_factor -> . INTEGER
+    (37) d_factor -> . DICE
+    (38) d_factor -> . LPAREN d_expression RPAREN
+    (45) d_factor -> . IDENTIFIER LPAREN d_expression RPAREN
 
-    MULTIPLY        reduce using rule 23 (d_factor -> MINUS d_factor .)
-    DIVIDE          reduce using rule 23 (d_factor -> MINUS d_factor .)
-    PLUS            reduce using rule 23 (d_factor -> MINUS d_factor .)
-    MINUS           reduce using rule 23 (d_factor -> MINUS d_factor .)
-    TIMES           reduce using rule 23 (d_factor -> MINUS d_factor .)
-    AND             reduce using rule 23 (d_factor -> MINUS d_factor .)
-    BG_SEPERATOR    reduce using rule 23 (d_factor -> MINUS d_factor .)
-    $end            reduce using rule 23 (d_factor -> MINUS d_factor .)
-    RPAREN          reduce using rule 23 (d_factor -> MINUS d_factor .)
+    PLUS            shift and go to state 30
+    MINUS           shift and go to state 32
+    INTEGER         shift and go to state 55
+    DICE            shift and go to state 34
+    LPAREN          shift and go to state 35
+    IDENTIFIER      shift and go to state 56
 
+    d_term2                        shift and go to state 64
+    d_term1                        shift and go to state 29
+    d_term0                        shift and go to state 31
+    d_factor                       shift and go to state 33
 
 state 50
 
-    (30) d_factor -> LPAREN d_expression . RPAREN
-    (16) d_expression -> d_expression . AND d_term2
+    (45) d_factor -> IDENTIFIER LPAREN . d_expression RPAREN
+    (24) d_expression -> . d_expression AND d_term2
+    (32) d_expression -> . d_term2
+    (25) d_term2 -> . d_term2 TIMES d_term1
+    (33) d_term2 -> . d_term1
+    (26) d_term1 -> . d_term1 PLUS d_term0
+    (27) d_term1 -> . d_term1 MINUS d_term0
+    (34) d_term1 -> . d_term0
+    (28) d_term0 -> . d_term0 MULTIPLY d_factor
+    (29) d_term0 -> . d_term0 DIVIDE d_factor
+    (35) d_term0 -> . d_factor
+    (30) d_factor -> . PLUS d_factor
+    (31) d_factor -> . MINUS d_factor
+    (36) d_factor -> . INTEGER
+    (37) d_factor -> . DICE
+    (38) d_factor -> . LPAREN d_expression RPAREN
+    (45) d_factor -> . IDENTIFIER LPAREN d_expression RPAREN
 
-    RPAREN          shift and go to state 59
-    AND             shift and go to state 39
+    PLUS            shift and go to state 30
+    MINUS           shift and go to state 32
+    INTEGER         shift and go to state 55
+    DICE            shift and go to state 34
+    LPAREN          shift and go to state 35
+    IDENTIFIER      shift and go to state 56
 
+    d_expression                   shift and go to state 65
+    d_term2                        shift and go to state 27
+    d_term1                        shift and go to state 29
+    d_term0                        shift and go to state 31
+    d_factor                       shift and go to state 33
 
 state 51
 
-    (3) arglist -> arglist BG_SEPERATOR expression .
+    (25) d_term2 -> d_term2 TIMES . d_term1
+    (26) d_term1 -> . d_term1 PLUS d_term0
+    (27) d_term1 -> . d_term1 MINUS d_term0
+    (34) d_term1 -> . d_term0
+    (28) d_term0 -> . d_term0 MULTIPLY d_factor
+    (29) d_term0 -> . d_term0 DIVIDE d_factor
+    (35) d_term0 -> . d_factor
+    (30) d_factor -> . PLUS d_factor
+    (31) d_factor -> . MINUS d_factor
+    (36) d_factor -> . INTEGER
+    (37) d_factor -> . DICE
+    (38) d_factor -> . LPAREN d_expression RPAREN
+    (45) d_factor -> . IDENTIFIER LPAREN d_expression RPAREN
 
-    BG_SEPERATOR    reduce using rule 3 (arglist -> arglist BG_SEPERATOR expression .)
-    $end            reduce using rule 3 (arglist -> arglist BG_SEPERATOR expression .)
+    PLUS            shift and go to state 30
+    MINUS           shift and go to state 32
+    INTEGER         shift and go to state 55
+    DICE            shift and go to state 34
+    LPAREN          shift and go to state 35
+    IDENTIFIER      shift and go to state 56
 
+    d_term1                        shift and go to state 66
+    d_term0                        shift and go to state 31
+    d_factor                       shift and go to state 33
 
 state 52
 
-    (16) d_expression -> d_expression AND d_term2 .
-    (17) d_term2 -> d_term2 . TIMES d_term1
+    (26) d_term1 -> d_term1 PLUS . d_term0
+    (28) d_term0 -> . d_term0 MULTIPLY d_factor
+    (29) d_term0 -> . d_term0 DIVIDE d_factor
+    (35) d_term0 -> . d_factor
+    (30) d_factor -> . PLUS d_factor
+    (31) d_factor -> . MINUS d_factor
+    (36) d_factor -> . INTEGER
+    (37) d_factor -> . DICE
+    (38) d_factor -> . LPAREN d_expression RPAREN
+    (45) d_factor -> . IDENTIFIER LPAREN d_expression RPAREN
 
-    AND             reduce using rule 16 (d_expression -> d_expression AND d_term2 .)
-    BG_SEPERATOR    reduce using rule 16 (d_expression -> d_expression AND d_term2 .)
-    $end            reduce using rule 16 (d_expression -> d_expression AND d_term2 .)
-    RPAREN          reduce using rule 16 (d_expression -> d_expression AND d_term2 .)
-    TIMES           shift and go to state 41
+    PLUS            shift and go to state 30
+    MINUS           shift and go to state 32
+    INTEGER         shift and go to state 55
+    DICE            shift and go to state 34
+    LPAREN          shift and go to state 35
+    IDENTIFIER      shift and go to state 56
 
+    d_term0                        shift and go to state 67
+    d_factor                       shift and go to state 33
 
 state 53
 
-    (37) d_factor -> IDENTIFIER LPAREN d_expression . RPAREN
-    (16) d_expression -> d_expression . AND d_term2
+    (27) d_term1 -> d_term1 MINUS . d_term0
+    (28) d_term0 -> . d_term0 MULTIPLY d_factor
+    (29) d_term0 -> . d_term0 DIVIDE d_factor
+    (35) d_term0 -> . d_factor
+    (30) d_factor -> . PLUS d_factor
+    (31) d_factor -> . MINUS d_factor
+    (36) d_factor -> . INTEGER
+    (37) d_factor -> . DICE
+    (38) d_factor -> . LPAREN d_expression RPAREN
+    (45) d_factor -> . IDENTIFIER LPAREN d_expression RPAREN
 
-    RPAREN          shift and go to state 60
-    AND             shift and go to state 39
+    PLUS            shift and go to state 30
+    MINUS           shift and go to state 32
+    INTEGER         shift and go to state 55
+    DICE            shift and go to state 34
+    LPAREN          shift and go to state 35
+    IDENTIFIER      shift and go to state 56
 
+    d_term0                        shift and go to state 68
+    d_factor                       shift and go to state 33
 
 state 54
 
-    (17) d_term2 -> d_term2 TIMES d_term1 .
-    (18) d_term1 -> d_term1 . PLUS d_term0
-    (19) d_term1 -> d_term1 . MINUS d_term0
+    (30) d_factor -> PLUS d_factor .
 
-    TIMES           reduce using rule 17 (d_term2 -> d_term2 TIMES d_term1 .)
-    AND             reduce using rule 17 (d_term2 -> d_term2 TIMES d_term1 .)
-    BG_SEPERATOR    reduce using rule 17 (d_term2 -> d_term2 TIMES d_term1 .)
-    $end            reduce using rule 17 (d_term2 -> d_term2 TIMES d_term1 .)
-    RPAREN          reduce using rule 17 (d_term2 -> d_term2 TIMES d_term1 .)
-    PLUS            shift and go to state 42
-    MINUS           shift and go to state 43
+    MULTIPLY        reduce using rule 30 (d_factor -> PLUS d_factor .)
+    DIVIDE          reduce using rule 30 (d_factor -> PLUS d_factor .)
+    PLUS            reduce using rule 30 (d_factor -> PLUS d_factor .)
+    MINUS           reduce using rule 30 (d_factor -> PLUS d_factor .)
+    TIMES           reduce using rule 30 (d_factor -> PLUS d_factor .)
+    AND             reduce using rule 30 (d_factor -> PLUS d_factor .)
+    BG_SEPERATOR    reduce using rule 30 (d_factor -> PLUS d_factor .)
+    $end            reduce using rule 30 (d_factor -> PLUS d_factor .)
+    RPAREN          reduce using rule 30 (d_factor -> PLUS d_factor .)
 
 
 state 55
 
-    (18) d_term1 -> d_term1 PLUS d_term0 .
-    (20) d_term0 -> d_term0 . MULTIPLY d_factor
-    (21) d_term0 -> d_term0 . DIVIDE d_factor
+    (36) d_factor -> INTEGER .
 
-    PLUS            reduce using rule 18 (d_term1 -> d_term1 PLUS d_term0 .)
-    MINUS           reduce using rule 18 (d_term1 -> d_term1 PLUS d_term0 .)
-    TIMES           reduce using rule 18 (d_term1 -> d_term1 PLUS d_term0 .)
-    AND             reduce using rule 18 (d_term1 -> d_term1 PLUS d_term0 .)
-    BG_SEPERATOR    reduce using rule 18 (d_term1 -> d_term1 PLUS d_term0 .)
-    $end            reduce using rule 18 (d_term1 -> d_term1 PLUS d_term0 .)
-    RPAREN          reduce using rule 18 (d_term1 -> d_term1 PLUS d_term0 .)
-    MULTIPLY        shift and go to state 47
-    DIVIDE          shift and go to state 48
+    MULTIPLY        reduce using rule 36 (d_factor -> INTEGER .)
+    DIVIDE          reduce using rule 36 (d_factor -> INTEGER .)
+    PLUS            reduce using rule 36 (d_factor -> INTEGER .)
+    MINUS           reduce using rule 36 (d_factor -> INTEGER .)
+    TIMES           reduce using rule 36 (d_factor -> INTEGER .)
+    AND             reduce using rule 36 (d_factor -> INTEGER .)
+    BG_SEPERATOR    reduce using rule 36 (d_factor -> INTEGER .)
+    $end            reduce using rule 36 (d_factor -> INTEGER .)
+    RPAREN          reduce using rule 36 (d_factor -> INTEGER .)
 
 
 state 56
 
-    (19) d_term1 -> d_term1 MINUS d_term0 .
-    (20) d_term0 -> d_term0 . MULTIPLY d_factor
-    (21) d_term0 -> d_term0 . DIVIDE d_factor
+    (45) d_factor -> IDENTIFIER . LPAREN d_expression RPAREN
 
-    PLUS            reduce using rule 19 (d_term1 -> d_term1 MINUS d_term0 .)
-    MINUS           reduce using rule 19 (d_term1 -> d_term1 MINUS d_term0 .)
-    TIMES           reduce using rule 19 (d_term1 -> d_term1 MINUS d_term0 .)
-    AND             reduce using rule 19 (d_term1 -> d_term1 MINUS d_term0 .)
-    BG_SEPERATOR    reduce using rule 19 (d_term1 -> d_term1 MINUS d_term0 .)
-    $end            reduce using rule 19 (d_term1 -> d_term1 MINUS d_term0 .)
-    RPAREN          reduce using rule 19 (d_term1 -> d_term1 MINUS d_term0 .)
-    MULTIPLY        shift and go to state 47
-    DIVIDE          shift and go to state 48
+    LPAREN          shift and go to state 50
 
 
 state 57
 
-    (20) d_term0 -> d_term0 MULTIPLY d_factor .
+    (28) d_term0 -> d_term0 MULTIPLY . d_factor
+    (30) d_factor -> . PLUS d_factor
+    (31) d_factor -> . MINUS d_factor
+    (36) d_factor -> . INTEGER
+    (37) d_factor -> . DICE
+    (38) d_factor -> . LPAREN d_expression RPAREN
+    (45) d_factor -> . IDENTIFIER LPAREN d_expression RPAREN
 
-    MULTIPLY        reduce using rule 20 (d_term0 -> d_term0 MULTIPLY d_factor .)
-    DIVIDE          reduce using rule 20 (d_term0 -> d_term0 MULTIPLY d_factor .)
-    PLUS            reduce using rule 20 (d_term0 -> d_term0 MULTIPLY d_factor .)
-    MINUS           reduce using rule 20 (d_term0 -> d_term0 MULTIPLY d_factor .)
-    TIMES           reduce using rule 20 (d_term0 -> d_term0 MULTIPLY d_factor .)
-    AND             reduce using rule 20 (d_term0 -> d_term0 MULTIPLY d_factor .)
-    BG_SEPERATOR    reduce using rule 20 (d_term0 -> d_term0 MULTIPLY d_factor .)
-    $end            reduce using rule 20 (d_term0 -> d_term0 MULTIPLY d_factor .)
-    RPAREN          reduce using rule 20 (d_term0 -> d_term0 MULTIPLY d_factor .)
+    PLUS            shift and go to state 30
+    MINUS           shift and go to state 32
+    INTEGER         shift and go to state 55
+    DICE            shift and go to state 34
+    LPAREN          shift and go to state 35
+    IDENTIFIER      shift and go to state 56
 
+    d_factor                       shift and go to state 69
 
 state 58
 
-    (21) d_term0 -> d_term0 DIVIDE d_factor .
+    (29) d_term0 -> d_term0 DIVIDE . d_factor
+    (30) d_factor -> . PLUS d_factor
+    (31) d_factor -> . MINUS d_factor
+    (36) d_factor -> . INTEGER
+    (37) d_factor -> . DICE
+    (38) d_factor -> . LPAREN d_expression RPAREN
+    (45) d_factor -> . IDENTIFIER LPAREN d_expression RPAREN
 
-    MULTIPLY        reduce using rule 21 (d_term0 -> d_term0 DIVIDE d_factor .)
-    DIVIDE          reduce using rule 21 (d_term0 -> d_term0 DIVIDE d_factor .)
-    PLUS            reduce using rule 21 (d_term0 -> d_term0 DIVIDE d_factor .)
-    MINUS           reduce using rule 21 (d_term0 -> d_term0 DIVIDE d_factor .)
-    TIMES           reduce using rule 21 (d_term0 -> d_term0 DIVIDE d_factor .)
-    AND             reduce using rule 21 (d_term0 -> d_term0 DIVIDE d_factor .)
-    BG_SEPERATOR    reduce using rule 21 (d_term0 -> d_term0 DIVIDE d_factor .)
-    $end            reduce using rule 21 (d_term0 -> d_term0 DIVIDE d_factor .)
-    RPAREN          reduce using rule 21 (d_term0 -> d_term0 DIVIDE d_factor .)
+    PLUS            shift and go to state 30
+    MINUS           shift and go to state 32
+    INTEGER         shift and go to state 55
+    DICE            shift and go to state 34
+    LPAREN          shift and go to state 35
+    IDENTIFIER      shift and go to state 56
 
+    d_factor                       shift and go to state 70
 
 state 59
 
-    (30) d_factor -> LPAREN d_expression RPAREN .
+    (31) d_factor -> MINUS d_factor .
 
-    MULTIPLY        reduce using rule 30 (d_factor -> LPAREN d_expression RPAREN .)
-    DIVIDE          reduce using rule 30 (d_factor -> LPAREN d_expression RPAREN .)
-    PLUS            reduce using rule 30 (d_factor -> LPAREN d_expression RPAREN .)
-    MINUS           reduce using rule 30 (d_factor -> LPAREN d_expression RPAREN .)
-    TIMES           reduce using rule 30 (d_factor -> LPAREN d_expression RPAREN .)
-    AND             reduce using rule 30 (d_factor -> LPAREN d_expression RPAREN .)
-    BG_SEPERATOR    reduce using rule 30 (d_factor -> LPAREN d_expression RPAREN .)
-    $end            reduce using rule 30 (d_factor -> LPAREN d_expression RPAREN .)
-    RPAREN          reduce using rule 30 (d_factor -> LPAREN d_expression RPAREN .)
+    MULTIPLY        reduce using rule 31 (d_factor -> MINUS d_factor .)
+    DIVIDE          reduce using rule 31 (d_factor -> MINUS d_factor .)
+    PLUS            reduce using rule 31 (d_factor -> MINUS d_factor .)
+    MINUS           reduce using rule 31 (d_factor -> MINUS d_factor .)
+    TIMES           reduce using rule 31 (d_factor -> MINUS d_factor .)
+    AND             reduce using rule 31 (d_factor -> MINUS d_factor .)
+    BG_SEPERATOR    reduce using rule 31 (d_factor -> MINUS d_factor .)
+    $end            reduce using rule 31 (d_factor -> MINUS d_factor .)
+    RPAREN          reduce using rule 31 (d_factor -> MINUS d_factor .)
 
 
 state 60
 
-    (37) d_factor -> IDENTIFIER LPAREN d_expression RPAREN .
+    (38) d_factor -> LPAREN d_expression . RPAREN
+    (24) d_expression -> d_expression . AND d_term2
 
-    MULTIPLY        reduce using rule 37 (d_factor -> IDENTIFIER LPAREN d_expression RPAREN .)
-    DIVIDE          reduce using rule 37 (d_factor -> IDENTIFIER LPAREN d_expression RPAREN .)
-    PLUS            reduce using rule 37 (d_factor -> IDENTIFIER LPAREN d_expression RPAREN .)
-    MINUS           reduce using rule 37 (d_factor -> IDENTIFIER LPAREN d_expression RPAREN .)
-    TIMES           reduce using rule 37 (d_factor -> IDENTIFIER LPAREN d_expression RPAREN .)
-    AND             reduce using rule 37 (d_factor -> IDENTIFIER LPAREN d_expression RPAREN .)
-    BG_SEPERATOR    reduce using rule 37 (d_factor -> IDENTIFIER LPAREN d_expression RPAREN .)
-    $end            reduce using rule 37 (d_factor -> IDENTIFIER LPAREN d_expression RPAREN .)
-    RPAREN          reduce using rule 37 (d_factor -> IDENTIFIER LPAREN d_expression RPAREN .)
+    RPAREN          shift and go to state 71
+    AND             shift and go to state 49
 
-WARNING: 
-WARNING: Conflicts:
-WARNING: 
-WARNING: reduce/reduce conflict in state 5 resolved using rule (pathelem -> DOUBLE_STAR)
-WARNING: rejected rule (path -> DOUBLE_STAR) in state 5
-WARNING: reduce/reduce conflict in state 6 resolved using rule (pathelem -> MULTIPLY)
-WARNING: rejected rule (path -> MULTIPLY) in state 6
+
+state 61
+
+    (7) command -> operator LPAREN arglist RPAREN .
+
+    $end            reduce using rule 7 (command -> operator LPAREN arglist RPAREN .)
+
+
+state 62
+
+    (5) command -> IDENTIFIER LPAREN arglist RPAREN .
+
+    $end            reduce using rule 5 (command -> IDENTIFIER LPAREN arglist RPAREN .)
+
+
+state 63
+
+    (9) arglist -> arglist BG_SEPERATOR expression .
+
+    BG_SEPERATOR    reduce using rule 9 (arglist -> arglist BG_SEPERATOR expression .)
+    $end            reduce using rule 9 (arglist -> arglist BG_SEPERATOR expression .)
+    RPAREN          reduce using rule 9 (arglist -> arglist BG_SEPERATOR expression .)
+
+
+state 64
+
+    (24) d_expression -> d_expression AND d_term2 .
+    (25) d_term2 -> d_term2 . TIMES d_term1
+
+    AND             reduce using rule 24 (d_expression -> d_expression AND d_term2 .)
+    BG_SEPERATOR    reduce using rule 24 (d_expression -> d_expression AND d_term2 .)
+    $end            reduce using rule 24 (d_expression -> d_expression AND d_term2 .)
+    RPAREN          reduce using rule 24 (d_expression -> d_expression AND d_term2 .)
+    TIMES           shift and go to state 51
+
+
+state 65
+
+    (45) d_factor -> IDENTIFIER LPAREN d_expression . RPAREN
+    (24) d_expression -> d_expression . AND d_term2
+
+    RPAREN          shift and go to state 72
+    AND             shift and go to state 49
+
+
+state 66
+
+    (25) d_term2 -> d_term2 TIMES d_term1 .
+    (26) d_term1 -> d_term1 . PLUS d_term0
+    (27) d_term1 -> d_term1 . MINUS d_term0
+
+    TIMES           reduce using rule 25 (d_term2 -> d_term2 TIMES d_term1 .)
+    AND             reduce using rule 25 (d_term2 -> d_term2 TIMES d_term1 .)
+    BG_SEPERATOR    reduce using rule 25 (d_term2 -> d_term2 TIMES d_term1 .)
+    $end            reduce using rule 25 (d_term2 -> d_term2 TIMES d_term1 .)
+    RPAREN          reduce using rule 25 (d_term2 -> d_term2 TIMES d_term1 .)
+    PLUS            shift and go to state 52
+    MINUS           shift and go to state 53
+
+
+state 67
+
+    (26) d_term1 -> d_term1 PLUS d_term0 .
+    (28) d_term0 -> d_term0 . MULTIPLY d_factor
+    (29) d_term0 -> d_term0 . DIVIDE d_factor
+
+    PLUS            reduce using rule 26 (d_term1 -> d_term1 PLUS d_term0 .)
+    MINUS           reduce using rule 26 (d_term1 -> d_term1 PLUS d_term0 .)
+    TIMES           reduce using rule 26 (d_term1 -> d_term1 PLUS d_term0 .)
+    AND             reduce using rule 26 (d_term1 -> d_term1 PLUS d_term0 .)
+    BG_SEPERATOR    reduce using rule 26 (d_term1 -> d_term1 PLUS d_term0 .)
+    $end            reduce using rule 26 (d_term1 -> d_term1 PLUS d_term0 .)
+    RPAREN          reduce using rule 26 (d_term1 -> d_term1 PLUS d_term0 .)
+    MULTIPLY        shift and go to state 57
+    DIVIDE          shift and go to state 58
+
+
+state 68
+
+    (27) d_term1 -> d_term1 MINUS d_term0 .
+    (28) d_term0 -> d_term0 . MULTIPLY d_factor
+    (29) d_term0 -> d_term0 . DIVIDE d_factor
+
+    PLUS            reduce using rule 27 (d_term1 -> d_term1 MINUS d_term0 .)
+    MINUS           reduce using rule 27 (d_term1 -> d_term1 MINUS d_term0 .)
+    TIMES           reduce using rule 27 (d_term1 -> d_term1 MINUS d_term0 .)
+    AND             reduce using rule 27 (d_term1 -> d_term1 MINUS d_term0 .)
+    BG_SEPERATOR    reduce using rule 27 (d_term1 -> d_term1 MINUS d_term0 .)
+    $end            reduce using rule 27 (d_term1 -> d_term1 MINUS d_term0 .)
+    RPAREN          reduce using rule 27 (d_term1 -> d_term1 MINUS d_term0 .)
+    MULTIPLY        shift and go to state 57
+    DIVIDE          shift and go to state 58
+
+
+state 69
+
+    (28) d_term0 -> d_term0 MULTIPLY d_factor .
+
+    MULTIPLY        reduce using rule 28 (d_term0 -> d_term0 MULTIPLY d_factor .)
+    DIVIDE          reduce using rule 28 (d_term0 -> d_term0 MULTIPLY d_factor .)
+    PLUS            reduce using rule 28 (d_term0 -> d_term0 MULTIPLY d_factor .)
+    MINUS           reduce using rule 28 (d_term0 -> d_term0 MULTIPLY d_factor .)
+    TIMES           reduce using rule 28 (d_term0 -> d_term0 MULTIPLY d_factor .)
+    AND             reduce using rule 28 (d_term0 -> d_term0 MULTIPLY d_factor .)
+    BG_SEPERATOR    reduce using rule 28 (d_term0 -> d_term0 MULTIPLY d_factor .)
+    $end            reduce using rule 28 (d_term0 -> d_term0 MULTIPLY d_factor .)
+    RPAREN          reduce using rule 28 (d_term0 -> d_term0 MULTIPLY d_factor .)
+
+
+state 70
+
+    (29) d_term0 -> d_term0 DIVIDE d_factor .
+
+    MULTIPLY        reduce using rule 29 (d_term0 -> d_term0 DIVIDE d_factor .)
+    DIVIDE          reduce using rule 29 (d_term0 -> d_term0 DIVIDE d_factor .)
+    PLUS            reduce using rule 29 (d_term0 -> d_term0 DIVIDE d_factor .)
+    MINUS           reduce using rule 29 (d_term0 -> d_term0 DIVIDE d_factor .)
+    TIMES           reduce using rule 29 (d_term0 -> d_term0 DIVIDE d_factor .)
+    AND             reduce using rule 29 (d_term0 -> d_term0 DIVIDE d_factor .)
+    BG_SEPERATOR    reduce using rule 29 (d_term0 -> d_term0 DIVIDE d_factor .)
+    $end            reduce using rule 29 (d_term0 -> d_term0 DIVIDE d_factor .)
+    RPAREN          reduce using rule 29 (d_term0 -> d_term0 DIVIDE d_factor .)
+
+
+state 71
+
+    (38) d_factor -> LPAREN d_expression RPAREN .
+
+    MULTIPLY        reduce using rule 38 (d_factor -> LPAREN d_expression RPAREN .)
+    DIVIDE          reduce using rule 38 (d_factor -> LPAREN d_expression RPAREN .)
+    PLUS            reduce using rule 38 (d_factor -> LPAREN d_expression RPAREN .)
+    MINUS           reduce using rule 38 (d_factor -> LPAREN d_expression RPAREN .)
+    TIMES           reduce using rule 38 (d_factor -> LPAREN d_expression RPAREN .)
+    AND             reduce using rule 38 (d_factor -> LPAREN d_expression RPAREN .)
+    BG_SEPERATOR    reduce using rule 38 (d_factor -> LPAREN d_expression RPAREN .)
+    $end            reduce using rule 38 (d_factor -> LPAREN d_expression RPAREN .)
+    RPAREN          reduce using rule 38 (d_factor -> LPAREN d_expression RPAREN .)
+
+
+state 72
+
+    (45) d_factor -> IDENTIFIER LPAREN d_expression RPAREN .
+
+    MULTIPLY        reduce using rule 45 (d_factor -> IDENTIFIER LPAREN d_expression RPAREN .)
+    DIVIDE          reduce using rule 45 (d_factor -> IDENTIFIER LPAREN d_expression RPAREN .)
+    PLUS            reduce using rule 45 (d_factor -> IDENTIFIER LPAREN d_expression RPAREN .)
+    MINUS           reduce using rule 45 (d_factor -> IDENTIFIER LPAREN d_expression RPAREN .)
+    TIMES           reduce using rule 45 (d_factor -> IDENTIFIER LPAREN d_expression RPAREN .)
+    AND             reduce using rule 45 (d_factor -> IDENTIFIER LPAREN d_expression RPAREN .)
+    BG_SEPERATOR    reduce using rule 45 (d_factor -> IDENTIFIER LPAREN d_expression RPAREN .)
+    $end            reduce using rule 45 (d_factor -> IDENTIFIER LPAREN d_expression RPAREN .)
+    RPAREN          reduce using rule 45 (d_factor -> IDENTIFIER LPAREN d_expression RPAREN .)
+

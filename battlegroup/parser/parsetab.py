@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'AND ARROWLEFT ASSIGN BG_SEPERATOR COMMA DICE DIVIDE DOT DOUBLE_STAR IDENTIFIER INITIALIZE INTEGER LPAREN MINUS MINUSEQUAL MULTIPLY PLUS PLUSEQUAL QUESTION RPAREN TIMEScommand       : path operator arglist\n                         | IDENTIFIER operator arglist\n        arglist       : arglist BG_SEPERATOR expression\n                         | expression\n        pathelem      : MULTIPLY\n                         | DOUBLE_STAR\n                         | IDENTIFIER\n                         | INTEGER\n           expression    : d_expression\n                         | path\n                         | IDENTIFIER\n        path          : path DOT pathelem\n                         | pathelem DOT pathelem\n                         | DOUBLE_STAR\n                         | MULTIPLY\n        d_expression  : d_expression AND d_term2\n           d_term2       : d_term2 TIMES d_term1\n           d_term1       : d_term1 PLUS d_term0\n                         | d_term1 MINUS d_term0\n           d_term0       : d_term0 MULTIPLY d_factor\n                         | d_term0 DIVIDE d_factord_factor : PLUS d_factor\n                    | MINUS d_factord_expression : d_term2\n           d_term2      : d_term1\n           d_term1      : d_term0\n           d_term0      : d_factor\n           d_factor     : INTEGER\n                        | DICEd_factor     : LPAREN d_expression RPAREN\n        operator    : ASSIGN\n                       | INITIALIZE\n                       | PLUSEQUAL\n                       | MINUSEQUAL\n                       | ARROWLEFT\n                       | QUESTION\n        d_factor     : IDENTIFIER LPAREN d_expression RPAREN\n        '
+_lr_signature = 'AND ARROWLEFT ASSIGN BG_SEPERATOR DICE DIVIDE DOT DOUBLE_STAR IDENTIFIER INITIALIZE INTEGER LPAREN MINUS MINUSEQUAL MULTIPLY PLUS PLUSEQUAL QUESTION RPAREN STRLITERAL TIMEScommand       : path operator arglist\n                         | IDENTIFIER operator arglist\n                         | path operator\n                         | IDENTIFIER operator\n        command       : IDENTIFIER LPAREN arglist RPAREN\n                         | IDENTIFIER LPAREN RPAREN\n                         | operator LPAREN arglist RPAREN\n                         | operator LPAREN RPAREN\n        arglist       : arglist BG_SEPERATOR expression\n                         | expression\n        pathelem      : MULTIPLY\n                         | DOUBLE_STAR\n                         | IDENTIFIER\n                         | INTEGER\n           expression    : d_expression\n                         | path\n                         | IDENTIFIER\n                         | STRLITERAL\n        path          : path DOT pathelem\n                         | IDENTIFIER DOT pathelem\n                         | INTEGER DOT pathelem\n                         | DOUBLE_STAR\n                         | MULTIPLY\n        d_expression  : d_expression AND d_term2\n           d_term2       : d_term2 TIMES d_term1\n           d_term1       : d_term1 PLUS d_term0\n                         | d_term1 MINUS d_term0\n           d_term0       : d_term0 MULTIPLY d_factor\n                         | d_term0 DIVIDE d_factord_factor : PLUS d_factor\n                    | MINUS d_factord_expression : d_term2\n           d_term2      : d_term1\n           d_term1      : d_term0\n           d_term0      : d_factor\n           d_factor     : INTEGER\n                        | DICEd_factor     : LPAREN d_expression RPAREN\n        operator    : ASSIGN\n                       | INITIALIZE\n                       | PLUSEQUAL\n                       | MINUSEQUAL\n                       | ARROWLEFT\n                       | QUESTION\n        d_factor     : IDENTIFIER LPAREN d_expression RPAREN\n        '
     
-_lr_action_items = {'IDENTIFIER':([0,8,9,10,11,12,13,14,15,16,17,26,28,31,38,39,40,41,42,43,47,48,],[3,22,35,-31,-32,-33,-34,-35,-36,22,35,46,46,46,22,46,46,46,46,46,46,46,]),'DOUBLE_STAR':([0,8,9,10,11,12,13,14,15,16,17,38,],[5,5,34,-31,-32,-33,-34,-35,-36,5,34,5,]),'MULTIPLY':([0,8,9,10,11,12,13,14,15,16,17,25,27,29,30,38,44,45,49,55,56,57,58,59,60,],[6,6,33,-31,-32,-33,-34,-35,-36,6,33,-28,47,-27,-29,6,-22,-28,-23,47,47,-20,-21,-30,-37,]),'INTEGER':([0,8,9,10,11,12,13,14,15,16,17,26,28,31,38,39,40,41,42,43,47,48,],[7,25,7,-31,-32,-33,-34,-35,-36,25,7,45,45,45,25,45,45,45,45,45,45,45,]),'$end':([1,5,6,7,18,19,20,21,22,23,24,25,27,29,30,32,33,34,35,36,37,44,45,49,51,52,54,55,56,57,58,59,60,],[0,-14,-15,-8,-10,-1,-4,-9,-11,-24,-25,-28,-26,-27,-29,-12,-5,-6,-7,-2,-13,-22,-28,-23,-3,-16,-17,-18,-19,-20,-21,-30,-37,]),'DOT':([2,3,4,5,6,7,18,22,25,32,33,34,35,37,],[9,-7,17,-6,-5,-8,9,-7,-8,-12,-5,-6,-7,-13,]),'ASSIGN':([2,3,5,6,7,32,33,34,35,37,],[10,10,-14,-15,-8,-12,-5,-6,-7,-13,]),'INITIALIZE':([2,3,5,6,7,32,33,34,35,37,],[11,11,-14,-15,-8,-12,-5,-6,-7,-13,]),'PLUSEQUAL':([2,3,5,6,7,32,33,34,35,37,],[12,12,-14,-15,-8,-12,-5,-6,-7,-13,]),'MINUSEQUAL':([2,3,5,6,7,32,33,34,35,37,],[13,13,-14,-15,-8,-12,-5,-6,-7,-13,]),'ARROWLEFT':([2,3,5,6,7,32,33,34,35,37,],[14,14,-14,-15,-8,-12,-5,-6,-7,-13,]),'QUESTION':([2,3,5,6,7,32,33,34,35,37,],[15,15,-14,-15,-8,-12,-5,-6,-7,-13,]),'BG_SEPERATOR':([5,6,7,18,19,20,21,22,23,24,25,27,29,30,32,33,34,35,36,37,44,45,49,51,52,54,55,56,57,58,59,60,],[-14,-15,-8,-10,38,-4,-9,-11,-24,-25,-28,-26,-27,-29,-12,-5,-6,-7,38,-13,-22,-28,-23,-3,-16,-17,-18,-19,-20,-21,-30,-37,]),'PLUS':([8,10,11,12,13,14,15,16,24,25,26,27,28,29,30,31,38,39,40,41,42,43,44,45,47,48,49,54,55,56,57,58,59,60,],[26,-31,-32,-33,-34,-35,-36,26,42,-28,26,-26,26,-27,-29,26,26,26,26,26,26,26,-22,-28,26,26,-23,42,-18,-19,-20,-21,-30,-37,]),'MINUS':([8,10,11,12,13,14,15,16,24,25,26,27,28,29,30,31,38,39,40,41,42,43,44,45,47,48,49,54,55,56,57,58,59,60,],[28,-31,-32,-33,-34,-35,-36,28,43,-28,28,-26,28,-27,-29,28,28,28,28,28,28,28,-22,-28,28,28,-23,43,-18,-19,-20,-21,-30,-37,]),'DICE':([8,10,11,12,13,14,15,16,26,28,31,38,39,40,41,42,43,47,48,],[30,-31,-32,-33,-34,-35,-36,30,30,30,30,30,30,30,30,30,30,30,30,]),'LPAREN':([8,10,11,12,13,14,15,16,22,26,28,31,38,39,40,41,42,43,46,47,48,],[31,-31,-32,-33,-34,-35,-36,31,40,31,31,31,31,31,31,31,31,31,40,31,31,]),'AND':([21,23,24,25,27,29,30,44,45,49,50,52,53,54,55,56,57,58,59,60,],[39,-24,-25,-28,-26,-27,-29,-22,-28,-23,39,-16,39,-17,-18,-19,-20,-21,-30,-37,]),'RPAREN':([23,24,27,29,30,44,45,49,50,52,53,54,55,56,57,58,59,60,],[-24,-25,-26,-27,-29,-22,-28,-23,59,-16,60,-17,-18,-19,-20,-21,-30,-37,]),'TIMES':([23,24,25,27,29,30,44,45,49,52,54,55,56,57,58,59,60,],[41,-25,-28,-26,-27,-29,-22,-28,-23,41,-17,-18,-19,-20,-21,-30,-37,]),'DIVIDE':([25,27,29,30,44,45,49,55,56,57,58,59,60,],[-28,48,-27,-29,-22,-28,-23,48,48,-20,-21,-30,-37,]),}
+_lr_action_items = {'IDENTIFIER':([0,8,9,10,11,12,13,14,15,16,17,18,19,20,30,32,35,48,49,50,51,52,53,57,58,],[4,-39,-40,-41,-42,-43,-44,25,39,25,25,25,39,39,56,56,56,25,56,56,56,56,56,56,56,]),'INTEGER':([0,8,9,10,11,12,13,14,15,16,17,18,19,20,30,32,35,48,49,50,51,52,53,57,58,],[5,-39,-40,-41,-42,-43,-44,28,40,28,28,28,40,40,55,55,55,28,55,55,55,55,55,55,55,]),'DOUBLE_STAR':([0,8,9,10,11,12,13,14,15,16,17,18,19,20,48,],[6,-39,-40,-41,-42,-43,-44,6,38,6,6,6,38,38,6,]),'MULTIPLY':([0,8,9,10,11,12,13,14,15,16,17,18,19,20,28,31,33,34,48,54,55,59,67,68,69,70,71,72,],[7,-39,-40,-41,-42,-43,-44,7,37,7,7,7,37,37,-36,57,-35,-37,7,-30,-36,-31,57,57,-28,-29,-38,-45,]),'ASSIGN':([0,2,4,6,7,36,37,38,39,40,46,47,],[8,8,8,-22,-23,-19,-11,-12,-13,-14,-20,-21,]),'INITIALIZE':([0,2,4,6,7,36,37,38,39,40,46,47,],[9,9,9,-22,-23,-19,-11,-12,-13,-14,-20,-21,]),'PLUSEQUAL':([0,2,4,6,7,36,37,38,39,40,46,47,],[10,10,10,-22,-23,-19,-11,-12,-13,-14,-20,-21,]),'MINUSEQUAL':([0,2,4,6,7,36,37,38,39,40,46,47,],[11,11,11,-22,-23,-19,-11,-12,-13,-14,-20,-21,]),'ARROWLEFT':([0,2,4,6,7,36,37,38,39,40,46,47,],[12,12,12,-22,-23,-19,-11,-12,-13,-14,-20,-21,]),'QUESTION':([0,2,4,6,7,36,37,38,39,40,46,47,],[13,13,13,-22,-23,-19,-11,-12,-13,-14,-20,-21,]),'$end':([1,6,7,8,9,10,11,12,13,14,17,21,22,23,24,25,26,27,28,29,31,33,34,36,37,38,39,40,42,43,45,46,47,54,55,59,61,62,63,64,66,67,68,69,70,71,72,],[0,-22,-23,-39,-40,-41,-42,-43,-44,-3,-4,-16,-1,-10,-15,-17,-18,-32,-36,-33,-34,-35,-37,-19,-11,-12,-13,-14,-8,-2,-6,-20,-21,-30,-36,-31,-7,-5,-9,-24,-25,-26,-27,-28,-29,-38,-45,]),'DOT':([2,4,5,6,7,21,25,28,36,37,38,39,40,46,47,],[15,19,20,-22,-23,15,19,20,-19,-11,-12,-13,-14,-20,-21,]),'LPAREN':([3,4,8,9,10,11,12,13,14,16,17,18,25,30,32,35,48,49,50,51,52,53,56,57,58,],[16,18,-39,-40,-41,-42,-43,-44,35,35,35,35,50,35,35,35,35,35,35,35,35,35,50,35,35,]),'BG_SEPERATOR':([6,7,21,22,23,24,25,26,27,28,29,31,33,34,36,37,38,39,40,41,43,44,46,47,54,55,59,63,64,66,67,68,69,70,71,72,],[-22,-23,-16,48,-10,-15,-17,-18,-32,-36,-33,-34,-35,-37,-19,-11,-12,-13,-14,48,48,48,-20,-21,-30,-36,-31,-9,-24,-25,-26,-27,-28,-29,-38,-45,]),'RPAREN':([6,7,16,18,21,23,24,25,26,27,28,29,31,33,34,36,37,38,39,40,41,44,46,47,54,55,59,60,63,64,65,66,67,68,69,70,71,72,],[-22,-23,42,45,-16,-10,-15,-17,-18,-32,-36,-33,-34,-35,-37,-19,-11,-12,-13,-14,61,62,-20,-21,-30,-36,-31,71,-9,-24,72,-25,-26,-27,-28,-29,-38,-45,]),'STRLITERAL':([8,9,10,11,12,13,14,16,17,18,48,],[-39,-40,-41,-42,-43,-44,26,26,26,26,26,]),'PLUS':([8,9,10,11,12,13,14,16,17,18,28,29,30,31,32,33,34,35,48,49,50,51,52,53,54,55,57,58,59,66,67,68,69,70,71,72,],[-39,-40,-41,-42,-43,-44,30,30,30,30,-36,52,30,-34,30,-35,-37,30,30,30,30,30,30,30,-30,-36,30,30,-31,52,-26,-27,-28,-29,-38,-45,]),'MINUS':([8,9,10,11,12,13,14,16,17,18,28,29,30,31,32,33,34,35,48,49,50,51,52,53,54,55,57,58,59,66,67,68,69,70,71,72,],[-39,-40,-41,-42,-43,-44,32,32,32,32,-36,53,32,-34,32,-35,-37,32,32,32,32,32,32,32,-30,-36,32,32,-31,53,-26,-27,-28,-29,-38,-45,]),'DICE':([8,9,10,11,12,13,14,16,17,18,30,32,35,48,49,50,51,52,53,57,58,],[-39,-40,-41,-42,-43,-44,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,]),'AND':([24,27,28,29,31,33,34,54,55,59,60,64,65,66,67,68,69,70,71,72,],[49,-32,-36,-33,-34,-35,-37,-30,-36,-31,49,-24,49,-25,-26,-27,-28,-29,-38,-45,]),'TIMES':([27,28,29,31,33,34,54,55,59,64,66,67,68,69,70,71,72,],[51,-36,-33,-34,-35,-37,-30,-36,-31,51,-25,-26,-27,-28,-29,-38,-45,]),'DIVIDE':([28,31,33,34,54,55,59,67,68,69,70,71,72,],[-36,58,-35,-37,-30,-36,-31,58,58,-28,-29,-38,-45,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'command':([0,],[1,]),'path':([0,8,16,38,],[2,18,18,18,]),'pathelem':([0,8,9,16,17,38,],[4,4,32,4,37,4,]),'operator':([2,3,],[8,16,]),'arglist':([8,16,],[19,36,]),'expression':([8,16,38,],[20,20,51,]),'d_expression':([8,16,31,38,40,],[21,21,50,21,53,]),'d_term2':([8,16,31,38,39,40,],[23,23,23,23,52,23,]),'d_term1':([8,16,31,38,39,40,41,],[24,24,24,24,24,24,54,]),'d_term0':([8,16,31,38,39,40,41,42,43,],[27,27,27,27,27,27,27,55,56,]),'d_factor':([8,16,26,28,31,38,39,40,41,42,43,47,48,],[29,29,44,49,29,29,29,29,29,29,29,57,58,]),}
+_lr_goto_items = {'command':([0,],[1,]),'path':([0,14,16,17,18,48,],[2,21,21,21,21,21,]),'operator':([0,2,4,],[3,14,17,]),'arglist':([14,16,17,18,],[22,41,43,44,]),'expression':([14,16,17,18,48,],[23,23,23,23,63,]),'d_expression':([14,16,17,18,35,48,50,],[24,24,24,24,60,24,65,]),'d_term2':([14,16,17,18,35,48,49,50,],[27,27,27,27,27,27,64,27,]),'d_term1':([14,16,17,18,35,48,49,50,51,],[29,29,29,29,29,29,29,29,66,]),'d_term0':([14,16,17,18,35,48,49,50,51,52,53,],[31,31,31,31,31,31,31,31,31,67,68,]),'d_factor':([14,16,17,18,30,32,35,48,49,50,51,52,53,57,58,],[33,33,33,33,54,59,33,33,33,33,33,33,33,69,70,]),'pathelem':([15,19,20,],[36,46,47,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,41 +27,49 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> command","S'",1,None,None,None),
-  ('command -> path operator arglist','command',3,'p_command','battlegroup_parser.py',295),
-  ('command -> IDENTIFIER operator arglist','command',3,'p_command','battlegroup_parser.py',296),
-  ('arglist -> arglist BG_SEPERATOR expression','arglist',3,'p_arglist','battlegroup_parser.py',301),
-  ('arglist -> expression','arglist',1,'p_arglist','battlegroup_parser.py',302),
-  ('pathelem -> MULTIPLY','pathelem',1,'p_pathelem','battlegroup_parser.py',310),
-  ('pathelem -> DOUBLE_STAR','pathelem',1,'p_pathelem','battlegroup_parser.py',311),
-  ('pathelem -> IDENTIFIER','pathelem',1,'p_pathelem','battlegroup_parser.py',312),
-  ('pathelem -> INTEGER','pathelem',1,'p_pathelem','battlegroup_parser.py',313),
-  ('expression -> d_expression','expression',1,'p_pathelem','battlegroup_parser.py',314),
-  ('expression -> path','expression',1,'p_pathelem','battlegroup_parser.py',315),
-  ('expression -> IDENTIFIER','expression',1,'p_pathelem','battlegroup_parser.py',316),
-  ('path -> path DOT pathelem','path',3,'p_path','battlegroup_parser.py',321),
-  ('path -> pathelem DOT pathelem','path',3,'p_path','battlegroup_parser.py',322),
-  ('path -> DOUBLE_STAR','path',1,'p_path','battlegroup_parser.py',323),
-  ('path -> MULTIPLY','path',1,'p_path','battlegroup_parser.py',324),
-  ('d_expression -> d_expression AND d_term2','d_expression',3,'p_binary_operators_dice','battlegroup_parser.py',332),
-  ('d_term2 -> d_term2 TIMES d_term1','d_term2',3,'p_binary_operators_dice','battlegroup_parser.py',333),
-  ('d_term1 -> d_term1 PLUS d_term0','d_term1',3,'p_binary_operators_dice','battlegroup_parser.py',334),
-  ('d_term1 -> d_term1 MINUS d_term0','d_term1',3,'p_binary_operators_dice','battlegroup_parser.py',335),
-  ('d_term0 -> d_term0 MULTIPLY d_factor','d_term0',3,'p_binary_operators_dice','battlegroup_parser.py',336),
-  ('d_term0 -> d_term0 DIVIDE d_factor','d_term0',3,'p_binary_operators_dice','battlegroup_parser.py',337),
-  ('d_factor -> PLUS d_factor','d_factor',2,'p_unary_operators_dice','battlegroup_parser.py',341),
-  ('d_factor -> MINUS d_factor','d_factor',2,'p_unary_operators_dice','battlegroup_parser.py',342),
-  ('d_expression -> d_term2','d_expression',1,'p_fallthroughs','battlegroup_parser.py',346),
-  ('d_term2 -> d_term1','d_term2',1,'p_fallthroughs','battlegroup_parser.py',347),
-  ('d_term1 -> d_term0','d_term1',1,'p_fallthroughs','battlegroup_parser.py',348),
-  ('d_term0 -> d_factor','d_term0',1,'p_fallthroughs','battlegroup_parser.py',349),
-  ('d_factor -> INTEGER','d_factor',1,'p_fallthroughs','battlegroup_parser.py',350),
-  ('d_factor -> DICE','d_factor',1,'p_fallthroughs','battlegroup_parser.py',351),
-  ('d_factor -> LPAREN d_expression RPAREN','d_factor',3,'p_parens','battlegroup_parser.py',355),
-  ('operator -> ASSIGN','operator',1,'p_operator','battlegroup_parser.py',360),
-  ('operator -> INITIALIZE','operator',1,'p_operator','battlegroup_parser.py',361),
-  ('operator -> PLUSEQUAL','operator',1,'p_operator','battlegroup_parser.py',362),
-  ('operator -> MINUSEQUAL','operator',1,'p_operator','battlegroup_parser.py',363),
-  ('operator -> ARROWLEFT','operator',1,'p_operator','battlegroup_parser.py',364),
-  ('operator -> QUESTION','operator',1,'p_operator','battlegroup_parser.py',365),
-  ('d_factor -> IDENTIFIER LPAREN d_expression RPAREN','d_factor',4,'p_func','battlegroup_parser.py',370),
+  ('command -> path operator arglist','command',3,'p_command','parser.py',90),
+  ('command -> IDENTIFIER operator arglist','command',3,'p_command','parser.py',91),
+  ('command -> path operator','command',2,'p_command','parser.py',92),
+  ('command -> IDENTIFIER operator','command',2,'p_command','parser.py',93),
+  ('command -> IDENTIFIER LPAREN arglist RPAREN','command',4,'p_funccommand','parser.py',101),
+  ('command -> IDENTIFIER LPAREN RPAREN','command',3,'p_funccommand','parser.py',102),
+  ('command -> operator LPAREN arglist RPAREN','command',4,'p_funccommand','parser.py',103),
+  ('command -> operator LPAREN RPAREN','command',3,'p_funccommand','parser.py',104),
+  ('arglist -> arglist BG_SEPERATOR expression','arglist',3,'p_arglist','parser.py',113),
+  ('arglist -> expression','arglist',1,'p_arglist','parser.py',114),
+  ('pathelem -> MULTIPLY','pathelem',1,'p_pathelem','parser.py',122),
+  ('pathelem -> DOUBLE_STAR','pathelem',1,'p_pathelem','parser.py',123),
+  ('pathelem -> IDENTIFIER','pathelem',1,'p_pathelem','parser.py',124),
+  ('pathelem -> INTEGER','pathelem',1,'p_pathelem','parser.py',125),
+  ('expression -> d_expression','expression',1,'p_pathelem','parser.py',126),
+  ('expression -> path','expression',1,'p_pathelem','parser.py',127),
+  ('expression -> IDENTIFIER','expression',1,'p_pathelem','parser.py',128),
+  ('expression -> STRLITERAL','expression',1,'p_pathelem','parser.py',129),
+  ('path -> path DOT pathelem','path',3,'p_path','parser.py',134),
+  ('path -> IDENTIFIER DOT pathelem','path',3,'p_path','parser.py',135),
+  ('path -> INTEGER DOT pathelem','path',3,'p_path','parser.py',136),
+  ('path -> DOUBLE_STAR','path',1,'p_path','parser.py',137),
+  ('path -> MULTIPLY','path',1,'p_path','parser.py',138),
+  ('d_expression -> d_expression AND d_term2','d_expression',3,'p_binary_operators_dice','parser.py',149),
+  ('d_term2 -> d_term2 TIMES d_term1','d_term2',3,'p_binary_operators_dice','parser.py',150),
+  ('d_term1 -> d_term1 PLUS d_term0','d_term1',3,'p_binary_operators_dice','parser.py',151),
+  ('d_term1 -> d_term1 MINUS d_term0','d_term1',3,'p_binary_operators_dice','parser.py',152),
+  ('d_term0 -> d_term0 MULTIPLY d_factor','d_term0',3,'p_binary_operators_dice','parser.py',153),
+  ('d_term0 -> d_term0 DIVIDE d_factor','d_term0',3,'p_binary_operators_dice','parser.py',154),
+  ('d_factor -> PLUS d_factor','d_factor',2,'p_unary_operators_dice','parser.py',158),
+  ('d_factor -> MINUS d_factor','d_factor',2,'p_unary_operators_dice','parser.py',159),
+  ('d_expression -> d_term2','d_expression',1,'p_fallthroughs','parser.py',163),
+  ('d_term2 -> d_term1','d_term2',1,'p_fallthroughs','parser.py',164),
+  ('d_term1 -> d_term0','d_term1',1,'p_fallthroughs','parser.py',165),
+  ('d_term0 -> d_factor','d_term0',1,'p_fallthroughs','parser.py',166),
+  ('d_factor -> INTEGER','d_factor',1,'p_fallthroughs','parser.py',167),
+  ('d_factor -> DICE','d_factor',1,'p_fallthroughs','parser.py',168),
+  ('d_factor -> LPAREN d_expression RPAREN','d_factor',3,'p_parens','parser.py',172),
+  ('operator -> ASSIGN','operator',1,'p_operator','parser.py',177),
+  ('operator -> INITIALIZE','operator',1,'p_operator','parser.py',178),
+  ('operator -> PLUSEQUAL','operator',1,'p_operator','parser.py',179),
+  ('operator -> MINUSEQUAL','operator',1,'p_operator','parser.py',180),
+  ('operator -> ARROWLEFT','operator',1,'p_operator','parser.py',181),
+  ('operator -> QUESTION','operator',1,'p_operator','parser.py',182),
+  ('d_factor -> IDENTIFIER LPAREN d_expression RPAREN','d_factor',4,'p_func','parser.py',187),
 ]

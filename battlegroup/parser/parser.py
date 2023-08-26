@@ -25,7 +25,6 @@ class Parser:
         "AND",
         "TIMES",
         "DOT",
-        "COMMA",
         "DOUBLE_STAR",
         "BG_SEPERATOR",
         "ASSIGN",
@@ -33,9 +32,9 @@ class Parser:
         "PLUSEQUAL",
         "MINUSEQUAL",
         "ARROWLEFT",
-        "QUESTION",
+        "QUESTION"
     )
-
+    
     # Regular expression rules for simple tokens
     t_LPAREN        = r'\('
     t_RPAREN        = r'\)'
@@ -46,7 +45,6 @@ class Parser:
     t_AND           = r'&'
     t_TIMES         = r'\#'
     t_DOT           = r'\.'
-    t_COMMA         = r','
     t_DOUBLE_STAR   = r'\*{2}'
     t_IDENTIFIER    = r'[a-zA-Z_][a-zA-Z0-9_\-]*'
     t_BG_SEPERATOR  = r'::'
@@ -82,20 +80,33 @@ class Parser:
         r'\n+'
         t.lexer.lineno += len(t.value)
         
+    def t_COMMENT(self, t):
+        r'(//.*(\n|$))'
+
+
     t_ignore  = ' \t'
 
     def p_command(self, p):
         """command       : path operator arglist
                          | IDENTIFIER operator arglist
+                         | path operator
+                         | IDENTIFIER operator
         """
-        p[0] = {"path": p[1], "cmd": p[2], "args": p[3]}
+        args = p[3] if len(p) == 4 else []
+        p[0] = {"path": p[1], "cmd": p[2], "args": args}
         if isinstance(p[0]["path"], str):
             p[0]["path"] = [p[0]["path"]]
 
     def p_funccommand(self, p):
         """command       : IDENTIFIER LPAREN arglist RPAREN
+                         | IDENTIFIER LPAREN RPAREN
+                         | operator LPAREN arglist RPAREN
+                         | operator LPAREN RPAREN
         """
-        p[0] = {"path": "**", "cmd": p[1], "args": p[3]}
+        if len(p) == 5:
+            p[0] = {"path": ["**"], "cmd": p[1], "args": p[3]}
+        else:
+            p[0] = {"path": ["**"], "cmd": p[1], "args": []}
 
 
     def p_arglist(self, p):
@@ -121,7 +132,8 @@ class Parser:
 
     def p_path(self, p):
         """path          : path DOT pathelem
-                         | pathelem DOT pathelem
+                         | IDENTIFIER DOT pathelem
+                         | INTEGER DOT pathelem
                          | DOUBLE_STAR
                          | MULTIPLY
         """
@@ -209,9 +221,11 @@ class Parser:
             res.append(tok)
     
     def parse_command(self, inp: str) -> typing.Any:
+        if len(self.tokenise(inp)) == 0: 
+            return ["**"], "_", []
         res = self.parser.parse(inp)
         if res is None:
-            return "_", "_", []
+            return ["**"], "_", []
         return res["path"], res["cmd"], res["args"]
 
     def parse_dice(self, inp: str) -> typing.Optional[DiceNode]:

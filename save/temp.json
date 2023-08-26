@@ -42,7 +42,7 @@
           ]
         },
         ".e1": {
-          "_name": "loyal_guardian",
+          "_name": "loyal-guardian",
           "_defense": 8,
           "+defense": 0,
           "+interdiction": "",
@@ -64,7 +64,7 @@
         "hp": 25,
         "max_hp": 25,
         ".e2": {
-          "_name": "den_mother",
+          "_name": "den-mother",
           "_defense": 5,
           "+defense": 0,
           "+interdiction": "",
@@ -103,7 +103,7 @@
           "_init": true
         },
         ".e3": {
-          "_name": "brothers_in_arms",
+          "_name": "brothers-in-arms",
           "_defense": 8,
           "+defense": 0,
           "+interdiction": "",
@@ -117,14 +117,14 @@
               "&short-spool spinal guns": 2,
               "0short-spool spinal guns": 2,
               "lockon": 0,
-              "greywash": 1
+              "greywash": 0
             },
             {
               "hp": 8,
               "&short-spool spinal guns": 2,
               "0short-spool spinal guns": 2,
               "lockon": 0,
-              "greywash": 1
+              "greywash": 0
             }
           ],
           "_init": true
@@ -140,10 +140,10 @@
         "_valid": true,
         "_hp0": 25,
         ".": {
-          "hp": 21,
+          "hp": 25,
           "max_hp": 25,
-          "&redgiant_solar_lance": 3,
-          "0redgiant_solar_lance": 3,
+          "&redgiant-solar-lance": 3,
+          "0redgiant-solar-lance": 3,
           "lockon": 0,
           "greywash": 0
         },
@@ -158,12 +158,12 @@
           "_valid": true,
           ".": [
             {
-              "hp": 4,
+              "hp": 8,
               "lockon": 0,
               "greywash": 0
             },
             {
-              "hp": 4,
+              "hp": 8,
               "lockon": 0,
               "greywash": 0
             }
@@ -178,7 +178,7 @@
         "hp": 25,
         "max_hp": 25,
         ".e2": {
-          "_name": "starfield_furies",
+          "_name": "starfield-furies",
           "_defense": 8,
           "+defense": 0,
           "+interdiction": "",
@@ -188,12 +188,12 @@
           "_valid": true,
           ".": [
             {
-              "hp": 6,
+              "hp": 10,
               "lockon": 0,
               "greywash": 0
             },
             {
-              "hp": 6,
+              "hp": 10,
               "lockon": 0,
               "greywash": 0
             }
@@ -204,12 +204,12 @@
             "_tenacity": 0,
             ".": [
               {
-                "hp": 1,
+                "hp": 5,
                 "lockon": 0,
                 "greywash": 0
               },
               {
-                "hp": 1,
+                "hp": 5,
                 "lockon": 0,
                 "greywash": 0
               }
@@ -221,7 +221,7 @@
             "_tenacity": 0,
             ".": [
               {
-                "hp": 2,
+                "hp": 6,
                 "lockon": 0,
                 "greywash": 0
               }
@@ -233,12 +233,12 @@
             "_tenacity": 0,
             ".": [
               {
-                "hp": 0,
+                "hp": 5,
                 "lockon": 0,
                 "greywash": 0
               },
               {
-                "hp": -2,
+                "hp": 5,
                 "lockon": 0,
                 "greywash": 0
               }
@@ -250,7 +250,7 @@
             "_tenacity": 0,
             ".": [
               {
-                "hp": 2,
+                "hp": 6,
                 "lockon": 0,
                 "greywash": 0
               }
@@ -269,12 +269,12 @@
           "_valid": true,
           ".": [
             {
-              "hp": 4,
+              "hp": 8,
               "lockon": 0,
               "greywash": 0
             },
             {
-              "hp": 4,
+              "hp": 8,
               "lockon": 0,
               "greywash": 0
             }
@@ -294,7 +294,7 @@
         ".": {
           "hp": 20,
           "max_hp": 20,
-          "lockon": 1,
+          "lockon": 0,
           "greywash": 0
         },
         "+defense": [],
@@ -351,7 +351,9 @@
       }
     }
   ],
-  "modifiers": [],
+  "modifiers": [
+    "LOCAL"
+  ],
   "opened": true,
   "turn": 1
 }

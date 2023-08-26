@@ -104,7 +104,7 @@ class NPCBattleGroup:
             return ""
         elif index.isdigit():
             if int(index) - 1 >= len(self.__ensure_list(content.get(".", []))):
-                return "list expected at '.'"
+                return f"{index} Out of bounds '.'"
             return ""
         if "." + index not in content:
             return f"no such key: '.{index}'"

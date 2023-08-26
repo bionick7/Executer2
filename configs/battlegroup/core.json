@@ -1,5 +1,5 @@
 {
-    "npc_escorts": [
+    "npc-escorts": [
         {
             "name": "battlethreads",
             "hp": [10, 10],
@@ -7,7 +7,7 @@
             "tags": ["unique"]
         },
         {
-            "name": "brothers_in_arms",
+            "name": "brothers-in-arms",
             "hp": [8, 8],
             "defense": 8,
             "tags": [],
@@ -20,7 +20,7 @@
             "tags": []
         },
         {
-            "name": "den_mother",
+            "name": "den-mother",
             "+hp": 5,
             "+defense": 0,
             "tags": ["template"],
@@ -45,7 +45,7 @@
             "charges": {"tyrant cannon": 4}
         },
         {
-            "name": "loyal_guardian",
+            "name": "loyal-guardian",
             "hp": [20],
             "defense": 8,
             "tags": ["unique"]
@@ -62,7 +62,7 @@
             "tags": []
         },
         {
-            "name": "starfield_furies",
+            "name": "starfield-furies",
             "hp": [10, 10],
             "defense": 8,
             "tags": [],
@@ -111,7 +111,7 @@
             "charges": {"naophoros omnigun": "[ERROR]"}
         }
     ],
-    "npc_capital": [
+    "npc-capital": [
         {
             "name": "breakwater",
             "hp": 25,
@@ -154,11 +154,11 @@
             "interdiction": "2d6"
         },
         {
-            "name": "man_o_war",
+            "name": "man-o-war",
             "hp": 30,
             "defense": 6,
             "interdiction": "2d6",
-            "charges": {"demisolar_lance": 4}
+            "charges": {"demisolar-lance": 4}
         },
         {
             "name": "narcissus",
@@ -177,21 +177,21 @@
             "hp": 25,
             "defense": 8,
             "interdiction": "2d6",
-            "charges": {"redgiant_solar_lance": 3}
+            "charges": {"redgiant-solar-lance": 3}
         },
         {
             "name": "phantasm",
             "hp": 20,
             "defense": 15,
             "interdiction": "1d6",
-            "charges": {"killdart_coherent_nuclear_actuated_laser": 3}
+            "charges": {"killdart-coherent-nuclear-actuated-laser": 3}
         },
         {
             "name": "starkiller",
             "hp": 25,
             "defense": 8,
             "interdiction": "2d6",
-            "charges": {"starkiller_cannon": 2}
+            "charges": {"starkiller-cannon": 2}
         },
         {
             "name": "triton",

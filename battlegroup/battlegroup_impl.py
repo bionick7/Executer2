@@ -1,5 +1,6 @@
 import re
 import json
+import os.path
 
 from data_backend import load, can_load
 from battlegroup.output import format_bg
@@ -24,14 +25,17 @@ class BGBattle:
         self.gm_id :str = "NO-ONE"
         self.turn = -1
 
+        self.undo_stack = []
+        self.undo_pointer = 0
+
     def _load_compendium(self, name: str) -> list:
         path = "battlegroup/" + name
         res = []
         if can_load(path):
             lib: dict[str, list[dict]] = load(path)
-            for capitalship in lib.get("npc_capital", []):
+            for capitalship in lib.get("npc-capital", []):
                 self.capitalship_compendium[capitalship.get("name", "__UNNAMED__")] = capitalship
-            for escort in lib.get("npc_escorts", []):
+            for escort in lib.get("npc-escorts", []):
                 self.escorts_compendium[escort.get("name", "__UNNAMED__")] = escort
             res.append(lib["__meta__"])
             print("Added compendium: " + path)
@@ -112,55 +116,61 @@ class BGBattle:
             **wing_objs,
         }
 
-    def add_npc(self, flagship_name: str, escorts_names: list[str]) -> typing.Optional[NPCBattleGroup]:
+    def add_npc(self, flagship_name: str, escorts_names: list[str], name: str) -> typing.Optional[NPCBattleGroup]:
         flagship_stats = self._get_stats_capitalship(flagship_name)
         if not flagship_stats["_valid"]:
             self.error_queue.append(f"Invalid capitalship name: {flagship_name}")
-        name = f"bg{len(self.npcs) + 1}"
         npc_bg = NPCBattleGroup(name, flagship_stats)
         for escort_name in escorts_names:
             escort_stats = self._get_stats_escort(escort_name)
             if not escort_stats["_valid"]:
-                self.error_queue.append(f"Invalid capitalship name: {escort_name}")
+                self.error_queue.append(f"Invalid escort name: {escort_name}")
             npc_bg.add_escort(escort_stats)
 
         self.npcs[name] = npc_bg
         return npc_bg
 
-    def check_path_valid(self, path: str, include_property: bool=False) -> bool:
-        steps = path.split(".")
+    def check_path_valid(self, path: list[str], include_property: bool=False) -> bool:
         if include_property:
-            steps = steps[:-1]
-        if steps[0] not in self.npcs:
+            path = path[:-1]
+        if len(path) == 0:
             return False
-        bg = self.npcs[steps[0]]
-        res = bg.is_path_valid(steps[1:])
+        if path[0] not in self.npcs:
+            return False
+        bg = self.npcs[path[0]]
+        res = bg.is_path_valid(path[1:])
         if res != "":
             self.error_queue.append(res)
             return False
         return True
 
     def set_attribute(self, path: list[str], value: int) -> None:
-        bg = self.npcs[path[0]]
-        if bg.is_path_valid(path[1:-1]):
+        if not self.check_path_valid(path, True):
             return
+        bg = self.npcs[path[0]]
+        #if bg.is_path_valid(path[1:-1]):
+        #    return
         bg.set_counter(path[1:], value)
         #self.get_gm_detail(path[0])
         
     def inc_attribute(self, path: list[str], value: int) -> None:
-        bg = self.npcs[path[0]]
-        if bg.is_path_valid(path[1:-1]):
+        if not self.check_path_valid(path, True):
             return
+        bg = self.npcs[path[0]]
+        #if bg.is_path_valid(path[1:-1]):
+        #    return
         bg.inc_counter(path[1:], value)
         #self.get_gm_detail(path[0])
         
     def reset_attribute(self, path: list[str]) -> None:
+        if not self.check_path_valid(path, True):
+            return
         bg = self.npcs[path[0]]
         if bg.is_path_valid(path[1:-1]):
             return
         res = bg.reset_counter(path[1:])
-        if res != "":
-            self.error_queue.append(res)
+        #if res != "":
+        #    self.error_queue.append(res)
         #self.get_gm_detail(path[0])
     
     def logistics_phase(self) -> None:
@@ -171,8 +181,11 @@ class BGBattle:
             self.message_queue.append(f"BG: {bg} - {weapon} charged")  # TODO
         self.turn += 1
                 
-    def reassign_escort(self, path1: str, bg2_name: str = "") -> bool:
-        bg_name, *escort_path = path1.split(".")
+    def reassign_escort(self, path: list[str], bg2_name: str = "") -> bool:
+        if not self.check_path_valid(path, False):
+            return False
+        bg_name = path[0]
+        escort_path = path[1:]
         if bg_name not in self.npcs:
             self.error_queue.append(f"no such battlegroup: {bg_name}")
             return False
@@ -224,7 +237,8 @@ class BGBattle:
         pass
 
     def save_to(self, filepath: str) -> None:
-        with open(filepath + ".json", "w") as f:
+        true_filepath = "save/" + filepath + ".json"
+        with open(true_filepath, "w") as f:
             save_dict = {
                 "npcs": [x.save() for x in self.npcs.values()],
                 "modifiers": self.modifiers,
@@ -234,8 +248,12 @@ class BGBattle:
             json.dump(save_dict, f, indent="  ")
         self.message_queue.append(f"Saved game to \"{filepath}\"")
 
-    def load_from(self, filepath: str):
-        with open(filepath + ".json", "r") as f:
+    def load_from(self, filepath: str) -> None:
+        true_filepath = "save/" + filepath + ".json"
+        if not os.path.isfile(true_filepath):
+            self.message_queue.append(f"No such file: {true_filepath}")
+            return
+        with open(true_filepath, "r") as f:
             save_dict = json.load(f)
             self.npcs = dict((x["name"], NPCBattleGroup.load(x)) for x in save_dict["npcs"])
             self.modifiers = save_dict["modifiers"]
@@ -243,24 +261,30 @@ class BGBattle:
             self.turn = save_dict["turn"]
         self.message_queue.append(f"Loaded game from \"{filepath}\"")
 
+    def undo(self) -> None:
+        pass
+
+    def redo(self) -> None:
+        pass
+
 def tests():
     battle = BGBattle()
     battle.open("Threading the needle", "LOCAL")
-    battle.add_npc("BREAKWATER", ["LOYAL_GUARDIAN", "DEN_MOTHER", "BROTHERS_IN_ARMS", "ALBEDO_CAVALIER"])
-    battle.add_npc("PALADIN", ["ROUGHNECKS"])
-    battle.add_npc("HIGHLINE", ["BROTHERS_IN_ARMS", "STARFIELD_FURIES"])
-    battle.add_npc("CORSAIR", ["ROUGHNECKS"])
+    battle.add_npc("BREAKWATER", ["LOYAL_GUARDIAN", "DEN_MOTHER", "BROTHERS_IN_ARMS", "ALBEDO_CAVALIER"], "bg1")
+    battle.add_npc("PALADIN", ["ROUGHNECKS"], "bg2")
+    battle.add_npc("HIGHLINE", ["BROTHERS_IN_ARMS", "STARFIELD_FURIES"], "bg3")
+    battle.add_npc("CORSAIR", ["ROUGHNECKS"], "bg4")
     battle.save_to("save/temp")
-    assert battle.check_path_valid("bg2"), battle.error_queue[-1]
-    assert battle.check_path_valid("bg3.e2.w3"), battle.error_queue[-1]
-    assert battle.check_path_valid("bg4.e1.2"), battle.error_queue[-1]
+    assert battle.check_path_valid("bg2".split(".")), battle.error_queue[-1]
+    assert battle.check_path_valid("bg3.e2.w3".split(".")), battle.error_queue[-1]
+    assert battle.check_path_valid("bg4.e1.2".split(".")), battle.error_queue[-1]
     battle.set_attribute("bg3.e2.w3.dmg".split("."), 1)
     battle.set_attribute("bg3.e2.w3.2.dmg".split("."), 2)
     battle.inc_attribute("bg3.e2.w3.dmg".split("."), 1)
     battle.inc_attribute("bg3.e2.w3.2.dmg".split("."), 2)
-    battle.reassign_escort("bg3.e2", "bg2")
-    battle.reassign_escort("bg3.e1", "")
-    battle.reassign_escort("bg4.e1", "bg2")
+    battle.reassign_escort("bg3.e2".split("."), "bg2")
+    battle.reassign_escort("bg3.e1".split("."), "")
+    battle.reassign_escort("bg4.e1".split("."), "bg2")
     d1 = battle.__dict__
     battle.save_to("save/temp")
     battle.load_from("save/temp")
