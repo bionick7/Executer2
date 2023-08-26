@@ -1,9 +1,9 @@
 import asyncio
 import discord.ext as dext
 
-from implementation.battlegroup_impl import *
-from implementation.battlegroup_output import *
-from commands.battlegroup_console import bg_cmd
+from battlegroup.battlegroup_impl import *
+from battlegroup.output import *
+from battlegroup.console import bg_cmd
 from message_processing import client, data, get_dm_channel
 
 #D = data["bg_data"]  # TODO

@@ -2,8 +2,8 @@ import re
 import json
 
 from data_backend import load, can_load
-from implementation.battlegroup_output import format_bg
-from implementation.battlegroup_npc import *
+from battlegroup.output import format_bg
+from battlegroup.npc import *
 
 DEFAULT_COUNTERS = {"lockon": 0, "greywash": 0}
  
@@ -112,27 +112,11 @@ class BGBattle:
             **wing_objs,
         }
 
-    def add_npc(self, npc_code: str, name: str="") -> typing.Optional[NPCBattleGroup]:
-        """
-        code template: 
-        "FLAGSHIP ::: (ESCORT_1, ESCORT_2, ...) "
-        """
-        if re.match(r"^\s*\w+\s*(:::\s*\(\s*\w+(\s*,\s*\w+)*\s*\))?$", npc_code) is None:
-            self.error_queue.append(f"Invalid NPC syntax: '{npc_code}'")
-            return None
-
-        if ":::" in npc_code:
-            flagship_name, escorts_names = npc_code.strip().split(":::")
-            escorts_names = [x.strip() for x in escorts_names.strip()[1:-1].split(",")]
-        else:
-            flagship_name, escorts_names = npc_code, []
-        flagship_name = flagship_name.strip()
+    def add_npc(self, flagship_name: str, escorts_names: list[str]) -> typing.Optional[NPCBattleGroup]:
         flagship_stats = self._get_stats_capitalship(flagship_name)
         if not flagship_stats["_valid"]:
             self.error_queue.append(f"Invalid capitalship name: {flagship_name}")
-        if name == "":
-            name = f"bg{len(self.npcs) + 1}"
-        name = name.lower()
+        name = f"bg{len(self.npcs) + 1}"
         npc_bg = NPCBattleGroup(name, flagship_stats)
         for escort_name in escorts_names:
             escort_stats = self._get_stats_escort(escort_name)
@@ -156,33 +140,28 @@ class BGBattle:
             return False
         return True
 
-    def area_dmg(self, fleet_name: str, dmg: int) -> None:
-        bg = self.npcs[fleet_name]
-        bg.inc_counter(["**", "hp"], -dmg)
-        bg.recalc_boni()
-        self.get_gm_detail(fleet_name)
-        
-    def ship_dmg(self, path: str, dmg: int) -> None:
-        steps = path.split(".")
-        bg = self.npcs[steps[0]]
-        bg.inc_counter(steps[1:] + ["hp"], -dmg)
-        bg.recalc_boni()
-        self.get_gm_detail(path)
-
-    def set_attribute(self, path: str, value: str) -> None:
-        steps = path.split(".")
-        bg = self.npcs[steps[0]]
-        if bg.is_path_valid(steps[1:-1]):
+    def set_attribute(self, path: list[str], value: int) -> None:
+        bg = self.npcs[path[0]]
+        if bg.is_path_valid(path[1:-1]):
             return
-        if value == "r":
-            res = bg.reset_counter(steps[1:])
-            if res != "":
-                self.error_queue.append(res)
-        elif re.match(r"[+-]\d+", value) is not None:
-            bg.inc_counter(steps[1:], int(value[1:]))
-        elif value.isdigit():
-            bg.set_counter(steps[1:], int(value))
-        self.get_gm_detail(path)
+        bg.set_counter(path[1:], value)
+        #self.get_gm_detail(path[0])
+        
+    def inc_attribute(self, path: list[str], value: int) -> None:
+        bg = self.npcs[path[0]]
+        if bg.is_path_valid(path[1:-1]):
+            return
+        bg.inc_counter(path[1:], value)
+        #self.get_gm_detail(path[0])
+        
+    def reset_attribute(self, path: list[str]) -> None:
+        bg = self.npcs[path[0]]
+        if bg.is_path_valid(path[1:-1]):
+            return
+        res = bg.reset_counter(path[1:])
+        if res != "":
+            self.error_queue.append(res)
+        #self.get_gm_detail(path[0])
     
     def logistics_phase(self) -> None:
         charge_triggers = []
@@ -235,17 +214,17 @@ class BGBattle:
         self.message_queue.append("$LONG" + res)
         
     def get_gm_detail(self, path: str):
-        if "." in path: path, *_ = path.split(".")
-        if path not in self.npcs:
-            self.error_queue.append(f"No such battlegroup: {path}")
+        query = path[0]
+        if query not in self.npcs:
+            self.error_queue.append(f"No such battlegroup: {query}")
             return
-        self.message_queue.append("$LONG" + format_bg(self.npcs[path], True) + "\n")
+        self.message_queue.append("$LONG" + format_bg(self.npcs[query], True) + "\n")
 
     def compile_actions(self, path: str, ) -> None:
         pass
 
-    def save_to(self, path: str) -> None:
-        with open(path + ".json", "w") as f:
+    def save_to(self, filepath: str) -> None:
+        with open(filepath + ".json", "w") as f:
             save_dict = {
                 "npcs": [x.save() for x in self.npcs.values()],
                 "modifiers": self.modifiers,
@@ -253,36 +232,35 @@ class BGBattle:
                 "turn": self.turn
             }
             json.dump(save_dict, f, indent="  ")
-        self.message_queue.append(f"Saved game to \"{path}\"")
+        self.message_queue.append(f"Saved game to \"{filepath}\"")
 
-    def load_from(self, path: str):
-        with open(path + ".json", "r") as f:
+    def load_from(self, filepath: str):
+        with open(filepath + ".json", "r") as f:
             save_dict = json.load(f)
             self.npcs = dict((x["name"], NPCBattleGroup.load(x)) for x in save_dict["npcs"])
             self.modifiers = save_dict["modifiers"]
             self.opened = save_dict["opened"]
             self.turn = save_dict["turn"]
-        self.message_queue.append(f"Loaded game from \"{path}\"")
+        self.message_queue.append(f"Loaded game from \"{filepath}\"")
 
 def tests():
     battle = BGBattle()
     battle.open("Threading the needle", "LOCAL")
-    battle.add_npc("BREAKWATER ::: (LOYAL_GUARDIAN, DEN_MOTHER, BROTHERS_IN_ARMS, ALBEDO_CAVALIER)", "Alpha")
-    battle.add_npc("PALADIN ::: (ROUGHNECKS)")
-    battle.add_npc("HIGHLINE ::: (BROTHERS_IN_ARMS, STARFIELD_FURIES)")
-    battle.add_npc("CORSAIR ::: (ROUGHNECKS)")
+    battle.add_npc("BREAKWATER", ["LOYAL_GUARDIAN", "DEN_MOTHER", "BROTHERS_IN_ARMS", "ALBEDO_CAVALIER"])
+    battle.add_npc("PALADIN", ["ROUGHNECKS"])
+    battle.add_npc("HIGHLINE", ["BROTHERS_IN_ARMS", "STARFIELD_FURIES"])
+    battle.add_npc("CORSAIR", ["ROUGHNECKS"])
     battle.save_to("save/temp")
     assert battle.check_path_valid("bg2"), battle.error_queue[-1]
     assert battle.check_path_valid("bg3.e2.w3"), battle.error_queue[-1]
     assert battle.check_path_valid("bg4.e1.2"), battle.error_queue[-1]
-    battle.ship_dmg("bg3.e2.w3", 1)
-    battle.ship_dmg("bg3.e2.w3.2", 2)
+    battle.set_attribute("bg3.e2.w3.dmg".split("."), 1)
+    battle.set_attribute("bg3.e2.w3.2.dmg".split("."), 2)
+    battle.inc_attribute("bg3.e2.w3.dmg".split("."), 1)
+    battle.inc_attribute("bg3.e2.w3.2.dmg".split("."), 2)
     battle.reassign_escort("bg3.e2", "bg2")
     battle.reassign_escort("bg3.e1", "")
     battle.reassign_escort("bg4.e1", "bg2")
-    battle.area_dmg("bg2", 4)
-    battle.set_attribute("bg3.lockon", "1")
-    battle.set_attribute("alpha.e3.greywash", "+1")
     d1 = battle.__dict__
     battle.save_to("save/temp")
     battle.load_from("save/temp")

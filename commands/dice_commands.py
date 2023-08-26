@@ -2,7 +2,7 @@ import discord
 import discord.ext.commands.context
 
 from data_backend import get_dm_channel
-from implementation.battlegroup_parser import Parser, tokenise
+from battlegroup.parser.parser import Parser
 from message_processing import client
 
 
@@ -31,6 +31,7 @@ Examples:
 ```
 """
 
+dice_parser = Parser()
 last_dice_rolls = {}
 
 @client.command(name="Dhelp", help="Gives more information about the dice rolling implementation")
@@ -44,14 +45,13 @@ async def dice_roll(ctx:discord.ext.commands.Context, *args):
         await ctx.send("```0```")
     
     query = " ".join(args)
-    parser = Parser(tokenise(query))
-    root = parser.parse_roll()
-    if not parser.has_error():
+    root = dice_parser.parse_dice(query)
+    if root is not None:
         res = root.evaluate()
         last_dice_rolls[ctx.author.id] = res[0]
         await ctx.send(root.string_evaluate())
-    while parser.has_error():
-        await ctx.send(parser.get_error())
+    while dice_parser.has_error():
+        await ctx.send(dice_parser.get_error())
 
 def get_user_name(ctx:discord.ext.commands.Context, i: int):
     guild = ctx.guild
