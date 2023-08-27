@@ -53,6 +53,9 @@ class BGBattleData:
     
     def _deserialize(self, inp: list) -> None:
         self.last_state, self.history, self.history_pointer = inp
+        self.current_state = self.last_state
+        while self.history_pointer > 0:
+            self.undo()
     
     def save_to(self, filepath: str) -> None:
         true_filepath = "save/" + filepath + ".json"
@@ -140,9 +143,9 @@ class BGBattle:
             for escort in lib.get("npc-escorts", []):
                 self.escorts_compendium[escort.get("name", "__UNNAMED__")] = escort
             res.append(lib["__meta__"])
-            print("Added compendium: " + path)
+            self.message_queue.append("Added compendium: " + path)
         else:
-            print("No such compendium: " + path)
+            self.message_queue.append("No such compendium: " + path)
         return res
 
     def open(self, p_gm: str, *p_modifiers: str):
@@ -253,6 +256,15 @@ class BGBattle:
             path = path[:-1]
         if len(path) == 0:
             return False
+        if path == ["**"]:
+            return True
+        if path[0] == "*":
+            for bg in self.npcs.values():
+                res = bg.is_path_valid(path[1:])
+                if res != "":
+                    self.error_queue.append(res)
+                    return False
+            return True
         if path[0] not in self.npcs:
             return False
         bg = self.npcs[path[0]]
@@ -261,37 +273,63 @@ class BGBattle:
             self.error_queue.append(res)
             return False
         return True
-
+    
     def set_attribute(self, path: list[str], value: int) -> None:
         if not self.check_path_valid(path, True):
             return
-        bg = self.npcs[path[0]]
-        bg.set_attribute(path[1:], value)
+        if path[0] == "*":
+            for bg in self.npcs.values():
+                bg.set_attribute(path[1:], value)
+        elif path[0] == "**":
+            for bg in self.npcs.values():
+                bg.set_attribute(["**", path[-1]], value)
+        else:
+            bg = self.npcs[path[0]]
+            bg.set_attribute(path[1:], value)
         self.on_modified()
         
     def get_attribute(self, path: list[str]) -> int:
         if not self.check_path_valid(path, True):
             self.error_queue.append(f"Requested invalid attribute path:{'.'.join(path)}")
             return -1
+        if path[0] == "*":
+            for bg in self.npcs.values():
+                return bg.get_attribute(path[1:])
+        elif path[0] == "**":
+            for bg in self.npcs.values():
+                return bg.get_attribute(["**", path[-1]])
         bg = self.npcs[path[0]]
         return bg.get_attribute(path[1:])
         
+        
     def inc_attribute(self, path: list[str], value: int) -> None:
         if not self.check_path_valid(path, True):
+            self.error_queue.append(f"Requested invalid attribute path:{'.'.join(path)}")
             return
-        bg = self.npcs[path[0]]
-        bg.inc_attribute(path[1:], value)
+        if path[0] == "*":
+            for bg in self.npcs.values():
+                bg.inc_attribute(path[1:], value)
+        elif path[0] == "**":
+            for bg in self.npcs.values():
+                bg.inc_attribute(["**", path[-1]], value)
+        else:
+            bg = self.npcs[path[0]]
+            bg.inc_attribute(path[1:], value)
         self.on_modified()
         
-    def reset_attribute(self, path: list[str]) -> None:
-        if not self.check_path_valid(path, True):
+    def reset_counter(self, path: list[str]) -> None:
+        if not self.check_path_valid(path, False):
+            self.error_queue.append(f"Requested invalid attribute path:{'.'.join(path)}")
             return
-        bg = self.npcs[path[0]]
-        if bg.is_path_valid(path[1:-1]):
-            return
-        res = bg.reset_counter(path[1:])
-        if res != "":
-            self.error_queue.append(res)
+        if path[0] == "*":
+            for bg in self.npcs.values():
+                bg.reset_counter(path[1:])
+        elif path[0] == "**":
+            for bg in self.npcs.values():
+                bg.reset_counter(["**"])
+        else:
+            bg = self.npcs[path[0]]
+            bg.reset_counter(path[1:])
         self.on_modified()
     
     def logistics_phase(self) -> None:
@@ -375,7 +413,7 @@ class BGBattle:
         self.turn = data["turn"]
 
     def sync(self) -> None:
-        self.set_data(self.datamanager.get_current())
+        self.set_data(dictdiffer.deepcopy(self.datamanager.get_current()))
         
     def watch_and_sync(self) -> None:
         if self.datamanager.watch():

@@ -173,7 +173,8 @@ class NPCBattleGroup:
     def reset_counter(self, path: list[str]) -> None:
         cws = self.decode_path(path)
         for cw in cws:
-            cw[KEY_PREFIX]["current"] = cw[KEY_PREFIX]["total"]
+            if "current" in cw and "total" in cw:
+                cw["current"] = cw["total"]
 
     def logistics_phase(self) -> list[tuple[str, str]]:
         res = []

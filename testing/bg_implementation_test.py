@@ -77,5 +77,16 @@ class TestImplementation(unittest.TestCase):
 
         self.compare_dict(self.battle.get_data(), d2)
 
+    def test_charges(self):
+        self.battle.add_npc("Starkiller", ["Brothers-in-arms"], "alpha")
+        self.battle.logistics_phase()
+        self.battle.logistics_phase()
+        self.assertEqual(self.battle.get_attribute(["alpha", "c1", "current"]), 0)
+        self.assertEqual(self.battle.get_attribute(["alpha", "e1", "c1", "current"]), 0)
+        self.battle.reset_counter(["alpha", "c1"])
+        self.battle.set_attribute(["alpha", "e1", "c1", "current"], self.battle.get_attribute(["alpha", "e1", "c1", "total"]))
+        self.assertEqual(self.battle.get_attribute(["alpha", "c1", "current"]), 2)
+        self.assertEqual(self.battle.get_attribute(["alpha", "e1", "c1", "current"]), 2)
+
 if __name__ == "__main__":
     unittest.main()

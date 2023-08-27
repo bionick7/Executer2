@@ -126,7 +126,13 @@ def bg_cmd(path: list[str], battle: BGBattle, cmd: str, args: ArgumentList, auth
         while args.can_fetch(): escorts.append(args.fetch_id())
         battle.add_npc(flagship, escorts, path[0])
     elif cmd == "=":
-        battle.set_attribute(path, args.fetch_int())
+        rhs = args.fetch_raw()
+        if isinstance(rhs, SyntaxNode):
+            battle.set_attribute(path, args._get_as_int(rhs, battle.get_attribute(path)))
+        elif isinstance(rhs, list) and all([isinstance(x, str) for x in rhs]):
+            battle.set_attribute(path, battle.get_attribute(rhs))
+        elif rhs == "R" or rhs == "r":
+            battle.reset_counter(path)
     elif cmd == "+=":
         battle.inc_attribute(path, args.fetch_int())
     elif cmd == "-=":
@@ -136,8 +142,7 @@ def bg_cmd(path: list[str], battle: BGBattle, cmd: str, args: ArgumentList, auth
     elif cmd == "??":
         fleet_name = path[0]
         if fleet_name == "**":
-            x = args.fetch_raw()
-            if isinstance(x, SyntaxNode):
+            if args.can_fetch() and isinstance((x := args.fetch_raw()), SyntaxNode):
                 print(x.string_evaluate())
             else:
                 battle.get_gm_rapport()
@@ -177,6 +182,15 @@ def get_input():
             print("Not Implemented")
         yield inp
 
+def sim_input(input_list: list[str]):
+    for inp in input_list:
+        print(">//[$USR]:: " + inp)
+        if inp == "exit":
+            break
+        elif inp == "help":
+            print("Not Implemented")
+        yield inp
+
 def console_application(input_gen):
     for i, inp in enumerate(input_gen):
         try:
@@ -190,14 +204,22 @@ def console_application(input_gen):
 
 
 if __name__ == "__main__":
+    tst1 = [
+        'open',
+        'bg1 := Starkiller :: Brothers-in-arms',
+        'turn',
+        'turn',
+        'bg1.e1.c1 = R',
+        'bg1.c1.current = bg1.c1.total',
+        '??',
+        'turn',
+        '** = R',
+        '??',
+    ]
+    tst2 = [
+        'open',
+        'bg1 := Starkiller :: Brothers-in-arms',
+        'bg1 ?? 0 :: 5'
+    ]
     #console_application(get_input())
-    console_application([
-        'open()',
-        'alpha := Starkiller :: Brothers-in-arms',
-        'save("test")',
-        'turn()',
-        'turn()',
-        '//alpha.c1.current = alpha.c1.total',
-        '//alpha.c1 = R',
-        'alpha ??',
-    ])
+    console_application(sim_input(tst2))

@@ -90,7 +90,12 @@ class Parser:
                          | IDENTIFIER operator arglist
                          | path operator
                          | IDENTIFIER operator
+                         | operator
+                         | IDENTIFIER
         """
+        if len(p) == 2:
+            p[0] = {"path": ["**"], "cmd": p[1], "args": []}
+            return
         args = p[3] if len(p) == 4 else []
         p[0] = {"path": p[1], "cmd": p[2], "args": args}
         if isinstance(p[0]["path"], str):
