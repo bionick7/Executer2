@@ -181,11 +181,60 @@
           },
           "+defense": [],
           "+interdiction": [
-            "2",
             "2"
           ],
           "hp": 25,
-          "max_hp": 25,
+          "max_hp": 25
+        }
+      },
+      {
+        "name": "bg3",
+        "content": {
+          "_name": "highline",
+          "_defense": 10,
+          "_interdiction": "1d6+4",
+          "_valid": true,
+          "_hp0": 20,
+          ".": {
+            "hp": 20,
+            "max_hp": 20,
+            "lockon": 0,
+            "greywash": 0
+          },
+          ".e1": {
+            "_name": "brothers-in-arms",
+            "_defense": 8,
+            "+defense": 0,
+            "+interdiction": "",
+            "+hp": 0,
+            "_is_template": false,
+            "_is_unique": false,
+            "_valid": true,
+            ".": [
+              {
+                "hp": 8,
+                "lockon": 0,
+                "greywash": 0
+              },
+              {
+                "hp": 8,
+                "lockon": 0,
+                "greywash": 0
+              }
+            ],
+            ".c1": {
+              "_name": "short-spool spinal guns",
+              ".": {
+                "total": 2,
+                "current": 2
+              }
+            },
+            "_init": true
+          },
+          "+defense": [],
+          "+interdiction": [],
+          "hp": 20,
+          "max_hp": 20,
           ".e2": {
             "_name": "starfield-furies",
             "_defense": 8,
@@ -242,12 +291,12 @@
               "_tenacity": 0,
               ".": [
                 {
-                  "hp": 2,
+                  "hp": 4,
                   "lockon": 0,
                   "greywash": 0
                 },
                 {
-                  "hp": 4,
+                  "hp": 2,
                   "lockon": 0,
                   "greywash": 0
                 }
@@ -266,50 +315,7 @@
               ]
             },
             "_init": true
-          },
-          ".e3": {
-            "_name": "roughnecks",
-            "_defense": 10,
-            "+defense": 0,
-            "+interdiction": "2",
-            "+hp": 0,
-            "_is_template": false,
-            "_is_unique": false,
-            "_valid": true,
-            ".": [
-              {
-                "hp": 8,
-                "lockon": 0,
-                "greywash": 0
-              },
-              {
-                "hp": 8,
-                "lockon": 0,
-                "greywash": 0
-              }
-            ],
-            "_init": true
           }
-        }
-      },
-      {
-        "name": "bg3",
-        "content": {
-          "_name": "highline",
-          "_defense": 10,
-          "_interdiction": "1d6+4",
-          "_valid": true,
-          "_hp0": 20,
-          ".": {
-            "hp": 20,
-            "max_hp": 20,
-            "lockon": 0,
-            "greywash": 0
-          },
-          "+defense": [],
-          "+interdiction": [],
-          "hp": 20,
-          "max_hp": 20
         }
       },
       {
@@ -353,8 +359,33 @@
               }
             ]
           },
+          ".e1": {
+            "_name": "roughnecks",
+            "_defense": 10,
+            "+defense": 0,
+            "+interdiction": "2",
+            "+hp": 0,
+            "_is_template": false,
+            "_is_unique": false,
+            "_valid": true,
+            ".": [
+              {
+                "hp": 8,
+                "lockon": 0,
+                "greywash": 0
+              },
+              {
+                "hp": 8,
+                "lockon": 0,
+                "greywash": 0
+              }
+            ],
+            "_init": true
+          },
           "+defense": [],
-          "+interdiction": [],
+          "+interdiction": [
+            "2"
+          ],
           "hp": 25,
           "max_hp": 25
         }
@@ -369,162 +400,56 @@
   [
     [
       [
-        "add",
-        "",
+        "change",
         [
-          [
-            "npcs",
-            [
-              {
-                "name": "alpha",
-                "content": {
-                  "_name": "breakwater",
-                  "_defense": 10,
-                  "_interdiction": "1d6",
-                  "_valid": true,
-                  "_hp0": 25,
-                  ".": {
-                    "hp": 25,
-                    "max_hp": 25,
-                    "lockon": 0,
-                    "greywash": 0
-                  },
-                  ".w1": {
-                    "_name": "fighter/bomber squadron",
-                    "_range": "0-3",
-                    "_tenacity": 0,
-                    ".": [
-                      {
-                        "hp": 5,
-                        "lockon": 0,
-                        "greywash": 0
-                      },
-                      {
-                        "hp": 5,
-                        "lockon": 0,
-                        "greywash": 0
-                      },
-                      {
-                        "hp": 5,
-                        "lockon": 0,
-                        "greywash": 0
-                      },
-                      {
-                        "hp": 5,
-                        "lockon": 0,
-                        "greywash": 0
-                      }
-                    ]
-                  },
-                  ".e1": {
-                    "_name": "loyal-guardian",
-                    "_defense": 8,
-                    "+defense": 0,
-                    "+interdiction": "",
-                    "+hp": 0,
-                    "_is_template": false,
-                    "_is_unique": true,
-                    "_valid": true,
-                    ".": [
-                      {
-                        "hp": 20,
-                        "lockon": 0,
-                        "greywash": 0
-                      }
-                    ],
-                    "_init": true
-                  },
-                  "+defense": [],
-                  "+interdiction": [],
-                  "hp": 25,
-                  "max_hp": 25,
-                  ".e2": {
-                    "_name": "den-mother",
-                    "_defense": 5,
-                    "+defense": 0,
-                    "+interdiction": "",
-                    "+hp": 5,
-                    "_is_template": true,
-                    "_is_unique": false,
-                    "_valid": true,
-                    ".": [],
-                    ".w1": {
-                      "_name": "mounted chassis",
-                      "_range": "0-3",
-                      "_tenacity": 11,
-                      ".": [
-                        {
-                          "hp": 5,
-                          "lockon": 0,
-                          "greywash": 0
-                        },
-                        {
-                          "hp": 5,
-                          "lockon": 0,
-                          "greywash": 0
-                        },
-                        {
-                          "hp": 5,
-                          "lockon": 0,
-                          "greywash": 0
-                        },
-                        {
-                          "hp": 5,
-                          "lockon": 0,
-                          "greywash": 0
-                        }
-                      ]
-                    },
-                    "_init": true
-                  },
-                  ".e3": {
-                    "_name": "brothers-in-arms",
-                    "_defense": 8,
-                    "+defense": 0,
-                    "+interdiction": "",
-                    "+hp": 0,
-                    "_is_template": false,
-                    "_is_unique": false,
-                    "_valid": true,
-                    ".": [
-                      {
-                        "hp": 8,
-                        "lockon": 0,
-                        "greywash": 0
-                      },
-                      {
-                        "hp": 8,
-                        "lockon": 0,
-                        "greywash": 0
-                      }
-                    ],
-                    ".c1": {
-                      "_name": "short-spool spinal guns",
-                      ".": {
-                        "total": 2,
-                        "current": 2
-                      }
-                    },
-                    "_init": true
-                  }
-                }
-              }
-            ]
-          ],
-          [
-            "modifiers",
-            [
-              "LOCAL"
-            ]
-          ],
-          [
-            "opened",
-            true
-          ],
-          [
-            "turn",
-            1
-          ]
+          "npcs",
+          2,
+          "content",
+          ".e2",
+          ".w3",
+          ".",
+          1,
+          "hp"
+        ],
+        [
+          4,
+          2
+        ]
+      ]
+    ],
+    [
+      [
+        "change",
+        [
+          "npcs",
+          2,
+          "content",
+          ".e2",
+          ".w3",
+          ".",
+          0,
+          "hp"
+        ],
+        [
+          5,
+          4
+        ]
+      ],
+      [
+        "change",
+        [
+          "npcs",
+          2,
+          "content",
+          ".e2",
+          ".w3",
+          ".",
+          1,
+          "hp"
+        ],
+        [
+          5,
+          4
         ]
       ]
     ],
@@ -534,13 +459,13 @@
         "npcs",
         [
           [
-            1,
+            3,
             {
-              "name": "bg2",
+              "name": "bg4",
               "content": {
-                "_name": "paladin",
-                "_defense": 8,
-                "_interdiction": "2d6",
+                "_name": "corsair",
+                "_defense": 10,
+                "_interdiction": "1d6",
                 "_valid": true,
                 "_hp0": 25,
                 ".": {
@@ -549,12 +474,32 @@
                   "lockon": 0,
                   "greywash": 0
                 },
-                ".c1": {
-                  "_name": "redgiant-solar-lance",
-                  ".": {
-                    "total": 3,
-                    "current": 3
-                  }
+                ".w1": {
+                  "_name": "motely crew",
+                  "_range": "0-3",
+                  "_tenacity": 12,
+                  ".": [
+                    {
+                      "hp": 5,
+                      "lockon": 0,
+                      "greywash": 0
+                    },
+                    {
+                      "hp": 5,
+                      "lockon": 0,
+                      "greywash": 0
+                    },
+                    {
+                      "hp": 5,
+                      "lockon": 0,
+                      "greywash": 0
+                    },
+                    {
+                      "hp": 5,
+                      "lockon": 0,
+                      "greywash": 0
+                    }
+                  ]
                 },
                 ".e1": {
                   "_name": "roughnecks",
@@ -739,13 +684,13 @@
         "npcs",
         [
           [
-            3,
+            1,
             {
-              "name": "bg4",
+              "name": "bg2",
               "content": {
-                "_name": "corsair",
-                "_defense": 10,
-                "_interdiction": "1d6",
+                "_name": "paladin",
+                "_defense": 8,
+                "_interdiction": "2d6",
                 "_valid": true,
                 "_hp0": 25,
                 ".": {
@@ -754,32 +699,12 @@
                   "lockon": 0,
                   "greywash": 0
                 },
-                ".w1": {
-                  "_name": "motely crew",
-                  "_range": "0-3",
-                  "_tenacity": 12,
-                  ".": [
-                    {
-                      "hp": 5,
-                      "lockon": 0,
-                      "greywash": 0
-                    },
-                    {
-                      "hp": 5,
-                      "lockon": 0,
-                      "greywash": 0
-                    },
-                    {
-                      "hp": 5,
-                      "lockon": 0,
-                      "greywash": 0
-                    },
-                    {
-                      "hp": 5,
-                      "lockon": 0,
-                      "greywash": 0
-                    }
-                  ]
+                ".c1": {
+                  "_name": "redgiant-solar-lance",
+                  ".": {
+                    "total": 3,
+                    "current": 3
+                  }
                 },
                 ".e1": {
                   "_name": "roughnecks",
@@ -816,13 +741,167 @@
         ]
       ]
     ],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    []
+    [
+      [
+        "add",
+        "",
+        [
+          [
+            "npcs",
+            [
+              {
+                "name": "alpha",
+                "content": {
+                  "_name": "breakwater",
+                  "_defense": 10,
+                  "_interdiction": "1d6",
+                  "_valid": true,
+                  "_hp0": 25,
+                  ".": {
+                    "hp": 25,
+                    "max_hp": 25,
+                    "lockon": 0,
+                    "greywash": 0
+                  },
+                  ".w1": {
+                    "_name": "fighter/bomber squadron",
+                    "_range": "0-3",
+                    "_tenacity": 0,
+                    ".": [
+                      {
+                        "hp": 5,
+                        "lockon": 0,
+                        "greywash": 0
+                      },
+                      {
+                        "hp": 5,
+                        "lockon": 0,
+                        "greywash": 0
+                      },
+                      {
+                        "hp": 5,
+                        "lockon": 0,
+                        "greywash": 0
+                      },
+                      {
+                        "hp": 5,
+                        "lockon": 0,
+                        "greywash": 0
+                      }
+                    ]
+                  },
+                  ".e1": {
+                    "_name": "loyal-guardian",
+                    "_defense": 8,
+                    "+defense": 0,
+                    "+interdiction": "",
+                    "+hp": 0,
+                    "_is_template": false,
+                    "_is_unique": true,
+                    "_valid": true,
+                    ".": [
+                      {
+                        "hp": 20,
+                        "lockon": 0,
+                        "greywash": 0
+                      }
+                    ],
+                    "_init": true
+                  },
+                  "+defense": [],
+                  "+interdiction": [],
+                  "hp": 25,
+                  "max_hp": 25,
+                  ".e2": {
+                    "_name": "den-mother",
+                    "_defense": 5,
+                    "+defense": 0,
+                    "+interdiction": "",
+                    "+hp": 5,
+                    "_is_template": true,
+                    "_is_unique": false,
+                    "_valid": true,
+                    ".": [],
+                    ".w1": {
+                      "_name": "mounted chassis",
+                      "_range": "0-3",
+                      "_tenacity": 11,
+                      ".": [
+                        {
+                          "hp": 5,
+                          "lockon": 0,
+                          "greywash": 0
+                        },
+                        {
+                          "hp": 5,
+                          "lockon": 0,
+                          "greywash": 0
+                        },
+                        {
+                          "hp": 5,
+                          "lockon": 0,
+                          "greywash": 0
+                        },
+                        {
+                          "hp": 5,
+                          "lockon": 0,
+                          "greywash": 0
+                        }
+                      ]
+                    },
+                    "_init": true
+                  },
+                  ".e3": {
+                    "_name": "brothers-in-arms",
+                    "_defense": 8,
+                    "+defense": 0,
+                    "+interdiction": "",
+                    "+hp": 0,
+                    "_is_template": false,
+                    "_is_unique": false,
+                    "_valid": true,
+                    ".": [
+                      {
+                        "hp": 8,
+                        "lockon": 0,
+                        "greywash": 0
+                      },
+                      {
+                        "hp": 8,
+                        "lockon": 0,
+                        "greywash": 0
+                      }
+                    ],
+                    ".c1": {
+                      "_name": "short-spool spinal guns",
+                      ".": {
+                        "total": 2,
+                        "current": 2
+                      }
+                    },
+                    "_init": true
+                  }
+                }
+              }
+            ]
+          ],
+          [
+            "modifiers",
+            [
+              "LOCAL"
+            ]
+          ],
+          [
+            "opened",
+            true
+          ],
+          [
+            "turn",
+            1
+          ]
+        ]
+      ]
+    ]
   ],
   0
 ]

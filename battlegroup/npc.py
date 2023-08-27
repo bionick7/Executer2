@@ -24,6 +24,8 @@ e1.** -> [D, E]
 ** -> [A, B, C, D, E]
 """
 
+KEY_PREFIX = "."
+
 import typing
 Obj = dict[str, typing.Any]
 
@@ -35,17 +37,17 @@ class NPCBattleGroup:
     @property
     def escorts(self):
         for key, value in self.content.items():
-            if key.startswith(".e"):
+            if key.startswith(KEY_PREFIX + "e"):
                 yield value
                 
     @property
-    def charge_weapons(self):
+    def counters(self):
         for k, v in self.content.items():
-            if k.startswith(".c"):
+            if k.startswith(KEY_PREFIX + "c"):
                 yield v
         for e in self.escorts:
             for k, v in e.items():
-                if k.startswith(".c"):
+                if k.startswith(KEY_PREFIX + "c"):
                     yield v
     
     def recalc_boni(self):
@@ -55,7 +57,7 @@ class NPCBattleGroup:
         content['hp'] = content['_hp0']
         content['max_hp'] = content['_hp0']
         for escort in self.escorts:
-            if any(x['hp'] > 0 for x in escort['.']):
+            if any(x['hp'] > 0 for x in escort[KEY_PREFIX]):
                 if escort['+defense'] > 0:
                     content['+defense'].append(escort['+defense'])
                 if escort['+interdiction'] != "":
@@ -80,15 +82,15 @@ class NPCBattleGroup:
             return  # TODO: error msg
         else:
             escort_num = len(list(self.escorts)) + 1
-            self.content[f".e{escort_num}"] = escort_dict
+            self.content[f"{KEY_PREFIX}e{escort_num}"] = escort_dict
         self.recalc_boni()
 
     def remove(self, path: list[str]) -> Obj:
         cursor = self.content
         for p in path[:-1]:
-            cursor = self.content["." + p]
-        res = cursor["." + path[-1]]
-        del cursor["." + path[-1]]
+            cursor = self.content[KEY_PREFIX + p]
+        res = cursor[KEY_PREFIX + path[-1]]
+        del cursor[KEY_PREFIX + path[-1]]
         self.recalc_boni()
         return res
     
@@ -100,25 +102,25 @@ class NPCBattleGroup:
 
     def __is_path_valid(self, path: list[str], content: Obj, include_meta: bool) -> str:
         if len(path) == 0:
-            if "." in content or include_meta: return ""
-            else: return "'.' expected"
+            if KEY_PREFIX in content or include_meta: return ""
+            else: return "'{KEY_PREFIX}' expected"
         index = path[0]
         if index in ["*", "**"]:
             if include_meta:
                 return "No wildcards supproted if include_meta is set"
             for key in content:
-                if key.startswith(".") and key != ".":
+                if key.startswith(KEY_PREFIX) and key != KEY_PREFIX:
                     err = self.__is_path_valid(path[1:] if index == "*" else ["**"], content[key], False)
                     if err != "":
                         return err
             return ""
         elif index.isdigit():
-            if int(index) - 1 >= len(self.__ensure_list(content.get(".", []))):
-                return f"{index} Out of bounds '.'"
+            if int(index) - 1 >= len(self.__ensure_list(content.get(KEY_PREFIX, []))):
+                return f"{index} Out of bounds {KEY_PREFIX}"
             return ""
-        if "." + index not in content:
-            return f"no such key: '.{index}'"
-        return self.__is_path_valid(path[1:], content["."+index], include_meta)
+        if KEY_PREFIX + index not in content:
+            return f"no such key: '{KEY_PREFIX}{index}'"
+        return self.__is_path_valid(path[1:], content[KEY_PREFIX+index], include_meta)
     
     @staticmethod
     def __ensure_list(inp) -> list:
@@ -128,58 +130,58 @@ class NPCBattleGroup:
 
     def __decode_path(self, path: list[str], content: Obj, include_meta: bool) -> list[Obj]:
         if len(path) == 0:
-            return [content] if include_meta else self.__ensure_list(content["."])
+            return [content] if include_meta else self.__ensure_list(content[KEY_PREFIX])
         index = path[0]
         if index == "*":
             return self.__decode_layer(content, path[1:])
         if index == "**":
             return self.__decode_layer(content, ["**"])
         elif index.isdigit():
-            return [self.__ensure_list(content["."])[int(index) - 1]]
-        return self.__decode_path(path[1:], content["."+index], include_meta)
+            return [self.__ensure_list(content[KEY_PREFIX])[int(index) - 1]]
+        return self.__decode_path(path[1:], content[KEY_PREFIX+index], include_meta)
     
     def __decode_layer(self, content: Obj, next: list[str]) -> list:
-        res = self.__ensure_list(content.get(".", []))
+        res = self.__ensure_list(content.get(KEY_PREFIX, []))
         for key in content:
-            if key == "." or not key.startswith("."):
+            if key == KEY_PREFIX or not key.startswith(KEY_PREFIX):
                 pass
             else:
                 res += self.__decode_path(next, content[key], False)
         return res
             
-    def inc_counter(self, path: list[str], value: int) -> None:
-        counter_name = path[-1]
-        assert not counter_name.startswith("_")
+    def inc_attribute(self, path: list[str], value: int) -> None:
+        attribute_name = path[-1]
+        assert not attribute_name.startswith("_")
         for obj in self.decode_path(path[:-1]):
-            if counter_name in obj:
-                obj[counter_name] += value
+            if attribute_name in obj:
+                obj[attribute_name] += value
             
-    def set_counter(self, path: list[str], value: int) -> None:
-        counter_name = path[-1]
-        assert not counter_name.startswith("_")
+    def set_attribute(self, path: list[str], value: int) -> None:
+        attribute_name = path[-1]
+        assert not attribute_name.startswith("_")
         for obj in self.decode_path(path[:-1]):
-            if counter_name in obj:
-                obj[counter_name] = value
+            if attribute_name in obj:
+                obj[attribute_name] = value
 
-    def reset_counter(self, path: list[str]) -> str:
-        counter_index = int(path[-1]) - 1
+    def get_attribute(self, path: list[str]) -> int:
+        attribute_name = path[-1]
         for obj in self.decode_path(path[:-1]):
-            all_counters = [x[1:] for x in obj.keys() if x.startswith("&")]
-            if 0 <= counter_index < len(all_counters):
-                counter_name = all_counters[counter_index]
-                if ("&" + counter_name) in obj and ("0" + counter_name) in obj:
-                    obj["&" + counter_name] = obj["0" + counter_name]
-            else:
-                return f"Invalid index: {path[-1]}"
-        return ""
+            if attribute_name in obj:
+                return obj[attribute_name]
+        return -1
+
+    def reset_counter(self, path: list[str]) -> None:
+        cws = self.decode_path(path)
+        for cw in cws:
+            cw[KEY_PREFIX]["current"] = cw[KEY_PREFIX]["total"]
 
     def logistics_phase(self) -> list[tuple[str, str]]:
         res = []
-        for cw in self.charge_weapons:
-            if cw["."]["current"] == 0:
+        for cw in self.counters:
+            if cw[KEY_PREFIX]["current"] > 0:
+                cw[KEY_PREFIX]["current"] -= 1
+            if cw[KEY_PREFIX]["current"] == 0:
                 res.append((self.name, cw["_name"]))
-            else:
-                cw["."]["current"] -= 1
         return res
 
     def save(self) -> dict:

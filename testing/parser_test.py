@@ -1,6 +1,7 @@
-import numpy as np
-from battlegroup.parser.parser import Parser
 import unittest
+import numpy as np
+
+from battlegroup.parser.parser import Parser
 
 class TestParser(unittest.TestCase):
     def  __init__(self, methodName: str = "runTest") -> None:

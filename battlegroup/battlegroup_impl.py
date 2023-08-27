@@ -2,12 +2,112 @@ import re
 import json
 import os.path
 
+import dictdiffer
+
 from data_backend import load, can_load
 from battlegroup.output import format_bg
 from battlegroup.npc import *
 
 DEFAULT_COUNTERS = {"lockon": 0, "greywash": 0}
  
+class BGBattleData:
+    def  __init__(self, p_message_queue, p_error_queue) -> None:
+        self.filepath = "save/__watch.json"
+
+        self.current_state: Obj = {}
+
+        self.last_state: Obj = {}
+        self.history: list = []
+        self.history_pointer = 0  # current state
+
+        self.filehash: int = 0
+        if not os.path.isfile(self.filepath):
+            self._dump_current()
+        else:
+            self.watch()
+        self.message_queue = p_message_queue
+        self.error_queue = p_error_queue
+
+    def watch(self) -> bool:
+        ''' Returns if data has been changed '''
+        if not os.path.isfile(self.filepath):
+            self.error_queue.append(f"Watch file ({self.filepath}) Deleted")
+            return False
+        with open(self.filepath, "r") as f:
+            txt = f.read()
+            hash2 = hash(txt)
+            if hash2 == self.filehash:
+                return False
+            else:
+                self._deserialize(json.loads(txt))
+                return True
+    
+    def _dump_current(self) -> None:
+        txt = json.dumps(self._serialize(), indent="  ")
+        self.filehash = hash(txt)
+        with open(self.filepath, "w") as f:
+            f.write(txt)
+
+    def _serialize(self) -> list:
+        return [self.last_state, self.history, self.history_pointer]
+    
+    def _deserialize(self, inp: list) -> None:
+        self.last_state, self.history, self.history_pointer = inp
+    
+    def save_to(self, filepath: str) -> None:
+        true_filepath = "save/" + filepath + ".json"
+        with open(true_filepath, "w") as f:
+            json.dump(self._serialize(), f, indent="  ")
+        self.message_queue.append(f"Saved game to \"{filepath}\"")
+
+    def load_from(self, filepath: str) -> None:
+        true_filepath = "save/" + filepath + ".json"
+        if not os.path.isfile(true_filepath):
+            self.message_queue.append(f"No such file: {true_filepath}")
+            return
+        with open(true_filepath, "r") as f:
+            self._deserialize(json.load(f))
+        self.message_queue.append(f"Loaded game from \"{filepath}\"")
+
+    def reset_history(self) -> None:
+        self.push_new_state(self.current_state)
+        self.history = []
+        self.history_pointer = 0
+        self._dump_current()
+
+    def push_new_state(self, new_data: Obj) -> None:
+        if self.history_pointer == 0:
+            diff = list(dictdiffer.diff(self.current_state, new_data))
+            self.history.insert(0, diff)
+            self.last_state = dictdiffer.deepcopy(new_data)
+            self.current_state = self.last_state
+        else:  # Overwrite current history
+            diff = list(dictdiffer.diff(self.current_state, new_data))
+            self.history = [diff] + self.history[:self.history_pointer]
+            self.last_state = dictdiffer.deepcopy(new_data)
+            self.current_state = self.last_state
+            self.history_pointer = 0
+
+        while len(self.history) > 100:
+            self.history.pop()
+        self._dump_current()
+
+    def get_current(self) -> Obj:
+        return self.current_state
+
+    def undo(self) -> None:
+        if self.history_pointer == len(self.history):
+            return
+        self.current_state = dictdiffer.revert(self.history[self.history_pointer], self.current_state)
+        self.history_pointer += 1
+
+    def redo(self) -> None:
+        if self.history_pointer == 0:
+            return
+        self.current_state = dictdiffer.patch(self.history[self.history_pointer - 1], self.current_state)
+        self.history_pointer -= 1
+
+
 class BGBattle:
     def __init__(self):
         self.modifiers = []
@@ -28,6 +128,8 @@ class BGBattle:
         self.undo_stack = []
         self.undo_pointer = 0
 
+        self.datamanager = BGBattleData(self.message_queue, self.error_queue)
+
     def _load_compendium(self, name: str) -> list:
         path = "battlegroup/" + name
         res = []
@@ -44,7 +146,7 @@ class BGBattle:
         return res
 
     def open(self, p_gm: str, *p_modifiers: str):
-        self.modifiers = p_modifiers
+        self.modifiers = list(p_modifiers)
         self.opened = True
         self.gm_id = p_gm
         self.turn = 1
@@ -65,20 +167,20 @@ class BGBattle:
             wings = [wings]
         wing_objs = {}
         for i, w in enumerate(wings):
-            wing_objs[f".w{i+1}"] = {
+            wing_objs[f"{KEY_PREFIX}w{i+1}"] = {
                 "_name": w.get("name", "UNNAMED"),
                 "_range": w.get("range", "0-0"),
                 "_tenacity": w.get("tenacity", 0),
-                ".": [{"hp": x, **DEFAULT_COUNTERS} for x in w["hp"]]
+                KEY_PREFIX: [{"hp": x, **DEFAULT_COUNTERS} for x in w["hp"]]
             }
         return wing_objs
     
     def _get_stats_charge_weapons(self, charge_weapons: dict) -> Obj:
         charge_objs = {}
         for i, (k, v) in enumerate(charge_weapons.items()):
-            charge_objs[f".c{i+1}"] = {
+            charge_objs[f"{KEY_PREFIX}c{i+1}"] = {
                 "_name": k,
-                ".": {
+                KEY_PREFIX: {
                     "total": v,
                     "current": v
                 }
@@ -95,7 +197,7 @@ class BGBattle:
             "_interdiction": comp.get("interdiction", "1d6"),
             "_valid": name.lower() in self.capitalship_compendium,
             "_hp0": comp.get("hp", 1),
-            ".": {
+            KEY_PREFIX: {
                 "hp": comp.get("hp", 1),
                 "max_hp": comp.get("hp", 1),
                 **comp.get("counters", {}),
@@ -119,7 +221,7 @@ class BGBattle:
             "_is_template": "template" in tags,
             "_is_unique": "unique" in tags,
             "_valid": name.lower() in self.escorts_compendium,
-            ".": [{
+            KEY_PREFIX: [{
                 "hp": x,
                 **comp.get("counters", {}),
                 **DEFAULT_COUNTERS,
@@ -127,6 +229,9 @@ class BGBattle:
             **wing_objs,
             **charge_objs,
         }
+
+    def on_modified(self) -> None:
+        self.datamanager.push_new_state(self.get_data())
 
     def add_npc(self, flagship_name: str, escorts_names: list[str], name: str) -> typing.Optional[NPCBattleGroup]:
         flagship_stats = self._get_stats_capitalship(flagship_name)
@@ -140,6 +245,7 @@ class BGBattle:
             npc_bg.add_escort(escort_stats)
 
         self.npcs[name] = npc_bg
+        self.on_modified()
         return npc_bg
 
     def check_path_valid(self, path: list[str], include_property: bool=False) -> bool:
@@ -160,19 +266,22 @@ class BGBattle:
         if not self.check_path_valid(path, True):
             return
         bg = self.npcs[path[0]]
-        #if bg.is_path_valid(path[1:-1]):
-        #    return
-        bg.set_counter(path[1:], value)
-        #self.get_gm_detail(path[0])
+        bg.set_attribute(path[1:], value)
+        self.on_modified()
+        
+    def get_attribute(self, path: list[str]) -> int:
+        if not self.check_path_valid(path, True):
+            self.error_queue.append(f"Requested invalid attribute path:{'.'.join(path)}")
+            return -1
+        bg = self.npcs[path[0]]
+        return bg.get_attribute(path[1:])
         
     def inc_attribute(self, path: list[str], value: int) -> None:
         if not self.check_path_valid(path, True):
             return
         bg = self.npcs[path[0]]
-        #if bg.is_path_valid(path[1:-1]):
-        #    return
-        bg.inc_counter(path[1:], value)
-        #self.get_gm_detail(path[0])
+        bg.inc_attribute(path[1:], value)
+        self.on_modified()
         
     def reset_attribute(self, path: list[str]) -> None:
         if not self.check_path_valid(path, True):
@@ -181,9 +290,9 @@ class BGBattle:
         if bg.is_path_valid(path[1:-1]):
             return
         res = bg.reset_counter(path[1:])
-        #if res != "":
-        #    self.error_queue.append(res)
-        #self.get_gm_detail(path[0])
+        if res != "":
+            self.error_queue.append(res)
+        self.on_modified()
     
     def logistics_phase(self) -> None:
         charge_triggers = []
@@ -192,6 +301,7 @@ class BGBattle:
         for bg, weapon in charge_triggers:
             self.message_queue.append(f"BG: {bg} - {weapon} charged")  # TODO
         self.turn += 1
+        self.on_modified()
                 
     def reassign_escort(self, path: list[str], bg2_name: str = "") -> bool:
         if not self.check_path_valid(path, False):
@@ -218,6 +328,7 @@ class BGBattle:
         escort = bg1.remove(escort_path)
         if bg2_name != "":
             self.npcs[bg2_name].add_escort(escort)
+        self.on_modified()
         return True
 
     def get_player_rapport(self) -> None:
@@ -225,7 +336,7 @@ class BGBattle:
         for npc in self.npcs.values():
             res += format_bg(npc, False) + "\n"
         if res == "":
-            self.error_queue.append("No hostile detected")
+            self.message_queue.append("No hostile detected")
             return
         self.message_queue.append("$LONG" + res)
 
@@ -234,7 +345,7 @@ class BGBattle:
         for npc in self.npcs.values():
             res += format_bg(npc, True) + "\n"
         if res == "":
-            self.error_queue.append("No npcs")
+            self.message_queue.append("No npcs")
             return
         self.message_queue.append("$LONG" + res)
         
@@ -247,33 +358,25 @@ class BGBattle:
     def compile_actions(self, path: list[str], ) -> None:
         pass
 
-    def save_to(self, filepath: str) -> None:
-        true_filepath = "save/" + filepath + ".json"
-        with open(true_filepath, "w") as f:
-            save_dict = {
-                "npcs": [x.save() for x in self.npcs.values()],
-                "modifiers": self.modifiers,
-                "opened": self.opened,
-                "turn": self.turn
-            }
-            json.dump(save_dict, f, indent="  ")
-        self.message_queue.append(f"Saved game to \"{filepath}\"")
+    def get_data(self) -> dict:
+        ''' Shallow copy '''
+        return {
+            "npcs": [x.save() for x in self.npcs.values()],
+            "modifiers": self.modifiers,
+            "opened": self.opened,
+            "turn": self.turn
+        }
 
-    def load_from(self, filepath: str) -> None:
-        true_filepath = "save/" + filepath + ".json"
-        if not os.path.isfile(true_filepath):
-            self.message_queue.append(f"No such file: {true_filepath}")
-            return
-        with open(true_filepath, "r") as f:
-            save_dict = json.load(f)
-            self.npcs = dict((x["name"], NPCBattleGroup.load(x)) for x in save_dict["npcs"])
-            self.modifiers = save_dict["modifiers"]
-            self.opened = save_dict["opened"]
-            self.turn = save_dict["turn"]
-        self.message_queue.append(f"Loaded game from \"{filepath}\"")
+    def set_data(self, data: dict) -> None:
+        ''' Shallow Copy '''
+        self.npcs = dict((x["name"], NPCBattleGroup.load(x)) for x in data["npcs"])
+        self.modifiers = data["modifiers"]
+        self.opened = data["opened"]
+        self.turn = data["turn"]
 
-    def undo(self) -> None:
-        pass
-
-    def redo(self) -> None:
-        pass
+    def sync(self) -> None:
+        self.set_data(self.datamanager.get_current())
+        
+    def watch_and_sync(self) -> None:
+        if self.datamanager.watch():
+            self.sync()

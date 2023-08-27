@@ -105,9 +105,10 @@ def bg_cmd(path: list[str], battle: BGBattle, cmd: str, args: ArgumentList, auth
     elif cmd == "load":
         if not battle.opened:
             battle.open(author, "")
-        battle.load_from(args.fetch_id("save/temp"))  # TODO: this might get a problem
+        battle.datamanager.load_from(args.fetch_id("save/temp"))  # TODO: this might get a problem
+        battle.sync()
     elif cmd == "save":
-        battle.save_to(args.fetch_id("save/temp"))
+        battle.datamanager.save_to(args.fetch_id("save/temp"))
     elif cmd == "turn":
         battle.logistics_phase()
     elif cmd == "show":
