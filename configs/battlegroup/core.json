@@ -8,15 +8,14 @@
             "abilities": [
                 {
                     "type": "Trait",
-                    "name": "Fleet Appendage",
-                    "effect": ""
+                    "name": "Fleet-Appendage"
                 },
                 {
                     "type": "Tactic",
-                    "name": "Local Legion Gestalt",
-                    "effect": ""
+                    "name": "Local-Legion-Gestalt"
                 }
-            ]
+            ],
+            "page": 183
         },
         {
             "name": "brothers-in-arms",
@@ -26,12 +25,12 @@
             "abilities": [
                 {
                     "type": "Trait",
-                    "name": "Tender Comerade",
+                    "name": "Tender-Comerade",
                     "effect": ""
                 },
                 {
-                    "type": "Gun",
-                    "name": "Short-Spool Spinal Guns",
+                    "type": "Charge",
+                    "name": "Short-Spool-Spinal-Guns",
                     "effect": "",
                     "range": "4-1",
                     "size": "Superheavy",
@@ -39,13 +38,31 @@
                     "charge": 2,
                     "dammage": 12
                 }
-            ]
+            ],
+            "page": 184
         },
         {
             "name": "daggerflight",
             "hp": [6, 6, 6, 6],
             "defense": 10,
-            "tags": []
+            "tags": [],
+            "abilities":[
+                {
+                    "type": "Maneuver",
+                    "name": "Battery-Fire",
+                    "effect": "Only",
+                    "range": "3-0",
+                    "size": "Superheavy",
+                    "target": "Single",
+                    "charge": 2,
+                    "dammage": 12
+                },
+                {
+                    "type": "Tactic",
+                    "name": "Draw-Fire"
+                }
+            ],
+            "page": 184
         },
         {
             "name": "den-mother",
@@ -72,7 +89,7 @@
             "tags": ["template"],
             "abilities":[
                 {
-                    "type": "Gun",
+                    "type": "Charge",
                     "name": "Tyrant-Cannon",
                     "effect": "",
                     "range": "5-4",
@@ -88,7 +105,24 @@
             "name": "loyal-guardian",
             "hp": [20],
             "defense": 8,
-            "tags": ["unique"]
+            "tags": ["unique"],
+            "abilities": [
+                {
+                    "type": "Trait",
+                    "name": "Passive-Formation"
+                },
+                {
+                    "type": "Maneuver",
+                    "name": "Retribution-Salvo",
+                    "effect": "",
+                    "range": "4-1",
+                    "tags": ["accurate"],
+                    "size": "Primary",
+                    "target": "Single",
+                    "dammage": 3
+                }
+            ],
+            "page": 187
         },
         {
             "name": "mastermind",
@@ -150,13 +184,13 @@
             "tags": ["template"],
             "abilities":[
                 {
-                    "type": "Gun",
+                    "type": "Charge",
                     "name": "Naophoros-Omnigun",
                     "effect": "",
                     "range": "5-0",
                     "size": "Superheavy",
                     "target": "Single",
-                    "charge": -1,
+                    "charge": 0,
                     "dammage": 0
                 }
             ]
@@ -202,7 +236,37 @@
             "name": "hivequeen",
             "hp": 30,
             "defense": 8,
-            "interdiction": "2d6"
+            "interdiction": "2d6",
+            "abilities": [
+                {
+                    "type": "Trait",
+                    "name": "Royal-Palace"
+                },
+                {
+                    "type": "Maneuver",
+                    "name": "K-Drone-Pack",
+                    "tags": ["payload"],
+                    "size": "Primary",
+                    "range": "4-2",
+                    "effect": " When this spread of weaponized drones is fired, choose its configuration:\n • A single-target attack that deals 1d6+6 damage.\n • An area-target attack that deals 1d6+3 damage.\n The Hivequeen may also choose to add or remove 1 Flight Counter from it.\n While this PAYLOAD attack is in flight, the Hivequeen may (as a maneuver) deal 2 damage to a hostile CAPITAL SHIP with LOCK ON and push that ship’s battlegroup back one range band."
+                },
+                {
+                    "type": "Tactic",
+                    "name": "Infestation",
+                    "tags": ["boarding"],
+                    "tenacity": 11,
+                    "effect": "The Hivequeen LOCKS ON to a hostile CAPITAL SHIP and then launches a breaching pod that disgorges a drone swarm into that ship’s interior. During the Boarding Phase, roll 1d20: on 8+, the target takes 3 damage and automatically gains LOCK ON at the start of the next Action Phase. On 7 or less, this boarding action may be attempted in subsequent Boarding Phases until it succeeds or the boarders are repelled. The Hivequeen may board up to three ships this way at one time.",
+                    "range": "4-0"
+                },
+                {
+                    "type": "System",
+                    "name": "Sapper-Drones",
+                    "reloading": 2,
+                    "effect": "The Hivequeen launches a spread of long-flight drones that remain powered down until they detect nearby enemy vessels. During the Logistics Phase, choose one range band from 5–4. Until the start of the next Logistics Phase, any hostile battlegroup that ends its turn in the chosen range band takes 1d6+1 AREA-TARGET damage, and all ships in that battlegroup receive +1 DIFFICULTY to single-target attacks until the end of their next turn.",
+                    "range": "5-4"
+                }
+            ],
+            "page": 171
         },
         {
             "name": "man-o-war",
@@ -211,17 +275,40 @@
             "interdiction": "2d6",
             "abilities":[
                 {
-                    "type": "Gun",
+                    "type": "Charge",
                     "name": "Demisolar-Lance",
-                    "effect": "",
+                    "effect": "Each time this weapon removes a Charge Counter, deal 2 damage to a hostile CAPITAL SHIP within Range 5-3.",
                     "range": "5-3",
                     "size": "Superheavy",
                     "target": "Single",
                     "tags": ["accurate", "critical"],
                     "charge": 4,
                     "dammage": 20
+                },
+                {
+                    "type": "Maneuver",
+                    "name": "Counter-Battery-Fire",
+                    "effect": "On hit, the target’s single-target attack rolls all receive +2 DIFFICULTY until the end of its next turn.",
+                    "range": "4-0",
+                    "size": "Primary",
+                    "target": "Single",
+                    "tags": ["reliable(2)"],
+                    "charge": 4,
+                    "dammage": 6
+                },
+                {
+                    "type": "Maneuver",
+                    "name": "Inexorable Advance",
+                    "effect": "+5 OS +++ advance"
+                },
+                {
+                    "type": "System",
+                    "name": "Pulse-Pack-Missiles",
+                    "reloading": 2,
+                    "effect": "The Man o’ War launches a massive volley of multi- warhead missiles that blanket an area in devastating explosions and deadly radiation. During the Logistics Phase, choose one range band from 4–3. Until the start of the next Logistics Phase, any hostile battlegroup that ends its turn in the chosen range band takes 2d6 AREA-TARGET damage."
                 }
-            ]
+            ],
+            "page": 173
         },
         {
             "name": "narcissus",
@@ -242,7 +329,7 @@
             "interdiction": "2d6",
             "abilities":[
                 {
-                    "type": "Gun",
+                    "type": "Charge",
                     "name": "Redgiant-Solar-Lance",
                     "effect": "",
                     "range": "5-2",
@@ -261,7 +348,7 @@
             "interdiction": "1d6",
             "abilities":[
                 {
-                    "type": "Gun",
+                    "type": "Charge",
                     "name": "killdart-coherent-nuclear-actuated-laser",
                     "effect": "",
                     "range": "4-1",
@@ -280,7 +367,7 @@
             "interdiction": "2d6",
             "abilities":[
                 {
-                    "type": "Gun",
+                    "type": "Charge",
                     "name": "killdart-coherent-nuclear-actuated-laser",
                     "effect": "",
                     "range": "5-3",
@@ -293,16 +380,66 @@
             ]
         },
         {
-            "name": "triton",
+            "name": "Triton",
             "hp": 30,
             "defense": 6,
-            "interdiction": "3d6"
+            "interdiction": "3d6",
+            "abilities": [
+                {
+                    "name": "Defensive-Constellation",
+                    "type": "Trait"
+                },
+                {
+                    "name": "Dammage-Control-Teams",
+                    "type": "System"
+                },
+                {
+                    "name": "Overlapping-Armaments",
+                    "type": "Maneuver",
+                    "range": "4-1"
+                },
+                {
+                    "name": "Chaperone-Cloud-Projector",
+                    "type": "Tactic"
+                }
+            ],
+            "page": 180
         },
         {
-            "name": "turtleback",
+            "name": "Turtleback",
             "hp": 35,
             "defense": 6,
-            "interdiction": "1d6"
+            "interdiction": "1d6",
+            "abilities": [
+                {
+                    "name": "Reinforced-Hull",
+                    "type": "Trait"
+                },
+                {
+                    "name": "Heavy-Kinetic-Batteries",
+                    "type": "Maneuver",
+                    "range": "4-0",
+                    "size": "Primary",
+                    "target": "Single",
+                    "dammage": 6,
+                    "effect": "Attacks 2 targets at a time"
+                },
+                {
+                    "name": "Swarm-Missiles",
+                    "type": "Maneuver",
+                    "range": "4-0",
+                    "size": "Primary",
+                    "target": "Area",
+                    "tags": ["Payload"],
+                    "dammage": "1d6+2",
+                    "effect": "Attacks 2 targets at a time"
+                },
+                {
+                    "name": "Priority-Target",
+                    "type": "Maneuver"
+                }
+            ],
+            "page": 181
         }
     ]
 }

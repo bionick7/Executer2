@@ -53,9 +53,10 @@ def format_counter(name: str, value: int, indent: str="") -> str:
 
 def format_ability(ability: Obj) -> str:
     name = truncate_string(ability['name'], 25)
-    if ability['type'] == 'gun':
-        return "{t_name:<25s} (gun), {min}-{max} DMG: {dammage} {tags}".format(**ability, t_name=name)
-    return "{t_name:<25s} ({type}), {effect}".format(**ability, t_name=name)
+    effect = truncate_string(ability['effect'], 60)
+    if ability['type'] in ["maneuver", "charge"]:
+        return "{_name:<25s} p{page} ({type}){tags}, {min}-{max} DMG: {dammage} | {effect}".format(**ability, _name=name, _effect = effect)
+    return "{_name:<25s} p{page} ({type}){tags} | {_effect}".format(**ability, _name=name, _effect = effect)
 
 def format_abillities(bg_name: str, ability_dict: dict[str, list[Obj]]) -> str:
     res = ""

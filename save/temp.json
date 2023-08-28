@@ -116,19 +116,28 @@
             "_is_unique": false,
             "_abilities": [
               {
-                "type": "Trait",
-                "name": "Tender Comerrade",
-                "effect": ""
+                "min": 0,
+                "max": 5,
+                "name": "tender comerade",
+                "type": "trait",
+                "effect": "",
+                "description": "No provided",
+                "reloading": -1,
+                "tags": []
               },
               {
-                "type": "Gun",
-                "name": "Short-Spool Spinal Guns",
+                "min": 1,
+                "max": 4,
+                "name": "short-spool spinal guns",
+                "type": "charge",
                 "effect": "",
-                "range": "4-1",
+                "description": "No provided",
+                "reloading": -1,
+                "tags": [],
+                "dammage": 12,
                 "size": "Superheavy",
                 "target": "Single",
-                "charge": 2,
-                "dammage": 12
+                "charge": 2
               }
             ],
             "_valid": true,
@@ -158,19 +167,21 @@
           "_hp0": 25,
           "_abilities": [
             {
-              "min": 5,
-              "max": 2,
+              "min": 2,
+              "max": 5,
               "name": "redgiant-solar-lance",
-              "type": "gun",
+              "type": "charge",
               "effect": "",
               "description": "No provided",
-              "dammage": 15,
-              "size": "Superheavy",
-              "target": "Single",
+              "reloading": -1,
               "tags": [
                 "reliable(5)",
                 "critical"
-              ]
+              ],
+              "dammage": 15,
+              "size": "Superheavy",
+              "target": "Single",
+              "charge": 3
             }
           ],
           ".": {
@@ -521,19 +532,28 @@
               "_is_unique": false,
               "_abilities": [
                 {
-                  "type": "Trait",
-                  "name": "Tender Comerrade",
-                  "effect": ""
+                  "min": 0,
+                  "max": 5,
+                  "name": "tender comerade",
+                  "type": "trait",
+                  "effect": "",
+                  "description": "No provided",
+                  "reloading": -1,
+                  "tags": []
                 },
                 {
-                  "type": "Gun",
-                  "name": "Short-Spool Spinal Guns",
+                  "min": 1,
+                  "max": 4,
+                  "name": "short-spool spinal guns",
+                  "type": "charge",
                   "effect": "",
-                  "range": "4-1",
+                  "description": "No provided",
+                  "reloading": -1,
+                  "tags": [],
+                  "dammage": 12,
                   "size": "Superheavy",
                   "target": "Single",
-                  "charge": 2,
-                  "dammage": 12
+                  "charge": 2
                 }
               ],
               "_valid": true,
@@ -974,19 +994,28 @@
                   "_is_unique": false,
                   "_abilities": [
                     {
-                      "type": "Trait",
-                      "name": "Tender Comerrade",
-                      "effect": ""
+                      "min": 0,
+                      "max": 5,
+                      "name": "tender comerade",
+                      "type": "trait",
+                      "effect": "",
+                      "description": "No provided",
+                      "reloading": -1,
+                      "tags": []
                     },
                     {
-                      "type": "Gun",
-                      "name": "Short-Spool Spinal Guns",
+                      "min": 1,
+                      "max": 4,
+                      "name": "short-spool spinal guns",
+                      "type": "charge",
                       "effect": "",
-                      "range": "4-1",
+                      "description": "No provided",
+                      "reloading": -1,
+                      "tags": [],
+                      "dammage": 12,
                       "size": "Superheavy",
                       "target": "Single",
-                      "charge": 2,
-                      "dammage": 12
+                      "charge": 2
                     }
                   ],
                   "_valid": true,
@@ -1113,19 +1142,21 @@
                 "_hp0": 25,
                 "_abilities": [
                   {
-                    "min": 5,
-                    "max": 2,
+                    "min": 2,
+                    "max": 5,
                     "name": "redgiant-solar-lance",
-                    "type": "gun",
+                    "type": "charge",
                     "effect": "",
                     "description": "No provided",
-                    "dammage": 15,
-                    "size": "Superheavy",
-                    "target": "Single",
+                    "reloading": -1,
                     "tags": [
                       "reliable(5)",
                       "critical"
-                    ]
+                    ],
+                    "dammage": 15,
+                    "size": "Superheavy",
+                    "target": "Single",
+                    "charge": 3
                   }
                 ],
                 ".": {
@@ -1292,19 +1323,28 @@
                   "_is_unique": false,
                   "_abilities": [
                     {
-                      "type": "Trait",
-                      "name": "Tender Comerrade",
-                      "effect": ""
+                      "min": 0,
+                      "max": 5,
+                      "name": "tender comerade",
+                      "type": "trait",
+                      "effect": "",
+                      "description": "No provided",
+                      "reloading": -1,
+                      "tags": []
                     },
                     {
-                      "type": "Gun",
-                      "name": "Short-Spool Spinal Guns",
+                      "min": 1,
+                      "max": 4,
+                      "name": "short-spool spinal guns",
+                      "type": "charge",
                       "effect": "",
-                      "range": "4-1",
+                      "description": "No provided",
+                      "reloading": -1,
+                      "tags": [],
+                      "dammage": 12,
                       "size": "Superheavy",
                       "target": "Single",
-                      "charge": 2,
-                      "dammage": 12
+                      "charge": 2
                     }
                   ],
                   "_valid": true,

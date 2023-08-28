@@ -132,6 +132,8 @@ def bg_cmd(path: list[str], battle: BGBattle, cmd: str, args: ArgumentList, auth
         battle.logistics_phase()
     elif cmd == "show":
         battle.get_player_rapport()
+    elif cmd == "reset":
+        battle.reset()
     elif cmd == "connect":
         w_path = args.fetch_string("__INVALID")
         if w_path == "__INVALID":
@@ -159,7 +161,7 @@ def bg_cmd(path: list[str], battle: BGBattle, cmd: str, args: ArgumentList, auth
     elif cmd == "-=":
         battle.inc_attribute(path, -args.fetch_int())
     elif cmd == "=>":
-        battle.reassign_escort(path, args.fetch_string())
+        battle.reassign(path, args.fetch_string())
     elif cmd == "??":
         if args.match(("int", "int")):
             fleet_name = path[0]
@@ -255,5 +257,5 @@ if __name__ == "__main__":
         'bg1 ?? 7 :: 6',
         'bg1 ?? 5 :: 5',
     ]
-    #console_application(get_input())
-    console_application(sim_input(tst2))
+    console_application(get_input())
+    #console_application(sim_input(tst2))

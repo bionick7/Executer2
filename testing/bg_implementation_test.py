@@ -1,10 +1,13 @@
 import unittest
+import logging
 
 import dictdiffer
 from battlegroup.battlegroup_impl import BGBattle
 from battlegroup.console import bg_cmd, ArgumentList
 
 class TestImplementation(unittest.TestCase):
+    logging.basicConfig(level=logging.INFO)
+
     def __init__(self, methodName: str = "runTest") -> None:
         super().__init__(methodName)
         self.battle = BGBattle()
@@ -18,6 +21,19 @@ class TestImplementation(unittest.TestCase):
         
     def _assert_attribute(self, path: str, compare: int):
         self.assertEqual(self.battle.get_attribute(path.split(".")), compare)
+
+    def test_compendium(self):
+        self.cmd("open")
+        all_capital = ['breakwater', 'cornicen', 'corsair', 'highline', 'hivequeen', 'man-o-war', 'narcissus', 'needleship', 'paladin', 'phantasm', 'starkiller', 'triton', 'turtleback']
+        all_escorts = ['battlethreads', 'brothers-in-arms', 'daggerflight', 'den-mother', 'diluvia', 'giant', 'loyal-guardian', 'mastermind', 'roughnecks', 'starfield-furies', 'stalwards', 'wardogs', '[unknown]']
+        self.cmd(":=", "a", args=[all_capital[0], *all_escorts])
+        for capital in all_capital[1:]:
+            self.cmd(":=", "a", args=[capital])
+        success = len(self.battle.error_queue) == 0
+        outp = ""
+        while len(self.battle.error_queue) > 0:
+            outp += self.battle.error_queue.pop(0) + "\n"
+        self.assertTrue(success, outp)
 
     def test_implementation(self):
         self.battle.open("Threading the needle", "LOCAL")
@@ -44,9 +60,9 @@ class TestImplementation(unittest.TestCase):
         self.battle.inc_attribute("bg3.e2.w3.2.hp".split("."), 1)
         self.assertEqual(self.battle.get_attribute("bg3.e2.w3.1.hp".split(".")), 2)
         self.assertEqual(self.battle.get_attribute("bg3.e2.w3.2.hp".split(".")), 4)
-        self.battle.reassign_escort("bg3.e2".split("."), "bg2")
-        self.battle.reassign_escort("bg3.e1".split("."), "")
-        self.battle.reassign_escort("bg4.e1".split("."), "bg2")
+        self.battle.reassign("bg3.e2".split("."), "bg2")
+        self.battle.reassign("bg3.e1".split("."), "")
+        self.battle.reassign("bg4.e1".split("."), "bg2")
         
         self.assertEqual(len(list(self.battle.npcs["bg2"].escorts)), 3)
         self.assertEqual(len(list(self.battle.npcs["bg3"].escorts)), 0)
@@ -115,7 +131,7 @@ class TestImplementation(unittest.TestCase):
         for bg in resdict:
             for abilities in bg.values():
                 for ability in abilities:
-                    if ability["type"] == "gun":
+                    if ability["type"] in ["maneuver", "charge"]:
                         available_guns += 1
         self.assertEqual(available_guns, compare)
 

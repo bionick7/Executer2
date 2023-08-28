@@ -158,6 +158,16 @@ class BGBattle:
         self.turn = -1
         self.on_modified()
 
+    def reset(self) -> None:
+        formation = {}
+        for name, npc in self.npcs.items():
+            formation[name] = [npc.content["_name"]] + [e["_name"] for e in npc.escorts]
+        for name in formation:
+            self.reassign([name])
+        for name, (capital, *escorts) in formation.items():
+            self.add_npc(capital, escorts, name)
+
+
     def connect_to(self, path: str) -> None:
         self.datamanager.filepath = "save/" + path + ".json"
         if self.datamanager.watch_or_dump():
@@ -167,18 +177,19 @@ class BGBattle:
     def on_modified(self) -> None:
         self.datamanager.push_new_state(self.get_data())
 
-    def add_npc(self, flagship_name: str, escorts_names: list[str], name: str) -> typing.Optional[NPCBattleGroup]:
-        flagship_stats = self.compendium.get_stats_capitalship(flagship_name)
-        if not flagship_stats["_valid"]:
-            self.error_queue.append(f"Invalid capitalship name: {flagship_name}")
-        npc_bg = NPCBattleGroup(name, flagship_stats)
+    def add_npc(self, capitalship_name: str, escorts_names: list[str], bg_name: str) -> typing.Optional[NPCBattleGroup]:
+        capitalship_stats = self.compendium.get_stats_capitalship(capitalship_name)
+        if not capitalship_stats["_valid"]:
+            self.error_queue.append(f"Invalid capitalship name: {capitalship_name}")
+        npc_bg = NPCBattleGroup(bg_name, capitalship_stats)
         for escort_name in escorts_names:
             escort_stats = self.compendium.get_stats_escort(escort_name)
             if not escort_stats["_valid"]:
                 self.error_queue.append(f"Invalid escort name: {escort_name}")
             npc_bg.add_escort(escort_stats)
 
-        self.npcs[name] = npc_bg
+        self.npcs[bg_name] = npc_bg
+        self.message_queue.append(f"Added battlegroup {bg_name}")
         self.on_modified()
         return npc_bg
 
@@ -259,7 +270,7 @@ class BGBattle:
         self.turn += 1
         self.on_modified()
                 
-    def reassign_escort(self, path: list[str], bg2_name: str = "") -> bool:
+    def reassign(self, path: list[str], bg2_name: str = "") -> bool:
         if not self.check_path_valid(path, False):
             return False
         bg_name = path[0]
