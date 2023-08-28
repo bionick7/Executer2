@@ -36,9 +36,6 @@ class Logger:
         self.log(text + " " * space)
         self._output_file.flush()
 
-    def indicate_process_outcome(self, text: str):
-        self.log(text + "\n")
-
     def log_line(self, text: str):
         self.log(text + "\n")
 

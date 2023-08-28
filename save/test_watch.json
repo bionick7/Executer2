@@ -1,0 +1,560 @@
+[
+  {
+    "npcs": [
+      {
+        "name": "bg1",
+        "content": {
+          "_name": "starkiller",
+          "_defense": 8,
+          "_interdiction": "2d6",
+          "_valid": true,
+          "_hp0": 25,
+          ".": {
+            "hp": 25,
+            "max_hp": 25,
+            "lockon": 0,
+            "greywash": 0
+          },
+          ".c1": {
+            "_name": "starkiller-cannon",
+            ".": {
+              "total": 2,
+              "current": 2
+            }
+          },
+          ".e1": {
+            "_name": "giant",
+            "_defense": 5,
+            "+defense": -2,
+            "+interdiction": "",
+            "+hp": 20,
+            "_is_template": true,
+            "_is_unique": false,
+            "_valid": true,
+            ".": [],
+            ".c1": {
+              "_name": "tyrant cannon",
+              ".": {
+                "total": 4,
+                "current": 4
+              }
+            },
+            "_init": true
+          },
+          "+defense": [],
+          "+interdiction": [],
+          "hp": 25,
+          "max_hp": 25
+        }
+      },
+      {
+        "name": "bg2",
+        "content": {
+          "_name": "triton",
+          "_defense": 6,
+          "_interdiction": "3d6",
+          "_valid": true,
+          "_hp0": 30,
+          ".": {
+            "hp": 29,
+            "max_hp": 30,
+            "lockon": 0,
+            "greywash": 0
+          },
+          ".e1": {
+            "_name": "battlethreads",
+            "_defense": 8,
+            "+defense": 0,
+            "+interdiction": "",
+            "+hp": 0,
+            "_is_template": false,
+            "_is_unique": true,
+            "_valid": true,
+            ".": [
+              {
+                "hp": 10,
+                "lockon": 0,
+                "greywash": 0
+              },
+              {
+                "hp": 10,
+                "lockon": 0,
+                "greywash": 0
+              }
+            ],
+            "_init": true
+          },
+          "+defense": [],
+          "+interdiction": [],
+          "hp": 30,
+          "max_hp": 30
+        }
+      }
+    ],
+    "modifiers": [
+      ""
+    ],
+    "turn": 1
+  },
+  [
+    [
+      [
+        "change",
+        [
+          "npcs",
+          1,
+          "content",
+          ".",
+          "hp"
+        ],
+        [
+          30,
+          29
+        ]
+      ]
+    ],
+    [
+      [
+        "add",
+        [
+          "npcs",
+          1,
+          "content"
+        ],
+        [
+          [
+            ".e1",
+            {
+              "_name": "battlethreads",
+              "_defense": 8,
+              "+defense": 0,
+              "+interdiction": "",
+              "+hp": 0,
+              "_is_template": false,
+              "_is_unique": true,
+              "_valid": true,
+              ".": [
+                {
+                  "hp": 10,
+                  "lockon": 0,
+                  "greywash": 0
+                },
+                {
+                  "hp": 10,
+                  "lockon": 0,
+                  "greywash": 0
+                }
+              ],
+              "_init": true
+            }
+          ],
+          [
+            "+defense",
+            []
+          ],
+          [
+            "+interdiction",
+            []
+          ],
+          [
+            "hp",
+            30
+          ],
+          [
+            "max_hp",
+            30
+          ]
+        ]
+      ]
+    ],
+    [],
+    [
+      [
+        "add",
+        "npcs",
+        [
+          [
+            1,
+            {
+              "name": "bg2",
+              "content": {
+                "_name": "triton",
+                "_defense": 6,
+                "_interdiction": "3d6",
+                "_valid": true,
+                "_hp0": 30,
+                ".": {
+                  "hp": 30,
+                  "max_hp": 30,
+                  "lockon": 0,
+                  "greywash": 0
+                }
+              }
+            }
+          ]
+        ]
+      ]
+    ],
+    [
+      [
+        "add",
+        "npcs",
+        [
+          [
+            0,
+            {
+              "name": "bg1",
+              "content": {
+                "_name": "starkiller",
+                "_defense": 8,
+                "_interdiction": "2d6",
+                "_valid": true,
+                "_hp0": 25,
+                ".": {
+                  "hp": 25,
+                  "max_hp": 25,
+                  "lockon": 0,
+                  "greywash": 0
+                },
+                ".c1": {
+                  "_name": "starkiller-cannon",
+                  ".": {
+                    "total": 2,
+                    "current": 2
+                  }
+                },
+                ".e1": {
+                  "_name": "giant",
+                  "_defense": 5,
+                  "+defense": -2,
+                  "+interdiction": "",
+                  "+hp": 20,
+                  "_is_template": true,
+                  "_is_unique": false,
+                  "_valid": true,
+                  ".": [],
+                  ".c1": {
+                    "_name": "tyrant cannon",
+                    ".": {
+                      "total": 4,
+                      "current": 4
+                    }
+                  },
+                  "_init": true
+                },
+                "+defense": [],
+                "+interdiction": [],
+                "hp": 25,
+                "max_hp": 25
+              }
+            }
+          ]
+        ]
+      ]
+    ],
+    [
+      [
+        "remove",
+        "npcs",
+        [
+          [
+            0,
+            {
+              "name": "alpha",
+              "content": {
+                "_name": "starkiller",
+                "_defense": 8,
+                "_interdiction": "2d6",
+                "_valid": true,
+                "_hp0": 25,
+                ".": {
+                  "hp": 25,
+                  "max_hp": 25,
+                  "lockon": 0,
+                  "greywash": 0
+                },
+                ".c1": {
+                  "_name": "starkiller-cannon",
+                  ".": {
+                    "total": 2,
+                    "current": 1
+                  }
+                },
+                ".e1": {
+                  "_name": "battlethreads",
+                  "_defense": 8,
+                  "+defense": 0,
+                  "+interdiction": "",
+                  "+hp": 0,
+                  "_is_template": false,
+                  "_is_unique": true,
+                  "_valid": true,
+                  ".": [
+                    {
+                      "hp": 10,
+                      "lockon": 0,
+                      "greywash": 0
+                    },
+                    {
+                      "hp": 10,
+                      "lockon": 0,
+                      "greywash": 0
+                    }
+                  ],
+                  "_init": true
+                },
+                "+defense": [],
+                "+interdiction": [],
+                "hp": 25,
+                "max_hp": 25
+              }
+            }
+          ]
+        ]
+      ],
+      [
+        "change",
+        "turn",
+        [
+          2,
+          1
+        ]
+      ]
+    ],
+    [
+      [
+        "remove",
+        "npcs",
+        [
+          [
+            1,
+            {
+              "name": "bg1",
+              "content": {
+                "_name": "starkiller",
+                "_defense": 8,
+                "_interdiction": "2d6",
+                "_valid": true,
+                "_hp0": 25,
+                ".": {
+                  "hp": 25,
+                  "max_hp": 25,
+                  "lockon": 0,
+                  "greywash": 0
+                },
+                ".c1": {
+                  "_name": "starkiller-cannon",
+                  ".": {
+                    "total": 2,
+                    "current": 2
+                  }
+                },
+                ".e1": {
+                  "_name": "brothers-in-arms",
+                  "_defense": 8,
+                  "+defense": 0,
+                  "+interdiction": "",
+                  "+hp": 0,
+                  "_is_template": false,
+                  "_is_unique": false,
+                  "_valid": true,
+                  ".": [
+                    {
+                      "hp": 8,
+                      "lockon": 0,
+                      "greywash": 0
+                    },
+                    {
+                      "hp": 8,
+                      "lockon": 0,
+                      "greywash": 0
+                    }
+                  ],
+                  ".c1": {
+                    "_name": "short-spool spinal guns",
+                    ".": {
+                      "total": 2,
+                      "current": 2
+                    }
+                  },
+                  "_init": true
+                },
+                "+defense": [],
+                "+interdiction": [],
+                "hp": 25,
+                "max_hp": 25
+              }
+            }
+          ]
+        ]
+      ]
+    ],
+    [
+      [
+        "add",
+        "npcs",
+        [
+          [
+            1,
+            {
+              "name": "bg1",
+              "content": {
+                "_name": "starkiller",
+                "_defense": 8,
+                "_interdiction": "2d6",
+                "_valid": true,
+                "_hp0": 25,
+                ".": {
+                  "hp": 25,
+                  "max_hp": 25,
+                  "lockon": 0,
+                  "greywash": 0
+                },
+                ".c1": {
+                  "_name": "starkiller-cannon",
+                  ".": {
+                    "total": 2,
+                    "current": 2
+                  }
+                },
+                ".e1": {
+                  "_name": "brothers-in-arms",
+                  "_defense": 8,
+                  "+defense": 0,
+                  "+interdiction": "",
+                  "+hp": 0,
+                  "_is_template": false,
+                  "_is_unique": false,
+                  "_valid": true,
+                  ".": [
+                    {
+                      "hp": 8,
+                      "lockon": 0,
+                      "greywash": 0
+                    },
+                    {
+                      "hp": 8,
+                      "lockon": 0,
+                      "greywash": 0
+                    }
+                  ],
+                  ".c1": {
+                    "_name": "short-spool spinal guns",
+                    ".": {
+                      "total": 2,
+                      "current": 2
+                    }
+                  },
+                  "_init": true
+                },
+                "+defense": [],
+                "+interdiction": [],
+                "hp": 25,
+                "max_hp": 25
+              }
+            }
+          ]
+        ]
+      ]
+    ],
+    [
+      [
+        "change",
+        [
+          "npcs",
+          0,
+          "content",
+          ".c1",
+          ".",
+          "current"
+        ],
+        [
+          2,
+          1
+        ]
+      ],
+      [
+        "change",
+        "turn",
+        [
+          1,
+          2
+        ]
+      ]
+    ],
+    [
+      [
+        "add",
+        "",
+        [
+          [
+            "npcs",
+            [
+              {
+                "name": "alpha",
+                "content": {
+                  "_name": "starkiller",
+                  "_defense": 8,
+                  "_interdiction": "2d6",
+                  "_valid": true,
+                  "_hp0": 25,
+                  ".": {
+                    "hp": 25,
+                    "max_hp": 25,
+                    "lockon": 0,
+                    "greywash": 0
+                  },
+                  ".c1": {
+                    "_name": "starkiller-cannon",
+                    ".": {
+                      "total": 2,
+                      "current": 2
+                    }
+                  },
+                  ".e1": {
+                    "_name": "battlethreads",
+                    "_defense": 8,
+                    "+defense": 0,
+                    "+interdiction": "",
+                    "+hp": 0,
+                    "_is_template": false,
+                    "_is_unique": true,
+                    "_valid": true,
+                    ".": [
+                      {
+                        "hp": 10,
+                        "lockon": 0,
+                        "greywash": 0
+                      },
+                      {
+                        "hp": 10,
+                        "lockon": 0,
+                        "greywash": 0
+                      }
+                    ],
+                    "_init": true
+                  },
+                  "+defense": [],
+                  "+interdiction": [],
+                  "hp": 25,
+                  "max_hp": 25
+                }
+              }
+            ]
+          ],
+          [
+            "modifiers",
+            [
+              ""
+            ]
+          ],
+          [
+            "turn",
+            1
+          ]
+        ]
+      ]
+    ]
+  ],
+  0
+]

@@ -7,11 +7,6 @@ from time import sleep as wait
 def main():
     import message_processing
     logger = message_processing.logger
-
-    logger.indicate_process_start("Connecting to Database ...")
-    logger.indicate_process_outcome("\nAn error occurred while trying to setup the database client."
-                                    " See stderr for more information")
-    logger.log_traceback()
     start = datetime.datetime.now()
     try:
         message_processing.run()

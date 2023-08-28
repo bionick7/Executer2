@@ -12,26 +12,32 @@ DEFAULT_COUNTERS = {"lockon": 0, "greywash": 0}
  
 class BGBattleData:
     def  __init__(self, p_message_queue, p_error_queue) -> None:
-        self.filepath = "save/__watch.json"
+        self.filepath = "__INVALID"
 
         self.current_state: Obj = {}
 
         self.last_state: Obj = {}
         self.history: list = []
         self.history_pointer = 0  # current state
-
         self.filehash: int = 0
-        if not os.path.isfile(self.filepath):
-            self._dump_current()
-        else:
-            self.watch()
         self.message_queue = p_message_queue
         self.error_queue = p_error_queue
+    
+    def watch_or_dump(self) -> bool:
+        if self.filepath == "__INVALID":
+            return False
+        if not os.path.isfile(self.filepath):
+            self._dump_current()
+            return False
+        else:
+            return self.watch()
 
     def watch(self) -> bool:
         ''' Returns if data has been changed '''
+        if self.filepath == "__INVALID":
+            return False
         if not os.path.isfile(self.filepath):
-            self.error_queue.append(f"Watch file ({self.filepath}) Deleted")
+            self.error_queue.append(f"Watch file ({self.filepath}) does not exist")
             return False
         with open(self.filepath, "r") as f:
             txt = f.read()
@@ -43,6 +49,8 @@ class BGBattleData:
                 return True
     
     def _dump_current(self) -> None:
+        if self.filepath == "__INVALID":
+            return
         txt = json.dumps(self._serialize(), indent="  ")
         self.filehash = hash(txt)
         with open(self.filepath, "w") as f:
@@ -148,22 +156,32 @@ class BGBattle:
             self.message_queue.append("No such compendium: " + path)
         return res
 
-    def open(self, p_gm: str, *p_modifiers: str):
+    def open(self, p_gm: str, *p_modifiers: str) -> None:
         self.modifiers = list(p_modifiers)
         self.opened = True
         self.gm_id = p_gm
+        self.npcs = {}
+        self.payloads = []
         self.turn = 1
         self.message_queue.append("Constructing legion...")
         self.message_queue.append("$WAIT:0.5")
         self.message_queue.append(f"Authorisation granted to {p_gm}")
+        self.on_modified()
 
-    def close(self):
+    def close(self) -> None:
         self.gm = "NO-ONE"
         self.opened = False
         self.modifiers = []
         self.npcs = {}
         self.payloads = []
         self.turn = -1
+        self.on_modified()
+
+    def connect_to(self, path: str) -> None:
+        self.datamanager.filepath = "save/" + path + ".json"
+        if self.datamanager.watch_or_dump():
+            self.opened = True
+            self.sync()
 
     def _get_stats_wings(self, wings: list) -> Obj:
         if not isinstance(wings, list):
@@ -359,6 +377,7 @@ class BGBattle:
             if  bg2_name == "":
                 del self.npcs[bg_name]
                 self.message_queue.append(f"Removed battlegroup {bg_name}")
+                self.on_modified()
                 return True
             else:
                 self.error_queue.append(f"Cannot reassign battlegroup {bg_name}")
@@ -401,7 +420,6 @@ class BGBattle:
         return {
             "npcs": [x.save() for x in self.npcs.values()],
             "modifiers": self.modifiers,
-            "opened": self.opened,
             "turn": self.turn
         }
 
@@ -409,12 +427,13 @@ class BGBattle:
         ''' Shallow Copy '''
         self.npcs = dict((x["name"], NPCBattleGroup.load(x)) for x in data["npcs"])
         self.modifiers = data["modifiers"]
-        self.opened = data["opened"]
         self.turn = data["turn"]
 
     def sync(self) -> None:
         self.set_data(dictdiffer.deepcopy(self.datamanager.get_current()))
-        
-    def watch_and_sync(self) -> None:
+            
+    def try_update(self, explicit: bool=True) -> None:
         if self.datamanager.watch():
+            if explicit:
+                self.message_queue.append("State changed; updating")
             self.sync()

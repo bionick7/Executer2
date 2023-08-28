@@ -33,14 +33,11 @@ def run():
 @client.event
 async def on_ready():
     time_display_template = data["config"]["time display template"]
-    logger.indicate_process_outcome(f"Ready\n{datetime.datetime.now().strftime(time_display_template)}")
-    logger.log_line("Initiate routines ...")
-    logger.log_line("Ready")
-
+    logger.log_line(f"Ready\n{datetime.datetime.now().strftime(time_display_template)}")
 
 @client.event
 async def on_connect():
-    logger.log("Connected")
+    logger.log_line("Connected")
 
 
 @client.event

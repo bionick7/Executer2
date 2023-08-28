@@ -1,779 +1,12 @@
 [
   {
-    "npcs": [
-      {
-        "name": "bg1",
-        "content": {
-          "_name": "turtleback",
-          "_defense": 6,
-          "_interdiction": "1d6",
-          "_valid": true,
-          "_hp0": 35,
-          ".": {
-            "hp": 35,
-            "max_hp": 35,
-            "lockon": 0,
-            "greywash": 0
-          },
-          ".e1": {
-            "_name": "brothers-in-arms",
-            "_defense": 8,
-            "+defense": 0,
-            "+interdiction": "",
-            "+hp": 0,
-            "_is_template": false,
-            "_is_unique": false,
-            "_valid": true,
-            ".": [
-              {
-                "hp": 8,
-                "lockon": 0,
-                "greywash": 0
-              },
-              {
-                "hp": 8,
-                "lockon": 0,
-                "greywash": 0
-              }
-            ],
-            ".c1": {
-              "_name": "short-spool spinal guns",
-              ".": {
-                "total": 2,
-                "current": 2
-              }
-            },
-            "_init": true
-          },
-          "+defense": [],
-          "+interdiction": [],
-          "hp": 35,
-          "max_hp": 35,
-          ".e2": {
-            "_name": "brothers-in-arms",
-            "_defense": 8,
-            "+defense": 0,
-            "+interdiction": "",
-            "+hp": 0,
-            "_is_template": false,
-            "_is_unique": false,
-            "_valid": true,
-            ".": [
-              {
-                "hp": 8,
-                "lockon": 0,
-                "greywash": 0
-              },
-              {
-                "hp": 8,
-                "lockon": 0,
-                "greywash": 0
-              }
-            ],
-            ".c1": {
-              "_name": "short-spool spinal guns",
-              ".": {
-                "total": 2,
-                "current": 2
-              }
-            },
-            "_init": true
-          },
-          ".e3": {
-            "_name": "loyal-guardian",
-            "_defense": 8,
-            "+defense": 0,
-            "+interdiction": "",
-            "+hp": 0,
-            "_is_template": false,
-            "_is_unique": true,
-            "_valid": true,
-            ".": [
-              {
-                "hp": 20,
-                "lockon": 0,
-                "greywash": 0
-              }
-            ],
-            "_init": true
-          }
-        }
-      },
-      {
-        "name": "bg2",
-        "content": {
-          "_name": "turtleback",
-          "_defense": 6,
-          "_interdiction": "1d6",
-          "_valid": true,
-          "_hp0": 35,
-          ".": {
-            "hp": 35,
-            "max_hp": 35,
-            "lockon": 0,
-            "greywash": 0
-          },
-          ".e1": {
-            "_name": "brothers-in-arms",
-            "_defense": 8,
-            "+defense": 0,
-            "+interdiction": "",
-            "+hp": 0,
-            "_is_template": false,
-            "_is_unique": false,
-            "_valid": true,
-            ".": [
-              {
-                "hp": 8,
-                "lockon": 0,
-                "greywash": 0
-              },
-              {
-                "hp": 8,
-                "lockon": 0,
-                "greywash": 0
-              }
-            ],
-            ".c1": {
-              "_name": "short-spool spinal guns",
-              ".": {
-                "total": 2,
-                "current": 2
-              }
-            },
-            "_init": true
-          },
-          "+defense": [],
-          "+interdiction": [],
-          "hp": 35,
-          "max_hp": 35,
-          ".e2": {
-            "_name": "brothers-in-arms",
-            "_defense": 8,
-            "+defense": 0,
-            "+interdiction": "",
-            "+hp": 0,
-            "_is_template": false,
-            "_is_unique": false,
-            "_valid": true,
-            ".": [
-              {
-                "hp": 8,
-                "lockon": 0,
-                "greywash": 0
-              },
-              {
-                "hp": 8,
-                "lockon": 0,
-                "greywash": 0
-              }
-            ],
-            ".c1": {
-              "_name": "short-spool spinal guns",
-              ".": {
-                "total": 2,
-                "current": 2
-              }
-            },
-            "_init": true
-          },
-          ".e3": {
-            "_name": "loyal-guardian",
-            "_defense": 8,
-            "+defense": 0,
-            "+interdiction": "",
-            "+hp": 0,
-            "_is_template": false,
-            "_is_unique": true,
-            "_valid": true,
-            ".": [
-              {
-                "hp": 20,
-                "lockon": 0,
-                "greywash": 0
-              }
-            ],
-            "_init": true
-          }
-        }
-      },
-      {
-        "name": "bg3",
-        "content": {
-          "_name": "hivequeen",
-          "_defense": 8,
-          "_interdiction": "2d6",
-          "_valid": true,
-          "_hp0": 30,
-          ".": {
-            "hp": 30,
-            "max_hp": 30,
-            "lockon": 0,
-            "greywash": 0
-          },
-          ".e1": {
-            "_name": "battlethreads",
-            "_defense": 8,
-            "+defense": 0,
-            "+interdiction": "",
-            "+hp": 0,
-            "_is_template": false,
-            "_is_unique": true,
-            "_valid": true,
-            ".": [
-              {
-                "hp": 10,
-                "lockon": 0,
-                "greywash": 0
-              },
-              {
-                "hp": 10,
-                "lockon": 0,
-                "greywash": 0
-              }
-            ],
-            "_init": true
-          },
-          "+defense": [],
-          "+interdiction": [],
-          "hp": 30,
-          "max_hp": 30,
-          ".e2": {
-            "_name": "daggerflight",
-            "_defense": 10,
-            "+defense": 0,
-            "+interdiction": "",
-            "+hp": 0,
-            "_is_template": false,
-            "_is_unique": false,
-            "_valid": true,
-            ".": [
-              {
-                "hp": 6,
-                "lockon": 0,
-                "greywash": 0
-              },
-              {
-                "hp": 6,
-                "lockon": 0,
-                "greywash": 0
-              },
-              {
-                "hp": 6,
-                "lockon": 0,
-                "greywash": 0
-              },
-              {
-                "hp": 6,
-                "lockon": 0,
-                "greywash": 0
-              }
-            ],
-            "_init": true
-          },
-          ".e3": {
-            "_name": "stalwards",
-            "_defense": 8,
-            "+defense": 0,
-            "+interdiction": "",
-            "+hp": 0,
-            "_is_template": false,
-            "_is_unique": false,
-            "_valid": true,
-            ".": [
-              {
-                "hp": 10,
-                "lockon": 0,
-                "greywash": 0
-              },
-              {
-                "hp": 10,
-                "lockon": 0,
-                "greywash": 0
-              }
-            ],
-            "_init": true
-          }
-        }
-      },
-      {
-        "name": "bg4",
-        "content": {
-          "_name": "triton",
-          "_defense": 6,
-          "_interdiction": "3d6",
-          "_valid": true,
-          "_hp0": 30,
-          ".": {
-            "hp": 30,
-            "max_hp": 30,
-            "lockon": 0,
-            "greywash": 0
-          },
-          ".e1": {
-            "_name": "battlethreads",
-            "_defense": 8,
-            "+defense": 0,
-            "+interdiction": "",
-            "+hp": 0,
-            "_is_template": false,
-            "_is_unique": true,
-            "_valid": true,
-            ".": [
-              {
-                "hp": 10,
-                "lockon": 0,
-                "greywash": 0
-              },
-              {
-                "hp": 10,
-                "lockon": 0,
-                "greywash": 0
-              }
-            ],
-            "_init": true
-          },
-          "+defense": [],
-          "+interdiction": [],
-          "hp": 30,
-          "max_hp": 30,
-          ".e2": {
-            "_name": "stalwards",
-            "_defense": 8,
-            "+defense": 0,
-            "+interdiction": "",
-            "+hp": 0,
-            "_is_template": false,
-            "_is_unique": false,
-            "_valid": true,
-            ".": [
-              {
-                "hp": 10,
-                "lockon": 0,
-                "greywash": 0
-              },
-              {
-                "hp": 10,
-                "lockon": 0,
-                "greywash": 0
-              }
-            ],
-            "_init": true
-          }
-        }
-      }
-    ],
+    "npcs": [],
     "modifiers": [
       ""
     ],
     "turn": 1
   },
   [
-    [
-      [
-        "add",
-        "npcs",
-        [
-          [
-            3,
-            {
-              "name": "bg4",
-              "content": {
-                "_name": "triton",
-                "_defense": 6,
-                "_interdiction": "3d6",
-                "_valid": true,
-                "_hp0": 30,
-                ".": {
-                  "hp": 30,
-                  "max_hp": 30,
-                  "lockon": 0,
-                  "greywash": 0
-                },
-                ".e1": {
-                  "_name": "battlethreads",
-                  "_defense": 8,
-                  "+defense": 0,
-                  "+interdiction": "",
-                  "+hp": 0,
-                  "_is_template": false,
-                  "_is_unique": true,
-                  "_valid": true,
-                  ".": [
-                    {
-                      "hp": 10,
-                      "lockon": 0,
-                      "greywash": 0
-                    },
-                    {
-                      "hp": 10,
-                      "lockon": 0,
-                      "greywash": 0
-                    }
-                  ],
-                  "_init": true
-                },
-                "+defense": [],
-                "+interdiction": [],
-                "hp": 30,
-                "max_hp": 30,
-                ".e2": {
-                  "_name": "stalwards",
-                  "_defense": 8,
-                  "+defense": 0,
-                  "+interdiction": "",
-                  "+hp": 0,
-                  "_is_template": false,
-                  "_is_unique": false,
-                  "_valid": true,
-                  ".": [
-                    {
-                      "hp": 10,
-                      "lockon": 0,
-                      "greywash": 0
-                    },
-                    {
-                      "hp": 10,
-                      "lockon": 0,
-                      "greywash": 0
-                    }
-                  ],
-                  "_init": true
-                }
-              }
-            }
-          ]
-        ]
-      ]
-    ],
-    [
-      [
-        "add",
-        "npcs",
-        [
-          [
-            2,
-            {
-              "name": "bg3",
-              "content": {
-                "_name": "hivequeen",
-                "_defense": 8,
-                "_interdiction": "2d6",
-                "_valid": true,
-                "_hp0": 30,
-                ".": {
-                  "hp": 30,
-                  "max_hp": 30,
-                  "lockon": 0,
-                  "greywash": 0
-                },
-                ".e1": {
-                  "_name": "battlethreads",
-                  "_defense": 8,
-                  "+defense": 0,
-                  "+interdiction": "",
-                  "+hp": 0,
-                  "_is_template": false,
-                  "_is_unique": true,
-                  "_valid": true,
-                  ".": [
-                    {
-                      "hp": 10,
-                      "lockon": 0,
-                      "greywash": 0
-                    },
-                    {
-                      "hp": 10,
-                      "lockon": 0,
-                      "greywash": 0
-                    }
-                  ],
-                  "_init": true
-                },
-                "+defense": [],
-                "+interdiction": [],
-                "hp": 30,
-                "max_hp": 30,
-                ".e2": {
-                  "_name": "daggerflight",
-                  "_defense": 10,
-                  "+defense": 0,
-                  "+interdiction": "",
-                  "+hp": 0,
-                  "_is_template": false,
-                  "_is_unique": false,
-                  "_valid": true,
-                  ".": [
-                    {
-                      "hp": 6,
-                      "lockon": 0,
-                      "greywash": 0
-                    },
-                    {
-                      "hp": 6,
-                      "lockon": 0,
-                      "greywash": 0
-                    },
-                    {
-                      "hp": 6,
-                      "lockon": 0,
-                      "greywash": 0
-                    },
-                    {
-                      "hp": 6,
-                      "lockon": 0,
-                      "greywash": 0
-                    }
-                  ],
-                  "_init": true
-                },
-                ".e3": {
-                  "_name": "stalwards",
-                  "_defense": 8,
-                  "+defense": 0,
-                  "+interdiction": "",
-                  "+hp": 0,
-                  "_is_template": false,
-                  "_is_unique": false,
-                  "_valid": true,
-                  ".": [
-                    {
-                      "hp": 10,
-                      "lockon": 0,
-                      "greywash": 0
-                    },
-                    {
-                      "hp": 10,
-                      "lockon": 0,
-                      "greywash": 0
-                    }
-                  ],
-                  "_init": true
-                }
-              }
-            }
-          ]
-        ]
-      ]
-    ],
-    [
-      [
-        "add",
-        "npcs",
-        [
-          [
-            1,
-            {
-              "name": "bg2",
-              "content": {
-                "_name": "turtleback",
-                "_defense": 6,
-                "_interdiction": "1d6",
-                "_valid": true,
-                "_hp0": 35,
-                ".": {
-                  "hp": 35,
-                  "max_hp": 35,
-                  "lockon": 0,
-                  "greywash": 0
-                },
-                ".e1": {
-                  "_name": "brothers-in-arms",
-                  "_defense": 8,
-                  "+defense": 0,
-                  "+interdiction": "",
-                  "+hp": 0,
-                  "_is_template": false,
-                  "_is_unique": false,
-                  "_valid": true,
-                  ".": [
-                    {
-                      "hp": 8,
-                      "lockon": 0,
-                      "greywash": 0
-                    },
-                    {
-                      "hp": 8,
-                      "lockon": 0,
-                      "greywash": 0
-                    }
-                  ],
-                  ".c1": {
-                    "_name": "short-spool spinal guns",
-                    ".": {
-                      "total": 2,
-                      "current": 2
-                    }
-                  },
-                  "_init": true
-                },
-                "+defense": [],
-                "+interdiction": [],
-                "hp": 35,
-                "max_hp": 35,
-                ".e2": {
-                  "_name": "brothers-in-arms",
-                  "_defense": 8,
-                  "+defense": 0,
-                  "+interdiction": "",
-                  "+hp": 0,
-                  "_is_template": false,
-                  "_is_unique": false,
-                  "_valid": true,
-                  ".": [
-                    {
-                      "hp": 8,
-                      "lockon": 0,
-                      "greywash": 0
-                    },
-                    {
-                      "hp": 8,
-                      "lockon": 0,
-                      "greywash": 0
-                    }
-                  ],
-                  ".c1": {
-                    "_name": "short-spool spinal guns",
-                    ".": {
-                      "total": 2,
-                      "current": 2
-                    }
-                  },
-                  "_init": true
-                },
-                ".e3": {
-                  "_name": "loyal-guardian",
-                  "_defense": 8,
-                  "+defense": 0,
-                  "+interdiction": "",
-                  "+hp": 0,
-                  "_is_template": false,
-                  "_is_unique": true,
-                  "_valid": true,
-                  ".": [
-                    {
-                      "hp": 20,
-                      "lockon": 0,
-                      "greywash": 0
-                    }
-                  ],
-                  "_init": true
-                }
-              }
-            }
-          ]
-        ]
-      ]
-    ],
-    [
-      [
-        "add",
-        "npcs",
-        [
-          [
-            0,
-            {
-              "name": "bg1",
-              "content": {
-                "_name": "turtleback",
-                "_defense": 6,
-                "_interdiction": "1d6",
-                "_valid": true,
-                "_hp0": 35,
-                ".": {
-                  "hp": 35,
-                  "max_hp": 35,
-                  "lockon": 0,
-                  "greywash": 0
-                },
-                ".e1": {
-                  "_name": "brothers-in-arms",
-                  "_defense": 8,
-                  "+defense": 0,
-                  "+interdiction": "",
-                  "+hp": 0,
-                  "_is_template": false,
-                  "_is_unique": false,
-                  "_valid": true,
-                  ".": [
-                    {
-                      "hp": 8,
-                      "lockon": 0,
-                      "greywash": 0
-                    },
-                    {
-                      "hp": 8,
-                      "lockon": 0,
-                      "greywash": 0
-                    }
-                  ],
-                  ".c1": {
-                    "_name": "short-spool spinal guns",
-                    ".": {
-                      "total": 2,
-                      "current": 2
-                    }
-                  },
-                  "_init": true
-                },
-                "+defense": [],
-                "+interdiction": [],
-                "hp": 35,
-                "max_hp": 35,
-                ".e2": {
-                  "_name": "brothers-in-arms",
-                  "_defense": 8,
-                  "+defense": 0,
-                  "+interdiction": "",
-                  "+hp": 0,
-                  "_is_template": false,
-                  "_is_unique": false,
-                  "_valid": true,
-                  ".": [
-                    {
-                      "hp": 8,
-                      "lockon": 0,
-                      "greywash": 0
-                    },
-                    {
-                      "hp": 8,
-                      "lockon": 0,
-                      "greywash": 0
-                    }
-                  ],
-                  ".c1": {
-                    "_name": "short-spool spinal guns",
-                    ".": {
-                      "total": 2,
-                      "current": 2
-                    }
-                  },
-                  "_init": true
-                },
-                ".e3": {
-                  "_name": "loyal-guardian",
-                  "_defense": 8,
-                  "+defense": 0,
-                  "+interdiction": "",
-                  "+hp": 0,
-                  "_is_template": false,
-                  "_is_unique": true,
-                  "_valid": true,
-                  ".": [
-                    {
-                      "hp": 20,
-                      "lockon": 0,
-                      "greywash": 0
-                    }
-                  ],
-                  "_init": true
-                }
-              }
-            }
-          ]
-        ]
-      ]
-    ],
     [
       [
         "remove",
@@ -5499,6 +4732,330 @@
         [
           1,
           2
+        ]
+      ]
+    ],
+    [
+      [
+        "change",
+        [
+          "npcs",
+          2,
+          "content",
+          ".e2",
+          ".w3",
+          ".",
+          0,
+          "hp"
+        ],
+        [
+          5,
+          1
+        ]
+      ],
+      [
+        "change",
+        [
+          "npcs",
+          2,
+          "content",
+          ".e2",
+          ".w3",
+          ".",
+          1,
+          "hp"
+        ],
+        [
+          5,
+          1
+        ]
+      ]
+    ],
+    [
+      [
+        "add",
+        "npcs",
+        [
+          [
+            3,
+            {
+              "name": "bg4",
+              "content": {
+                "_name": "corsair",
+                "_defense": 10,
+                "_interdiction": "1d6",
+                "_valid": true,
+                "_hp0": 25,
+                ".": {
+                  "hp": 25,
+                  "max_hp": 25,
+                  "lockon": 0,
+                  "greywash": 0
+                },
+                ".w1": {
+                  "_name": "motely crew",
+                  "_range": "0-3",
+                  "_tenacity": 12,
+                  ".": [
+                    {
+                      "hp": 5,
+                      "lockon": 0,
+                      "greywash": 0
+                    },
+                    {
+                      "hp": 5,
+                      "lockon": 0,
+                      "greywash": 0
+                    },
+                    {
+                      "hp": 5,
+                      "lockon": 0,
+                      "greywash": 0
+                    },
+                    {
+                      "hp": 5,
+                      "lockon": 0,
+                      "greywash": 0
+                    }
+                  ]
+                },
+                ".e1": {
+                  "_name": "roughnecks",
+                  "_defense": 10,
+                  "+defense": 0,
+                  "+interdiction": "2",
+                  "+hp": 0,
+                  "_is_template": false,
+                  "_is_unique": false,
+                  "_valid": true,
+                  ".": [
+                    {
+                      "hp": 8,
+                      "lockon": 0,
+                      "greywash": 0
+                    },
+                    {
+                      "hp": 8,
+                      "lockon": 0,
+                      "greywash": 0
+                    }
+                  ],
+                  "_init": true
+                },
+                "+defense": [],
+                "+interdiction": [
+                  "2"
+                ],
+                "hp": 25,
+                "max_hp": 25
+              }
+            }
+          ]
+        ]
+      ]
+    ],
+    [
+      [
+        "add",
+        "npcs",
+        [
+          [
+            2,
+            {
+              "name": "bg3",
+              "content": {
+                "_name": "highline",
+                "_defense": 10,
+                "_interdiction": "1d6+4",
+                "_valid": true,
+                "_hp0": 20,
+                ".": {
+                  "hp": 20,
+                  "max_hp": 20,
+                  "lockon": 0,
+                  "greywash": 0
+                },
+                ".e1": {
+                  "_name": "brothers-in-arms",
+                  "_defense": 8,
+                  "+defense": 0,
+                  "+interdiction": "",
+                  "+hp": 0,
+                  "_is_template": false,
+                  "_is_unique": false,
+                  "_valid": true,
+                  ".": [
+                    {
+                      "hp": 8,
+                      "lockon": 0,
+                      "greywash": 0
+                    },
+                    {
+                      "hp": 8,
+                      "lockon": 0,
+                      "greywash": 0
+                    }
+                  ],
+                  ".c1": {
+                    "_name": "short-spool spinal guns",
+                    ".": {
+                      "total": 2,
+                      "current": 2
+                    }
+                  },
+                  "_init": true
+                },
+                "+defense": [],
+                "+interdiction": [],
+                "hp": 20,
+                "max_hp": 20,
+                ".e2": {
+                  "_name": "starfield-furies",
+                  "_defense": 8,
+                  "+defense": 0,
+                  "+interdiction": "",
+                  "+hp": 0,
+                  "_is_template": false,
+                  "_is_unique": false,
+                  "_valid": true,
+                  ".": [
+                    {
+                      "hp": 10,
+                      "lockon": 0,
+                      "greywash": 0
+                    },
+                    {
+                      "hp": 10,
+                      "lockon": 0,
+                      "greywash": 0
+                    }
+                  ],
+                  ".w1": {
+                    "_name": "fighter",
+                    "_range": "0-2",
+                    "_tenacity": 0,
+                    ".": [
+                      {
+                        "hp": 5,
+                        "lockon": 0,
+                        "greywash": 0
+                      },
+                      {
+                        "hp": 5,
+                        "lockon": 0,
+                        "greywash": 0
+                      }
+                    ]
+                  },
+                  ".w2": {
+                    "_name": "bomber",
+                    "_range": "0-2",
+                    "_tenacity": 0,
+                    ".": [
+                      {
+                        "hp": 6,
+                        "lockon": 0,
+                        "greywash": 0
+                      }
+                    ]
+                  },
+                  ".w3": {
+                    "_name": "fighter",
+                    "_range": "0-2",
+                    "_tenacity": 0,
+                    ".": [
+                      {
+                        "hp": 5,
+                        "lockon": 0,
+                        "greywash": 0
+                      },
+                      {
+                        "hp": 5,
+                        "lockon": 0,
+                        "greywash": 0
+                      }
+                    ]
+                  },
+                  ".w4": {
+                    "_name": "bomber",
+                    "_range": "0-2",
+                    "_tenacity": 0,
+                    ".": [
+                      {
+                        "hp": 6,
+                        "lockon": 0,
+                        "greywash": 0
+                      }
+                    ]
+                  },
+                  "_init": true
+                }
+              }
+            }
+          ]
+        ]
+      ]
+    ],
+    [
+      [
+        "add",
+        "npcs",
+        [
+          [
+            1,
+            {
+              "name": "bg2",
+              "content": {
+                "_name": "paladin",
+                "_defense": 8,
+                "_interdiction": "2d6",
+                "_valid": true,
+                "_hp0": 25,
+                ".": {
+                  "hp": 25,
+                  "max_hp": 25,
+                  "lockon": 0,
+                  "greywash": 0
+                },
+                ".c1": {
+                  "_name": "redgiant-solar-lance",
+                  ".": {
+                    "total": 3,
+                    "current": 3
+                  }
+                },
+                ".e1": {
+                  "_name": "roughnecks",
+                  "_defense": 10,
+                  "+defense": 0,
+                  "+interdiction": "2",
+                  "+hp": 0,
+                  "_is_template": false,
+                  "_is_unique": false,
+                  "_valid": true,
+                  ".": [
+                    {
+                      "hp": 8,
+                      "lockon": 0,
+                      "greywash": 0
+                    },
+                    {
+                      "hp": 8,
+                      "lockon": 0,
+                      "greywash": 0
+                    }
+                  ],
+                  "_init": true
+                },
+                "+defense": [],
+                "+interdiction": [
+                  "2"
+                ],
+                "hp": 25,
+                "max_hp": 25
+              }
+            }
+          ]
         ]
       ]
     ]

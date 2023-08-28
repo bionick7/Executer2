@@ -2,6 +2,7 @@ import unittest
 
 import dictdiffer
 from battlegroup.battlegroup_impl import BGBattle
+from battlegroup.console import bg_cmd, ArgumentList
 
 class TestImplementation(unittest.TestCase):
     def __init__(self, methodName: str = "runTest") -> None:
@@ -11,6 +12,12 @@ class TestImplementation(unittest.TestCase):
     def compare_dict(self, d1: dict, d2: dict):
         diff = list(dictdiffer.diff(d1, d2))
         self.assertEqual(diff, [])
+
+    def _test_cmd(self, cmd: str, path: str = "**", args: list = []):
+        bg_cmd(path.split("."), self.battle, cmd, ArgumentList(args), "tester")
+        
+    def _assert_attribute(self, path: str, compare: int):
+        self.assertEqual(self.battle.get_attribute(path.split(".")), compare)
 
     def test_implementation(self):
         self.battle.open("Threading the needle", "LOCAL")
@@ -78,15 +85,29 @@ class TestImplementation(unittest.TestCase):
         self.compare_dict(self.battle.get_data(), d2)
 
     def test_charges(self):
-        self.battle.add_npc("Starkiller", ["Brothers-in-arms"], "alpha")
-        self.battle.logistics_phase()
-        self.battle.logistics_phase()
-        self.assertEqual(self.battle.get_attribute(["alpha", "c1", "current"]), 0)
-        self.assertEqual(self.battle.get_attribute(["alpha", "e1", "c1", "current"]), 0)
-        self.battle.reset_counter(["alpha", "c1"])
-        self.battle.set_attribute(["alpha", "e1", "c1", "current"], self.battle.get_attribute(["alpha", "e1", "c1", "total"]))
-        self.assertEqual(self.battle.get_attribute(["alpha", "c1", "current"]), 2)
-        self.assertEqual(self.battle.get_attribute(["alpha", "e1", "c1", "current"]), 2)
+        self._test_cmd("open")
+        self._test_cmd(":=", "alpha", ["Starkiller", "Brothers-in-arms"])
+        self._test_cmd("turn")
+        self._test_cmd("turn")
+        self._assert_attribute("alpha.c1.current", 0)
+        self._assert_attribute("alpha.e1.c1.current", 0)
+        self._test_cmd("=", "alpha.c1", ["R"])
+        self._test_cmd("=", "alpha.e1.c1.current", ["alpha.e1.c1.total".split(".")])
+        self._assert_attribute("alpha.c1.current", 2)
+        self._assert_attribute("alpha.e1.c1.current", 2)
+        
+    def test_sync(self):
+        battle2 = BGBattle()
+        self._test_cmd("open")
+        self._test_cmd(":=", "alpha", ["Starkiller", "Battlethreads"])
+        self._test_cmd("connect", "**", ["test_watch"])
+
+        d1 = dictdiffer.deepcopy(self.battle.get_data())
+        
+        bg_cmd(["**"], battle2, "connect", ArgumentList(["test_watch"]), "tester")
+        battle2.datamanager.watch()
+        battle2.sync()
+        self.compare_dict(d1, battle2.get_data())
 
 if __name__ == "__main__":
     unittest.main()

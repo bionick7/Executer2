@@ -2,7 +2,7 @@ import time
 import sys
 import numpy as np
 
-from typing import Callable, Any
+from typing import Callable, Collection, Any
 
 from battlegroup.battlegroup_impl import *
 from battlegroup.output import *
@@ -50,6 +50,24 @@ class ArgumentList:
     def fetch_raw(self) -> str:
         self._i += 1
         return self.args[self._i - 1]
+    
+    def match(self, arg_types: Collection) -> bool:
+        if len(arg_types) != len(self.args):
+            return False
+        for i, typ in enumerate(arg_types):
+            if typ == "int":
+                if self._get_as_int(self.args[i], UNREACHABLE) == UNREACHABLE:
+                    return False
+            elif typ.startswith("arr") and typ[3:].isdigit():
+                if self._get_as_arr(self.args[i], int(typ[3:]), [UNREACHABLE]) == [UNREACHABLE]:
+                    return False
+            elif typ == "str":
+                if isinstance(self.args[i], str):
+                    return False
+            else:
+                return False
+        return True
+
 
     @staticmethod
     def _get_as_int(x, default: int) -> int:
@@ -57,13 +75,13 @@ class ArgumentList:
             return int(x[0])
         if isinstance(x, (int, float)):
             return int(x)
+        if isinstance(x, (SyntaxNode)):
+            return ArgumentList._get_as_int(x.evaluate(), default)
         return default
 
     def fetch_int(self, default: int=0) -> int:
         if not self.can_fetch(): return default
         x = self.fetch_raw()
-        if isinstance(x, (SyntaxNode)):
-            return self._get_as_int(x.evaluate(), default)
         return self._get_as_int(x, default)
 
     @staticmethod
@@ -74,13 +92,13 @@ class ArgumentList:
             return list(map(int, x))
         if isinstance(x, (int, float)):
             return [int(x)] * count
+        if isinstance(x, (SyntaxNode)):
+            return ArgumentList._get_as_arr(x.evaluate(), count, default)
         return default
 
     def fetch_array(self, count: int, default: list[int]=[]) -> list[int]:
         if not self.can_fetch(): return default
         x = self.fetch_raw()
-        if isinstance(x, (SyntaxNode)):
-            return self._get_as_arr(x.evaluate(), count, default)
         return self._get_as_arr(x, count, default)
 
     def fetch_path(self, default: list[str]=[]) -> list[str]:
@@ -90,7 +108,7 @@ class ArgumentList:
             return list(map(str, x))
         return default
 
-    def fetch_id(self, default: str="") -> str:
+    def fetch_string(self, default: str="") -> str:
         if not self.can_fetch(): return default
         x = self.fetch_raw()
         if isinstance(x, str):
@@ -98,6 +116,7 @@ class ArgumentList:
         return default
 
 def bg_cmd(path: list[str], battle: BGBattle, cmd: str, args: ArgumentList, author: str) -> None:
+    battle.try_update()
     if cmd == "open":
         battle.open(author, "")
     elif cmd == "close":
@@ -105,25 +124,27 @@ def bg_cmd(path: list[str], battle: BGBattle, cmd: str, args: ArgumentList, auth
     elif cmd == "load":
         if not battle.opened:
             battle.open(author, "")
-        battle.datamanager.load_from(args.fetch_id("save/temp"))  # TODO: this might get a problem
+        battle.datamanager.load_from(args.fetch_string("save/temp"))  # TODO: this might get a problem
         battle.sync()
     elif cmd == "save":
-        battle.datamanager.save_to(args.fetch_id("save/temp"))
+        battle.datamanager.save_to(args.fetch_string("save/temp"))
     elif cmd == "turn":
         battle.logistics_phase()
     elif cmd == "show":
         battle.get_player_rapport()
-    elif cmd == "gm":
-        fleet_name = args.fetch_id("")
-        if fleet_name != "":
-            battle.get_gm_detail(fleet_name)
+    elif cmd == "connect":
+        w_path = args.fetch_string("__INVALID")
+        if w_path == "__INVALID":
+            battle.error_queue.append(f"No path provided on connect")
         else:
-            battle.get_gm_rapport()
+            if not battle.opened:
+                battle.open(author, "")
+            battle.connect_to(w_path)
     
     elif cmd == ":=":
-        flagship = args.fetch_id()
+        flagship = args.fetch_string()
         escorts = []
-        while args.can_fetch(): escorts.append(args.fetch_id())
+        while args.can_fetch(): escorts.append(args.fetch_string())
         battle.add_npc(flagship, escorts, path[0])
     elif cmd == "=":
         rhs = args.fetch_raw()
@@ -138,24 +159,29 @@ def bg_cmd(path: list[str], battle: BGBattle, cmd: str, args: ArgumentList, auth
     elif cmd == "-=":
         battle.inc_attribute(path, -args.fetch_int())
     elif cmd == "=>":
-        battle.reassign_escort(path, args.fetch_id())
+        battle.reassign_escort(path, args.fetch_string())
     elif cmd == "??":
-        fleet_name = path[0]
-        if fleet_name == "**":
-            if args.can_fetch() and isinstance((x := args.fetch_raw()), SyntaxNode):
-                print(x.string_evaluate())
-            else:
+        if args.match(("int", "int")):
+            fleet_name = path[0]
+            min_range = args.fetch_int()
+            max_range = args.fetch_int()
+            # TODO
+        elif args.match(()):
+            fleet_name = path[0]
+            if fleet_name == "**":
                 battle.get_gm_rapport()
-        else:
-            battle.get_gm_detail(fleet_name)
+            else:
+                battle.get_gm_detail(fleet_name)
+        elif args.can_fetch() and isinstance((x := args.fetch_raw()), SyntaxNode):
+            print(x.string_evaluate())
 
-def bg_console(path: list[str], cmd: str, args: list[str]):
+def bg_console(path: list[str], cmd: str, args: list[str]) -> None:
     global current_battle
-    if not current_battle.opened and cmd not in ["open", "load"]:
+    if not current_battle.opened and cmd not in ["open", "load", "connect"]:
         print(acm("Out of combat right now"))
         return
 
-    bg_cmd(path, current_battle, cmd, ArgumentList(args), "USR")
+    bg_cmd(path, current_battle, cmd, ArgumentList(args), "just_ech")
 
     is_error = len(current_battle.error_queue) > 0
     while len(current_battle.error_queue) > 0:
@@ -173,7 +199,7 @@ def bg_console(path: list[str], cmd: str, args: list[str]):
         else:
             print(acm(msg))
 
-def get_input():
+def get_input() -> typing.Iterator[str]:
     while True:
         inp = input(">//[$USR]:: ")
         if inp == "exit":
@@ -182,7 +208,7 @@ def get_input():
             print("Not Implemented")
         yield inp
 
-def sim_input(input_list: list[str]):
+def sim_input(input_list: list[str]) -> typing.Iterator[str]:
     for inp in input_list:
         print(">//[$USR]:: " + inp)
         if inp == "exit":
@@ -191,17 +217,20 @@ def sim_input(input_list: list[str]):
             print("Not Implemented")
         yield inp
 
-def console_application(input_gen):
-    for i, inp in enumerate(input_gen):
-        try:
-            path, cmd, args = parser.parse_command(inp)
-            if not parser.has_error():
-                bg_console(path, cmd, args)
-        except Exception as e:
-            print(f"Uncaught python exception: {e}")
-        while parser.has_error():
-            print(parser.get_error())
+def parse_and_do_line(inp: str):
+    try:
+        path, cmd, args = parser.parse_command(inp)
+        if not parser.has_error():
+            bg_console(path, cmd, args)
+    except Exception as e:
+        print(f"Uncaught python exception: {e}")
+    while parser.has_error():
+        print(parser.get_error())
 
+
+def console_application(input_gen):
+    for inp in input_gen:
+        parse_and_do_line(inp)
 
 if __name__ == "__main__":
     tst1 = [
@@ -221,5 +250,5 @@ if __name__ == "__main__":
         'bg1 := Starkiller :: Brothers-in-arms',
         'bg1 ?? 0 :: 5'
     ]
-    #console_application(get_input())
-    console_application(sim_input(tst2))
+    console_application(get_input())
+    #console_application(sim_input(tst2))
