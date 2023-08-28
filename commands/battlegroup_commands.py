@@ -36,7 +36,7 @@ async def process_command(ctx, path: list[str], cmd: str, args: list) -> None:
             delay = float(msg[6:])
             await asyncio.sleep(delay)
         elif msg.startswith("$LONG"):
-            await ctx.send(acm_long_embed(msg[5:]))
+            await ctx.send(acm_long_embed(msg[5:], False))
         else:
             await ctx.send(acm_embed(msg))
 

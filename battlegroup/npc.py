@@ -185,6 +185,19 @@ class NPCBattleGroup:
                 res.append((self.name, cw["_name"]))
         return res
 
+    def get_abilities(self, max_range: int, min_range: int) -> dict[str, list[Obj]]:
+        res = {}
+        for ability in self.content["_abilities"]:
+            res[self.content["_name"]] = []
+            if ability["max"] >= min_range and ability["min"] <= max_range:
+                res[self.content["_name"]].append(ability)
+        for escort in self.escorts:
+            res[escort["_name"]] = []
+            for ability in escort["_abilities"]:
+                if max_range >= ability["min"] and min_range <= ability["max"]:
+                    res[escort["_name"]].append(ability)
+        return res
+
     def save(self) -> dict:
         return {
             "name": self.name,

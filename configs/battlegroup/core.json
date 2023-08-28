@@ -4,14 +4,42 @@
             "name": "battlethreads",
             "hp": [10, 10],
             "defense": 8,
-            "tags": ["unique"]
+            "tags": ["unique"],
+            "abilities": [
+                {
+                    "type": "Trait",
+                    "name": "Fleet Appendage",
+                    "effect": ""
+                },
+                {
+                    "type": "Tactic",
+                    "name": "Local Legion Gestalt",
+                    "effect": ""
+                }
+            ]
         },
         {
             "name": "brothers-in-arms",
             "hp": [8, 8],
             "defense": 8,
             "tags": [],
-            "charges": {"short-spool spinal guns": 2}
+            "abilities": [
+                {
+                    "type": "Trait",
+                    "name": "Tender Comerade",
+                    "effect": ""
+                },
+                {
+                    "type": "Gun",
+                    "name": "Short-Spool Spinal Guns",
+                    "effect": "",
+                    "range": "4-1",
+                    "size": "Superheavy",
+                    "target": "Single",
+                    "charge": 2,
+                    "dammage": 12
+                }
+            ]
         },
         {
             "name": "daggerflight",
@@ -42,7 +70,19 @@
             "+hp": 20,
             "+defense": -2,
             "tags": ["template"],
-            "charges": {"tyrant cannon": 4}
+            "abilities":[
+                {
+                    "type": "Gun",
+                    "name": "Tyrant-Cannon",
+                    "effect": "",
+                    "range": "5-4",
+                    "size": "Superheavy",
+                    "target": "Single",
+                    "tags": ["critical", "reliable(10)"],
+                    "charge": 4,
+                    "dammage": 30
+                }
+            ]
         },
         {
             "name": "loyal-guardian",
@@ -108,7 +148,18 @@
             "name": "[unknown]",
             "+hp": 5,
             "tags": ["template"],
-            "charges": {"naophoros omnigun": "[ERROR]"}
+            "abilities":[
+                {
+                    "type": "Gun",
+                    "name": "Naophoros-Omnigun",
+                    "effect": "",
+                    "range": "5-0",
+                    "size": "Superheavy",
+                    "target": "Single",
+                    "charge": -1,
+                    "dammage": 0
+                }
+            ]
         }
     ],
     "npc-capital": [
@@ -118,7 +169,7 @@
             "defense": 10,
             "interdiction": "1d6",
             "wings": {
-                "name": "fighter/bomber squadron",
+                "name": "fighter/bomber-squadron",
                 "hp": [5, 5, 5, 5],
                 "range": "0-3"
             }
@@ -135,7 +186,7 @@
             "defense": 10,
             "interdiction": "1d6",
             "wings": {
-                "name": "motely crew",
+                "name": "motely-crew",
                 "hp": [5, 5, 5, 5],
                 "range": "0-3",
                 "tenacity": 12
@@ -158,7 +209,19 @@
             "hp": 30,
             "defense": 6,
             "interdiction": "2d6",
-            "charges": {"demisolar-lance": 4}
+            "abilities":[
+                {
+                    "type": "Gun",
+                    "name": "Demisolar-Lance",
+                    "effect": "",
+                    "range": "5-3",
+                    "size": "Superheavy",
+                    "target": "Single",
+                    "tags": ["accurate", "critical"],
+                    "charge": 4,
+                    "dammage": 20
+                }
+            ]
         },
         {
             "name": "narcissus",
@@ -177,21 +240,57 @@
             "hp": 25,
             "defense": 8,
             "interdiction": "2d6",
-            "charges": {"redgiant-solar-lance": 3}
+            "abilities":[
+                {
+                    "type": "Gun",
+                    "name": "Redgiant-Solar-Lance",
+                    "effect": "",
+                    "range": "5-2",
+                    "size": "Superheavy",
+                    "target": "Single",
+                    "tags": ["reliable(5)", "critical"],
+                    "charge": 3,
+                    "dammage": 15
+                }
+            ]
         },
         {
             "name": "phantasm",
             "hp": 20,
             "defense": 15,
             "interdiction": "1d6",
-            "charges": {"killdart-coherent-nuclear-actuated-laser": 3}
+            "abilities":[
+                {
+                    "type": "Gun",
+                    "name": "killdart-coherent-nuclear-actuated-laser",
+                    "effect": "",
+                    "range": "4-1",
+                    "size": "Superheavy",
+                    "target": "Single",
+                    "tags": ["reliable(5)", "critical"],
+                    "charge": 3,
+                    "dammage": 15
+                }
+            ]
         },
         {
             "name": "starkiller",
             "hp": 25,
             "defense": 8,
             "interdiction": "2d6",
-            "charges": {"starkiller-cannon": 2}
+            "abilities":[
+                {
+                    "type": "Gun",
+                    "name": "killdart-coherent-nuclear-actuated-laser",
+                    "effect": "",
+                    "range": "5-3",
+                    "size": "Superheavy",
+                    "target": "Single",
+                    "tags": ["critical"],
+                    "charge": 2,
+                    "dammage": 15
+                }
+            ]
         },
         {
             "name": "triton",

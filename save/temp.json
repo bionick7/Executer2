@@ -9,6 +9,7 @@
           "_interdiction": "1d6",
           "_valid": true,
           "_hp0": 25,
+          "_abilities": [],
           ".": {
             "hp": 25,
             "max_hp": 25,
@@ -16,7 +17,7 @@
             "greywash": 0
           },
           ".w1": {
-            "_name": "fighter/bomber squadron",
+            "_name": "fighter/bomber-squadron",
             "_range": "0-3",
             "_tenacity": 0,
             ".": [
@@ -50,6 +51,7 @@
             "+hp": 0,
             "_is_template": false,
             "_is_unique": true,
+            "_abilities": [],
             "_valid": true,
             ".": [
               {
@@ -72,6 +74,7 @@
             "+hp": 5,
             "_is_template": true,
             "_is_unique": false,
+            "_abilities": [],
             "_valid": true,
             ".": [],
             ".w1": {
@@ -111,6 +114,23 @@
             "+hp": 0,
             "_is_template": false,
             "_is_unique": false,
+            "_abilities": [
+              {
+                "type": "Trait",
+                "name": "Tender Comerrade",
+                "effect": ""
+              },
+              {
+                "type": "Gun",
+                "name": "Short-Spool Spinal Guns",
+                "effect": "",
+                "range": "4-1",
+                "size": "Superheavy",
+                "target": "Single",
+                "charge": 2,
+                "dammage": 12
+              }
+            ],
             "_valid": true,
             ".": [
               {
@@ -124,13 +144,6 @@
                 "greywash": 0
               }
             ],
-            ".c1": {
-              "_name": "short-spool spinal guns",
-              ".": {
-                "total": 2,
-                "current": 2
-              }
-            },
             "_init": true
           }
         }
@@ -143,18 +156,28 @@
           "_interdiction": "2d6",
           "_valid": true,
           "_hp0": 25,
+          "_abilities": [
+            {
+              "min": 5,
+              "max": 2,
+              "name": "redgiant-solar-lance",
+              "type": "gun",
+              "effect": "",
+              "description": "No provided",
+              "dammage": 15,
+              "size": "Superheavy",
+              "target": "Single",
+              "tags": [
+                "reliable(5)",
+                "critical"
+              ]
+            }
+          ],
           ".": {
             "hp": 25,
             "max_hp": 25,
             "lockon": 0,
             "greywash": 0
-          },
-          ".c1": {
-            "_name": "redgiant-solar-lance",
-            ".": {
-              "total": 3,
-              "current": 3
-            }
           },
           ".e1": {
             "_name": "roughnecks",
@@ -164,6 +187,7 @@
             "+hp": 0,
             "_is_template": false,
             "_is_unique": false,
+            "_abilities": [],
             "_valid": true,
             ".": [
               {
@@ -194,6 +218,7 @@
             "+hp": 0,
             "_is_template": false,
             "_is_unique": false,
+            "_abilities": [],
             "_valid": true,
             ".": [
               {
@@ -275,6 +300,7 @@
             "+hp": 0,
             "_is_template": false,
             "_is_unique": false,
+            "_abilities": [],
             "_valid": true,
             ".": [
               {
@@ -300,6 +326,7 @@
           "_interdiction": "1d6+4",
           "_valid": true,
           "_hp0": 20,
+          "_abilities": [],
           ".": {
             "hp": 20,
             "max_hp": 20,
@@ -320,6 +347,7 @@
           "_interdiction": "1d6",
           "_valid": true,
           "_hp0": 25,
+          "_abilities": [],
           ".": {
             "hp": 25,
             "max_hp": 25,
@@ -327,7 +355,7 @@
             "greywash": 0
           },
           ".w1": {
-            "_name": "motely crew",
+            "_name": "motely-crew",
             "_range": "0-3",
             "_tenacity": 12,
             ".": [
@@ -400,6 +428,7 @@
               "+hp": 0,
               "_is_template": false,
               "_is_unique": false,
+              "_abilities": [],
               "_valid": true,
               ".": [
                 {
@@ -451,6 +480,7 @@
               "+hp": 0,
               "_is_template": false,
               "_is_unique": false,
+              "_abilities": [],
               "_valid": true,
               ".": [
                 {
@@ -489,6 +519,23 @@
               "+hp": 0,
               "_is_template": false,
               "_is_unique": false,
+              "_abilities": [
+                {
+                  "type": "Trait",
+                  "name": "Tender Comerrade",
+                  "effect": ""
+                },
+                {
+                  "type": "Gun",
+                  "name": "Short-Spool Spinal Guns",
+                  "effect": "",
+                  "range": "4-1",
+                  "size": "Superheavy",
+                  "target": "Single",
+                  "charge": 2,
+                  "dammage": 12
+                }
+              ],
               "_valid": true,
               ".": [
                 {
@@ -502,13 +549,6 @@
                   "greywash": 0
                 }
               ],
-              ".c1": {
-                "_name": "short-spool spinal guns",
-                ".": {
-                  "total": 2,
-                  "current": 2
-                }
-              },
               "_init": true
             }
           ]
@@ -534,6 +574,7 @@
               "+hp": 0,
               "_is_template": false,
               "_is_unique": false,
+              "_abilities": [],
               "_valid": true,
               ".": [
                 {
@@ -628,6 +669,7 @@
               "+hp": 0,
               "_is_template": false,
               "_is_unique": false,
+              "_abilities": [],
               "_valid": true,
               ".": [
                 {
@@ -830,6 +872,7 @@
                 "_interdiction": "1d6",
                 "_valid": true,
                 "_hp0": 25,
+                "_abilities": [],
                 ".": {
                   "hp": 25,
                   "max_hp": 25,
@@ -837,7 +880,7 @@
                   "greywash": 0
                 },
                 ".w1": {
-                  "_name": "motely crew",
+                  "_name": "motely-crew",
                   "_range": "0-3",
                   "_tenacity": 12,
                   ".": [
@@ -871,6 +914,7 @@
                   "+hp": 0,
                   "_is_template": false,
                   "_is_unique": false,
+                  "_abilities": [],
                   "_valid": true,
                   ".": [
                     {
@@ -913,6 +957,7 @@
                 "_interdiction": "1d6+4",
                 "_valid": true,
                 "_hp0": 20,
+                "_abilities": [],
                 ".": {
                   "hp": 20,
                   "max_hp": 20,
@@ -927,6 +972,23 @@
                   "+hp": 0,
                   "_is_template": false,
                   "_is_unique": false,
+                  "_abilities": [
+                    {
+                      "type": "Trait",
+                      "name": "Tender Comerrade",
+                      "effect": ""
+                    },
+                    {
+                      "type": "Gun",
+                      "name": "Short-Spool Spinal Guns",
+                      "effect": "",
+                      "range": "4-1",
+                      "size": "Superheavy",
+                      "target": "Single",
+                      "charge": 2,
+                      "dammage": 12
+                    }
+                  ],
                   "_valid": true,
                   ".": [
                     {
@@ -940,13 +1002,6 @@
                       "greywash": 0
                     }
                   ],
-                  ".c1": {
-                    "_name": "short-spool spinal guns",
-                    ".": {
-                      "total": 2,
-                      "current": 2
-                    }
-                  },
                   "_init": true
                 },
                 "+defense": [],
@@ -961,6 +1016,7 @@
                   "+hp": 0,
                   "_is_template": false,
                   "_is_unique": false,
+                  "_abilities": [],
                   "_valid": true,
                   ".": [
                     {
@@ -1055,18 +1111,28 @@
                 "_interdiction": "2d6",
                 "_valid": true,
                 "_hp0": 25,
+                "_abilities": [
+                  {
+                    "min": 5,
+                    "max": 2,
+                    "name": "redgiant-solar-lance",
+                    "type": "gun",
+                    "effect": "",
+                    "description": "No provided",
+                    "dammage": 15,
+                    "size": "Superheavy",
+                    "target": "Single",
+                    "tags": [
+                      "reliable(5)",
+                      "critical"
+                    ]
+                  }
+                ],
                 ".": {
                   "hp": 25,
                   "max_hp": 25,
                   "lockon": 0,
                   "greywash": 0
-                },
-                ".c1": {
-                  "_name": "redgiant-solar-lance",
-                  ".": {
-                    "total": 3,
-                    "current": 3
-                  }
                 },
                 ".e1": {
                   "_name": "roughnecks",
@@ -1076,6 +1142,7 @@
                   "+hp": 0,
                   "_is_template": false,
                   "_is_unique": false,
+                  "_abilities": [],
                   "_valid": true,
                   ".": [
                     {
@@ -1106,29 +1173,90 @@
     [
       [
         "add",
-        "",
+        "npcs",
         [
           [
-            "npcs",
-            [
-              {
-                "name": "alpha",
-                "content": {
-                  "_name": "breakwater",
-                  "_defense": 10,
-                  "_interdiction": "1d6",
+            0,
+            {
+              "name": "alpha",
+              "content": {
+                "_name": "breakwater",
+                "_defense": 10,
+                "_interdiction": "1d6",
+                "_valid": true,
+                "_hp0": 25,
+                "_abilities": [],
+                ".": {
+                  "hp": 25,
+                  "max_hp": 25,
+                  "lockon": 0,
+                  "greywash": 0
+                },
+                ".w1": {
+                  "_name": "fighter/bomber-squadron",
+                  "_range": "0-3",
+                  "_tenacity": 0,
+                  ".": [
+                    {
+                      "hp": 5,
+                      "lockon": 0,
+                      "greywash": 0
+                    },
+                    {
+                      "hp": 5,
+                      "lockon": 0,
+                      "greywash": 0
+                    },
+                    {
+                      "hp": 5,
+                      "lockon": 0,
+                      "greywash": 0
+                    },
+                    {
+                      "hp": 5,
+                      "lockon": 0,
+                      "greywash": 0
+                    }
+                  ]
+                },
+                ".e1": {
+                  "_name": "loyal-guardian",
+                  "_defense": 8,
+                  "+defense": 0,
+                  "+interdiction": "",
+                  "+hp": 0,
+                  "_is_template": false,
+                  "_is_unique": true,
+                  "_abilities": [],
                   "_valid": true,
-                  "_hp0": 25,
-                  ".": {
-                    "hp": 25,
-                    "max_hp": 25,
-                    "lockon": 0,
-                    "greywash": 0
-                  },
+                  ".": [
+                    {
+                      "hp": 20,
+                      "lockon": 0,
+                      "greywash": 0
+                    }
+                  ],
+                  "_init": true
+                },
+                "+defense": [],
+                "+interdiction": [],
+                "hp": 25,
+                "max_hp": 25,
+                ".e2": {
+                  "_name": "den-mother",
+                  "_defense": 5,
+                  "+defense": 0,
+                  "+interdiction": "",
+                  "+hp": 5,
+                  "_is_template": true,
+                  "_is_unique": false,
+                  "_abilities": [],
+                  "_valid": true,
+                  ".": [],
                   ".w1": {
-                    "_name": "fighter/bomber squadron",
+                    "_name": "mounted chassis",
                     "_range": "0-3",
-                    "_tenacity": 0,
+                    "_tenacity": 11,
                     ".": [
                       {
                         "hp": 5,
@@ -1152,100 +1280,62 @@
                       }
                     ]
                   },
-                  ".e1": {
-                    "_name": "loyal-guardian",
-                    "_defense": 8,
-                    "+defense": 0,
-                    "+interdiction": "",
-                    "+hp": 0,
-                    "_is_template": false,
-                    "_is_unique": true,
-                    "_valid": true,
-                    ".": [
-                      {
-                        "hp": 20,
-                        "lockon": 0,
-                        "greywash": 0
-                      }
-                    ],
-                    "_init": true
-                  },
-                  "+defense": [],
-                  "+interdiction": [],
-                  "hp": 25,
-                  "max_hp": 25,
-                  ".e2": {
-                    "_name": "den-mother",
-                    "_defense": 5,
-                    "+defense": 0,
-                    "+interdiction": "",
-                    "+hp": 5,
-                    "_is_template": true,
-                    "_is_unique": false,
-                    "_valid": true,
-                    ".": [],
-                    ".w1": {
-                      "_name": "mounted chassis",
-                      "_range": "0-3",
-                      "_tenacity": 11,
-                      ".": [
-                        {
-                          "hp": 5,
-                          "lockon": 0,
-                          "greywash": 0
-                        },
-                        {
-                          "hp": 5,
-                          "lockon": 0,
-                          "greywash": 0
-                        },
-                        {
-                          "hp": 5,
-                          "lockon": 0,
-                          "greywash": 0
-                        },
-                        {
-                          "hp": 5,
-                          "lockon": 0,
-                          "greywash": 0
-                        }
-                      ]
+                  "_init": true
+                },
+                ".e3": {
+                  "_name": "brothers-in-arms",
+                  "_defense": 8,
+                  "+defense": 0,
+                  "+interdiction": "",
+                  "+hp": 0,
+                  "_is_template": false,
+                  "_is_unique": false,
+                  "_abilities": [
+                    {
+                      "type": "Trait",
+                      "name": "Tender Comerrade",
+                      "effect": ""
                     },
-                    "_init": true
-                  },
-                  ".e3": {
-                    "_name": "brothers-in-arms",
-                    "_defense": 8,
-                    "+defense": 0,
-                    "+interdiction": "",
-                    "+hp": 0,
-                    "_is_template": false,
-                    "_is_unique": false,
-                    "_valid": true,
-                    ".": [
-                      {
-                        "hp": 8,
-                        "lockon": 0,
-                        "greywash": 0
-                      },
-                      {
-                        "hp": 8,
-                        "lockon": 0,
-                        "greywash": 0
-                      }
-                    ],
-                    ".c1": {
-                      "_name": "short-spool spinal guns",
-                      ".": {
-                        "total": 2,
-                        "current": 2
-                      }
+                    {
+                      "type": "Gun",
+                      "name": "Short-Spool Spinal Guns",
+                      "effect": "",
+                      "range": "4-1",
+                      "size": "Superheavy",
+                      "target": "Single",
+                      "charge": 2,
+                      "dammage": 12
+                    }
+                  ],
+                  "_valid": true,
+                  ".": [
+                    {
+                      "hp": 8,
+                      "lockon": 0,
+                      "greywash": 0
                     },
-                    "_init": true
-                  }
+                    {
+                      "hp": 8,
+                      "lockon": 0,
+                      "greywash": 0
+                    }
+                  ],
+                  "_init": true
                 }
               }
-            ]
+            }
+          ]
+        ]
+      ]
+    ],
+    [
+      [
+        "add",
+        "",
+        [
+          [
+            "npcs",
+            []
           ],
           [
             "modifiers",

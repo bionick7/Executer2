@@ -163,9 +163,9 @@ def bg_cmd(path: list[str], battle: BGBattle, cmd: str, args: ArgumentList, auth
     elif cmd == "??":
         if args.match(("int", "int")):
             fleet_name = path[0]
-            min_range = args.fetch_int()
-            max_range = args.fetch_int()
-            # TODO
+            range_1 = args.fetch_int()
+            range_2 = args.fetch_int()
+            battle.get_available_actions(fleet_name, max(range_1, range_2), min(range_1, range_2))
         elif args.match(()):
             fleet_name = path[0]
             if fleet_name == "**":
@@ -195,7 +195,7 @@ def bg_console(path: list[str], cmd: str, args: list[str]) -> None:
             t = float(msg[6:])
             time.sleep(t)
         elif msg.startswith("$LONG"):
-            print(acm_long_embed(msg[5:]))
+            print(acm_long_embed(msg[5:], True))
         else:
             print(acm(msg))
 
@@ -248,7 +248,12 @@ if __name__ == "__main__":
     tst2 = [
         'open',
         'bg1 := Starkiller :: Brothers-in-arms',
-        'bg1 ?? 0 :: 5'
+        'bg1 ?? 0 :: 2',
+        'bg1 ?? 0 :: 5',
+        'bg1 ?? 0 :: 3',
+        'bg1 ?? 2 :: 0',
+        'bg1 ?? 7 :: 6',
+        'bg1 ?? 5 :: 5',
     ]
-    console_application(get_input())
-    #console_application(sim_input(tst2))
+    #console_application(get_input())
+    console_application(sim_input(tst2))

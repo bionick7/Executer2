@@ -3,6 +3,8 @@ import typing
 
 from battlegroup.npc import KEY_PREFIX, Obj
 
+USE_LONG_HEADER = False
+
 def corrupted(text: str) -> str:
     return ''.join([chr(ord(c) % 16 + 0x2590) if c.isalpha() else c for c in text])
 
@@ -12,7 +14,7 @@ def acm(msg: str, author: str = "$LGN") -> str:
 def acm_embed(msg: str, author: str = "$LGN") -> str:
     return f"```>//[{author}]:: {msg.upper()}```"
 
-def acm_long_embed(msg: str, author: str = "$LGN") -> str:
+def acm_long_embed(msg: str, console_mode: bool, author: str = "$LGN") -> str:
     fictional_date: datetime = datetime.now() - datetime(2023, 6, 7, 00, 00) + datetime(5016, 3, 30, 00, 00)
     date = fictional_date.strftime("%j.%Y %H:%M CrST")
     header = f"""
@@ -20,8 +22,14 @@ TIMESTAMP:           ({date})
 CODE+++PURPOSE:      SHOW BATTLE STATUS
 DISTRIBUTION:        VOID SPEER TASK FORCE -- CLEARANCE: CAPTAIN
 MESSAGE TO FOLLOW:::
-"""
+""" if USE_LONG_HEADER else ""
+    if console_mode:
+        return "| " + (header + msg).strip().replace("\n", "\n| ")
     return "```" + header + msg + "```"
+
+def truncate_string(inp: str, length: int) -> str:
+    if len(inp) < length: return inp
+    return inp[:length-3] + "..."
 
 def format_wing(w: dict, gm: bool) -> str:
     res = f"[W]{len(w[KEY_PREFIX])}x {w['_name'].upper()}"
@@ -42,6 +50,22 @@ def format_counter(name: str, value: int, indent: str="") -> str:
     if name[0] not in f"{KEY_PREFIX}_+" and name not in ["lockon", "hp", "max_hp"] and value != 0:
         return indent + f"({name.upper()}: {value})\n"
     return ""
+
+def format_ability(ability: Obj) -> str:
+    name = truncate_string(ability['name'], 25)
+    if ability['type'] == 'gun':
+        return "{t_name:<25s} (gun), {min}-{max} DMG: {dammage} {tags}".format(**ability, t_name=name)
+    return "{t_name:<25s} ({type}), {effect}".format(**ability, t_name=name)
+
+def format_abillities(bg_name: str, ability_dict: dict[str, list[Obj]]) -> str:
+    res = ""
+    for name, abilities in ability_dict.items():
+        if len(abilities) == 0:
+            continue
+        res += bg_name + " :: " + name + " : \n"
+        for ability in abilities:
+            res += "    " + format_ability(ability) + "\n"
+    return res
 
 def format_bg(bg, gm: bool) -> str:
     res = f"{bg.name.upper()} :: "

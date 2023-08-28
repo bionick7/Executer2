@@ -13,7 +13,7 @@ class TestImplementation(unittest.TestCase):
         diff = list(dictdiffer.diff(d1, d2))
         self.assertEqual(diff, [])
 
-    def _test_cmd(self, cmd: str, path: str = "**", args: list = []):
+    def cmd(self, cmd: str, path: str = "**", args: list = []):
         bg_cmd(path.split("."), self.battle, cmd, ArgumentList(args), "tester")
         
     def _assert_attribute(self, path: str, compare: int):
@@ -85,22 +85,22 @@ class TestImplementation(unittest.TestCase):
         self.compare_dict(self.battle.get_data(), d2)
 
     def test_charges(self):
-        self._test_cmd("open")
-        self._test_cmd(":=", "alpha", ["Starkiller", "Brothers-in-arms"])
-        self._test_cmd("turn")
-        self._test_cmd("turn")
+        self.cmd("open")
+        self.cmd(":=", "alpha", ["Starkiller", "Brothers-in-arms"])
+        self.cmd("turn")
+        self.cmd("turn")
         self._assert_attribute("alpha.c1.current", 0)
         self._assert_attribute("alpha.e1.c1.current", 0)
-        self._test_cmd("=", "alpha.c1", ["R"])
-        self._test_cmd("=", "alpha.e1.c1.current", ["alpha.e1.c1.total".split(".")])
+        self.cmd("=", "alpha.c1", ["R"])
+        self.cmd("=", "alpha.e1.c1.current", ["alpha.e1.c1.total".split(".")])
         self._assert_attribute("alpha.c1.current", 2)
         self._assert_attribute("alpha.e1.c1.current", 2)
         
     def test_sync(self):
         battle2 = BGBattle()
-        self._test_cmd("open")
-        self._test_cmd(":=", "alpha", ["Starkiller", "Battlethreads"])
-        self._test_cmd("connect", "**", ["test_watch"])
+        self.cmd("open")
+        self.cmd(":=", "alpha", ["Starkiller", "Battlethreads"])
+        self.cmd("connect", "**", ["test_watch"])
 
         d1 = dictdiffer.deepcopy(self.battle.get_data())
         
@@ -108,6 +108,27 @@ class TestImplementation(unittest.TestCase):
         battle2.datamanager.watch()
         battle2.sync()
         self.compare_dict(d1, battle2.get_data())
+
+    def _assert_available_guns(self, fleetname: str, max_range: int, min_range: int, compare: int) -> None:
+        resdict = [bg.get_abilities(max_range, min_range) for bg in self.battle._get_npcs(fleetname)]
+        available_guns = 0
+        for bg in resdict:
+            for abilities in bg.values():
+                for ability in abilities:
+                    if ability["type"] == "gun":
+                        available_guns += 1
+        self.assertEqual(available_guns, compare)
+
+    def test_ranges(self):
+        self.cmd("open")
+        self.cmd(":=", "alpha", ["Starkiller", "Brothers-in-arms"]) # 5-3 & 4-1
+        self.cmd("??", "alpha", )
+        self._assert_available_guns("alpha", 5, 0, 2)
+        self._assert_available_guns("alpha", 3, 0, 2)
+        self._assert_available_guns("alpha", 2, 0, 1)
+        self._assert_available_guns("alpha", 7, 6, 0)
+        self._assert_available_guns("alpha", 5, 5, 1)
+        self._assert_available_guns("alpha", 4, 4, 2)
 
 if __name__ == "__main__":
     unittest.main()
