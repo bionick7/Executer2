@@ -8,7 +8,7 @@ D = data["cah_config"]
 CAH_IMAGE_URL = D["image url"]
 BLACK = D["black"]
 WHITE = D["white"]
-current_cah_game = CahGame()
+current_cah_game: CahGame = CahGame()
 
 
 @client.command(name="Chost", help="Starts the joining part of a game")
