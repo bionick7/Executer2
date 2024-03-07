@@ -68,7 +68,7 @@ class DiceNode(SyntaxNode):
     def evaluate_as_numeric(self, modus_op: str="num") -> int:
         if modus_op == "num":
             if not self.has_result:  # Don't re-roll
-                self._set_result(np.random.randint(1, self.sides, self.number, np.int32))
+                self._set_result(np.random.randint(1, self.sides+1, self.number, np.int32))
             return int(np.sum(self.result))
         elif modus_op == "min":
             return self.number

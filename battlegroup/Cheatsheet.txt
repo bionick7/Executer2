@@ -1,0 +1,18 @@
+`open` : open new battle
+`close` : close current battle
+`load(savefile)` : load battle from savefile (and open it)
+`save(savefile)` : save open battle to savefile
+`turn` : communicate new turn (counts down all the couters)
+`show` : shows the player accessible information (can be requested by anyone)
+`reset` : Undo previous move
+`connect(path)` : connects to an existing battle (combine discord/console)
+`[BG] := [CAPITAL] :: [ESCORT1] :: [ESCORT2]` : creates new battlegroup, named BG
+`[PATH].[STAT] = [VALUE]` : sets a stat in a given path to value
+`[PATH].[STAT] = R` : resets the counter if stat is a counter
+`[PATH].[STAT] += [VALUE]` : increments a stat in a given path to value
+`[PATH].[STAT] -= [VALUE]` : decrements a stat in a given path to value
+`[PATH] => [BG]` : reassigns an escort at PATH to battlegroup BG
+`[PATH] =>` : removes an escort at PATH to
+`[BG] ??` : shows stats of battlegroup BG
+`[BG] ?? [MIN] :: [MAX]` : shows all actions that are applicable between rangebands MIN and MAX for battlegroup
+`??` : shows stats of the whole battle
