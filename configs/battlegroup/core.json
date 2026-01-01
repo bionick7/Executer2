@@ -248,14 +248,14 @@
                     "tags": ["payload"],
                     "size": "Primary",
                     "range": "4-2",
-                    "effect": " When this spread of weaponized drones is fired, choose its configuration:\n • A single-target attack that deals 1d6+6 damage.\n • An area-target attack that deals 1d6+3 damage.\n The Hivequeen may also choose to add or remove 1 Flight Counter from it.\n While this PAYLOAD attack is in flight, the Hivequeen may (as a maneuver) deal 2 damage to a hostile CAPITAL SHIP with LOCK ON and push that ship’s battlegroup back one range band."
+                    "effect": " When this spread of weaponized drones is fired, choose its configuration:\n • A single-target attack that deals 1d6+6 damage.\n • An area-target attack that deals 1d6+3 damage.\n The Hivequeen may also choose to add or remove 1 Flight Counter from it.\n While this PAYLOAD attack is in flight, the Hivequeen may (as a maneuver) deal 2 damage to a hostile CAPITAL SHIP with LOCK ON and push that ship's battlegroup back one range band."
                 },
                 {
                     "type": "Tactic",
                     "name": "Infestation",
                     "tags": ["boarding"],
                     "tenacity": 11,
-                    "effect": "The Hivequeen LOCKS ON to a hostile CAPITAL SHIP and then launches a breaching pod that disgorges a drone swarm into that ship’s interior. During the Boarding Phase, roll 1d20: on 8+, the target takes 3 damage and automatically gains LOCK ON at the start of the next Action Phase. On 7 or less, this boarding action may be attempted in subsequent Boarding Phases until it succeeds or the boarders are repelled. The Hivequeen may board up to three ships this way at one time.",
+                    "effect": "The Hivequeen LOCKS ON to a hostile CAPITAL SHIP and then launches a breaching pod that disgorges a drone swarm into that ship's interior. During the Boarding Phase, roll 1d20: on 8+, the target takes 3 damage and automatically gains LOCK ON at the start of the next Action Phase. On 7 or less, this boarding action may be attempted in subsequent Boarding Phases until it succeeds or the boarders are repelled. The Hivequeen may board up to three ships this way at one time.",
                     "range": "4-0"
                 },
                 {
@@ -288,7 +288,7 @@
                 {
                     "type": "Maneuver",
                     "name": "Counter-Battery-Fire",
-                    "effect": "On hit, the target’s single-target attack rolls all receive +2 DIFFICULTY until the end of its next turn.",
+                    "effect": "On hit, the target's single-target attack rolls all receive +2 DIFFICULTY until the end of its next turn.",
                     "range": "4-0",
                     "size": "Primary",
                     "target": "Single",
@@ -305,7 +305,7 @@
                     "type": "System",
                     "name": "Pulse-Pack-Missiles",
                     "reloading": 2,
-                    "effect": "The Man o’ War launches a massive volley of multi- warhead missiles that blanket an area in devastating explosions and deadly radiation. During the Logistics Phase, choose one range band from 4–3. Until the start of the next Logistics Phase, any hostile battlegroup that ends its turn in the chosen range band takes 2d6 AREA-TARGET damage."
+                    "effect": "The Man o' War launches a massive volley of multi- warhead missiles that blanket an area in devastating explosions and deadly radiation. During the Logistics Phase, choose one range band from 4–3. Until the start of the next Logistics Phase, any hostile battlegroup that ends its turn in the chosen range band takes 2d6 AREA-TARGET damage."
                 }
             ],
             "page": 173

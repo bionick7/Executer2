@@ -82,7 +82,7 @@ async def cah_play(ctx, args):
 
 @client.command(name="Cchoose", help="Chooses a winner")
 async def cah_choose(ctx, choice):
-    global current_cah_game        
+    global current_cah_game
     if current_cah_game.tsar.discord_implement != ctx.author:
         await ctx.send("Only the tsar can choose")
         return
@@ -94,10 +94,10 @@ async def cah_choose(ctx, choice):
     try:
         player_chosen = int(choice)
     except ValueError:
-        await ctx.send(f"{ctx.author.mention()}, choice must be an integer")
+        await ctx.send(f"{ctx.author.mention}, choice must be an integer")
         return
     if player_chosen >= current_cah_game.player_num - 1:
-        await ctx.send(f"{ctx.author.mention()}, choice must be a number between 0 and {current_cah_game.player_num - 2}")
+        await ctx.send(f"{ctx.author.mention}, choice must be a number between 0 and {current_cah_game.player_num - 2}")
         return
     await ctx.send(current_cah_game.choose(player_chosen))
 
@@ -105,6 +105,11 @@ async def cah_choose(ctx, choice):
 @client.command(name="Cstart", help="Starts the actual game. No players will be allowed to join after")
 async def cah_close_host(ctx):
     global current_cah_game
+    
+    if current_cah_game.tsar is None:
+        await ctx.send("Game has no tsar")
+        return
+    
     if current_cah_game.game_stat != 0:
         await ctx.send("Host already closed")
         return
@@ -164,7 +169,7 @@ async def cah_leave(ctx):
 
     em = discord.Embed(title="User Left", colour=0xa305d5)
     em.set_thumbnail(url=ctx.author.avatar.url)
-    em.description = ctx.author.mention() + " just left ..."
+    em.description = ctx.author.mention + " just left ..."
     em.set_author(name="CaH", icon_url=CAH_IMAGE_URL)
     await ctx.send("", embed=em)
 
@@ -174,7 +179,7 @@ async def cah_end(ctx):
     global current_cah_game
     await cah_stats(ctx)
 
-    current_cah_game = None
+    current_cah_game.close()
     em = discord.Embed(title="Game Finished", colour=0xff1c1d)
     em.description = "The game has just been finished"
     em.set_author(name="CaH", icon_url=CAH_IMAGE_URL)
@@ -188,5 +193,8 @@ async def cah_random(ctx, times: int = 1):
     if current_cah_game.closed:
         current_cah_game.open()
         current_cah_game.add_libs(["cah_lib"])
-    for i in range(times):
-        await ctx.send(current_cah_game.random())
+    if times > 100 or times <= 0:
+        await ctx.send("Cmon bruv!")
+    else:
+        for i in range(times):
+            await ctx.send(current_cah_game.random())
